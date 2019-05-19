@@ -1,0 +1,25 @@
+{% extends "templates/page.html" %}
+        <!-- Для шапки и футера однозначно нужен темплейт -->
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+        <h2>Здесь какой-нибудь текст про игру</h2>
+        {% if user == null %}
+        <form action="/log" method="POST">
+            <h3>Вход в "Кошелек"</h3>
+            <input id="login" name="login" class="form-control" type="text" placeholder="Логин">
+            <br>
+            <input id="pass" name="pass" class="form-control" type="password" placeholder="Пароль">
+            <br>
+            <button type="input" class="btn btn-success btn-xs">Войти</button>
+        </form>
+        <a href="/reg">Зарегистрироваться</a>
+        {% else %}
+        <br>
+        <h3>Вы авторизованы как {{user}}</h3>
+        <a href="/logout">Выйти</a>
+        {% endif%}
+    </div>
+</div>
+
+{% endblock %}

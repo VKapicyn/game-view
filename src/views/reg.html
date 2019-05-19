@@ -1,0 +1,20 @@
+{% extends "templates/page.html" %}
+        <!-- Для шапки и футера однозначно нужен темплейт -->
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+        <form action="/reg" method="POST">
+            <h3>Регистрация</h3>
+            <input id="login" name="login" class="form-control" type="text" placeholder="Логин">
+            <br>
+            <input id="pass" name="pass" class="form-control" type="password" placeholder="Пароль">
+            <br>
+            <input id="pass1" name="pass1" class="form-control" type="password" placeholder="Повторите пароль">
+            <br>
+            <button type="input" class="btn btn-success btn-xs">Зарегистрироваться</button>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

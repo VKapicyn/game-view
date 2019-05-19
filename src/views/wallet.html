@@ -1,0 +1,80 @@
+{% extends "templates/page.html" %}
+        <!-- Для шапки и футера однозначно нужен темплейт -->
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+        <h2>На Вашем балансе: {{accaunt.balance}}</h2>
+
+        <hr>
+        <h3>Переводы:</h3>
+        <form action="/send" method="POST">
+            <input id="amount" name="amount" class="form-control" type="text" placeholder="Сумма перевода">
+            <br>
+            <p>Получатель</p>
+            <select name="responser">
+                {% for item in items %}
+                    {% if accaunt.login != item.login %}
+                    <option value="{{item.login}}">{{item.login}}</option>
+                    {% endif %}
+                {% endfor %}
+                <option value="Всем">Всем</option>
+            </select>
+            <br>
+            <br>
+            <input id="text" name="text" class="form-control" type="text" placeholder="Комментарий к платежу">
+            <br>
+            <button type="input" class="btn btn-success btn-xs">Перевести</button>
+        </form>
+        <br>
+
+        <hr>
+        <h3>Списания:</h3>
+        <form action="/charge" method="POST">
+            <input id="amount" name="amount" class="form-control" type="text" placeholder="Сумма взыскания">
+            <br>
+            <p>Получатель</p>
+            <select name="responser">
+                {% for item in items %}
+                    {% if accaunt.login != item.login %}
+                    <option value="{{item.login}}">{{item.login}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <br>
+            <br>
+            <button type="input" class="btn btn-success btn-xs">Взыскать</button>
+        </form>
+        <br>
+        <hr>
+        <h3>Мои операции:</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Счет</th>
+                    <th scope="col">Сумма</th>
+                    <th scope="col">Комментарий</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for op in ops %}
+                <tr>
+                    {% if op.type == "output" %}
+                    <th scope="row">{{(ops.length - loop.index) + 1}}</th>
+                    <td>{{op.user}}</td>
+                    <td>-{{op.amount}}</td>
+                    <td>{{op.text}}</td>
+                    {% else %}
+                    <th scope="row">{{(ops.length - loop.index) + 1}}</th>
+                    <td>{{op.user}}</td>
+                    <td>+{{op.amount}}</td>
+                    <td>{{op.text}}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

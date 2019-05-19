@@ -1,0 +1,33 @@
+{% extends "templates/page.html" %}
+        <!-- Для шапки и футера однозначно нужен темплейт -->
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 col-sm-12">
+        <h3>Все операции:</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">От кого</th>
+                    <th scope="col"></th>
+                    <th scope="col">Кому</th>
+                    <th scope="col">Сумма</th>
+                    <th scope="col">Назначение</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for op in ops %}
+                <tr>
+                    <th scope="row">{{(ops.length - loop.index) + 1}}</th>
+                    <td>{{op.sender}}</td>
+                    <td>---></td>
+                    <td>{{op.responser}}</td>
+                    <td>{{op.amount}}</td>
+                    <td>{{op.text}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
