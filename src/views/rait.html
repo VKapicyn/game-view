@@ -3,6 +3,14 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-8 col-sm-12">
+        <br>
+        <form action="/rait" method="POST">
+          <div class="input-group">
+            <input type="text" class="form-control" name="mask" id="mask" placeholder="Введите маску поиска" aria-describedby="basic-addon2">
+              <button type="input" class="btn btn-success btn-xs">Фильтровать</button>
+          </div>  
+        </form>
+        <br>
         <h3>Список игроков:</h3>
         <table class="table">
             <thead>
@@ -13,13 +21,20 @@
               </tr>
             </thead>
             <tbody>
+            {% set balance = 0 %}
             {% for item in items %}
                 <tr>
                     <th scope="row">{{loop.index}}</th>
                     <td>{{item.login}}</td>
                     <td>{{item.balance}}</td>
                 </tr>
+            {% set balance = balance + item.balance%}
             {% endfor %}
+            <tr>
+                <th scope="row">#</th>
+                <td > </td>
+                <td ><b>{{balance}}</b></td>
+            </tr>
             </tbody>
           </table>
     </div>
