@@ -11,7 +11,7 @@ exports.isReged = (req, res, next) => {
 exports.isAdmin = (req, res, next) => {
     if (req.session.user == undefined) {
         return;
-    } else if (req.sessionID == req.session.user.session && req.session.user.login == 'Admin') {
+    } else if (req.sessionID == req.session.user.session && req.session.user.login == 'Bank') {
         next()
     } else {
         return;
