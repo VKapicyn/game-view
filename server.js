@@ -294,6 +294,7 @@ router.get('/onstart', (req, res) => {
     res.send('Запущенно')
 })
 router.get('/onpause', (req, res) => {
+    stop = true
     res.send('Приостановленно')
 })
 
