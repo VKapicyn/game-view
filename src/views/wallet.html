@@ -5,6 +5,7 @@
     <div class="col-lg-8 col-md-8 col-sm-12 col-12">
         <h2>На Вашем балансе: {{accaunt.balance}}</h2>
 
+        {% if stop == false%}
         <hr>
         <h3>Переводы:</h3>
         <form action="/send" method="POST">
@@ -27,7 +28,7 @@
         </form>
         <br>
 
-        {% if accaunt.login == "Admin" %}
+        {% if accaunt.login == "Bank" %}
         <hr>
         <h3>Списания:</h3>
         <form action="/charge" method="POST">
@@ -76,6 +77,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% elseif %}
+            <h3>Раунд завершён. Чтобы совершить перевод, дождитесь следующего раунда.</h3>
+        {% endif %}
     </div>
 </div>
 

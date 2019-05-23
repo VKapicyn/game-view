@@ -11,6 +11,7 @@ const isAdmin = require('./middleware').isAdmin;
 const request = require('async-request')
 
 let config = require('./config.js');
+let stop = false;
 
 let userDB = new Datastore({filename: 'users'});
 userDB.loadDatabase();
@@ -167,7 +168,7 @@ router.get('/wallet', isReged, (req, res) => {
     userDB.find({login: req.session.user.login}, (err, accaunt) => {
         accaunt = accaunt[0]
         userDB.find({}, (err, items) => {
-            res.render('wallet.html', {accaunt, items, ops: accaunt.ops.reverse()})
+            res.render('wallet.html', {accaunt, items, ops: accaunt.ops.reverse(), stop})
         })
     })
 })
@@ -286,6 +287,14 @@ router.get('/txs', (req, res) => {
 router.get('/logout', (req, res) => {
     delete req.session.user;
     res.redirect('/')
+})
+
+router.get('/onstart', (req, res) => {
+    stop = false
+    res.send('Запущенно')
+})
+router.get('/onpause', (req, res) => {
+    res.send('Приостановленно')
 })
 
 //----- GAME end
