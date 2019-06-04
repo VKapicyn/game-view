@@ -12,7 +12,7 @@
             <input id="amount" name="amount" class="form-control" type="text" placeholder="Сумма перевода">
             <br>
             <p>Получатель</p>
-            <select name="responser">
+            <select name="responser" class="selectpicker" data-show-subtext="true" data-live-search="true">
                 {% for item in items %}
                     {% if accaunt.login != item.login %}
                     <option value="{{item.login}}">{{item.login}}</option>
@@ -35,7 +35,7 @@
             <input id="amount" name="amount" class="form-control" type="text" placeholder="Сумма взыскания">
             <br>
             <p>Получатель</p>
-            <select name="responser">
+            <select name="responser" class="selectpicker" data-show-subtext="true" data-live-search="true">
                 {% for item in items %}
                     {% if accaunt.login != item.login %}
                     <option value="{{item.login}}">{{item.login}}</option>
