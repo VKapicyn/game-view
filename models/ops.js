@@ -12,14 +12,16 @@ class Operations {
     }
 
     async save() {
-        await opsDB.insert({
-            sender: this.sender,
-            responser: this.responser,
-            amount: this.amount,
-            text:  this.text,
-            date: this.date,
-            round: this.round
-        })
+        return new Promise((res, rej) => {
+            opsDB.insert({
+                sender: this.sender,
+                responser: this.responser,
+                amount: this.amount,
+                text:  this.text,
+                date: this.date,
+                round: this.round
+            }, (err, item) => {res(item)})
+        });
     }
 
     static async getOpsByUser(login) {

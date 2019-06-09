@@ -13,7 +13,7 @@ exports.charge = async (req, res) => {
         responserUser = await User.find(responser);
 
     if (amount > 0) {
-        operation.save();
+        operation = await operation.save();
         senderUser.Ops = operation;
         senderUser.updateDB();
         responserUser.Ops = operation;
@@ -52,7 +52,7 @@ exports.send = async (req, res) => {
             responsersUser = await User.findAll();
 
         if (sender.balance >= amount * responsersUser.length && amount > 0) {
-            operation.save();
+            operation = await operation.save();
             senderUser.Ops(operations);
             senderUser.updateDB();
             responserUser.Ops(operations);
@@ -71,7 +71,7 @@ exports.send = async (req, res) => {
             responserUser = await User.find(responser);
 
         if (amount > 0) {
-            operation.save();
+            operation = await operation.save();
             senderUser.Ops = operation;
             senderUser.updateDB();
             responserUser.Ops = operation;
