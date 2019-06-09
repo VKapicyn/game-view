@@ -37,14 +37,37 @@ class Operations {
         });
     }
 
+    static async getByRound(round) {
+        return new Promise( (res, req) => {
+            let search = {};
+            if (round != 'all')
+                search = {round: Number(round)};
+
+            opsDB.find(search, (err, items)=> {
+                res(items);
+            })
+        })
+    }
+
     static async find() {
         //opsDB.find({}).
         return null;
     }
 
-    static async findAll() {
+    static async findAll(date) {
         return new Promise( (res, rej) => {
             opsDB.find({}).sort({date:-1}).exec((err, ops) => {
+                if (date) {
+                    ops.map(op => {
+                        op.date = op.date.toLocaleString("ru-RU", {
+                            second: 'numeric',
+                            minute: 'numeric', 
+                            hour: 'numeric',
+                            day: 'numeric', 
+                            month: 'numeric', 
+                            year:'numeric'});
+                    })
+                }
                 res(ops)
             });
         })

@@ -1,7 +1,14 @@
 const userDB = require('../server').userDB;
+const User = require('../models/user').User;
+const Ops = require('../models/ops').Operations;
+const Round = require('../models/round');
+const config = require('../config');
 
 exports.getRaitPage = (req, res) => {
-    let admin;
+    let admin,
+        groups = config.projectGoups,
+        tables = config.tables, 
+        rounds = Round.getRoundList();
     
     if (req.session.user)
         admin = require('./admin').isAdmin(req.session.user.login);
@@ -9,8 +16,31 @@ exports.getRaitPage = (req, res) => {
         admin = false;
 
     userDB.find({}).sort({balance: -1}).exec( (err, items) => {
-        res.render('rait.html', {items, admin});
+        res.render('rait.html', {items, admin, groups, tables, rounds});
     });
+}
+
+exports.raitSearchV2 = async (req, res) => {
+    let round = req.body.round,
+        table = req.body.table,
+        group = req.body.group;
+
+    let ops = await Ops.getByRound(round);
+    let users = await User.recalcBalances(table, group, ops);
+
+    //---
+    let admin,
+        groups = config.projectGoups,
+        tables = config.tables, 
+        rounds = Round.getRoundList();
+    
+    if (req.session.user)
+        admin = require('./admin').isAdmin(req.session.user.login);
+    else 
+        admin = false;
+    //---
+    
+    res.render('rait.html', {items: users, admin, groups, tables, rounds})
 }
 
 exports.raitSearch = (req, res) => {

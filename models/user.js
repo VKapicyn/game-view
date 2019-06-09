@@ -52,7 +52,7 @@ class User {
                 let users = [];
 
                 for (let i=0; i<uDs.length; i++) {
-                    users.push(new User(uD[i].login, uD[i].pass, uD[i].ops, uD[i].balance, uD[i].name, uD[i].lastname))
+                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname))
                 }
 
                 res(users)
@@ -95,6 +95,43 @@ class User {
         }
         
         return loginList;
+    }
+
+    static async recalcBalances(table, group, ops) {
+        let userList = await User.findAll();
+        // на слючай изменения числа участников
+        let count = config.tables[0].length;
+
+        if (table != 'all') {
+            for (let i=0; i<userList.length; i++) {
+                if (userList[i].login.substr(0, count) != table){
+                    userList.splice(i, 1);
+                    --i;
+                }
+            }
+        }
+
+        if (group != 'all') {
+            for (let i=0; i<userList.length; i++) {
+                if (userList[i].login.slice(count) != group) {
+                    userList.splice(i, 1);
+                    --i;
+                }
+            }
+        }
+
+        for (let i=0; i<userList.length; i++) {
+            userList[i].balance = 0;
+            for(let j=0; j<ops.length; j++) {
+                if (ops[j].responser == userList[i].login)
+                    userList[i].balance = +userList[i].balance + Number(ops[j].amount);
+                if (ops[j].sender == userList[i].login)
+                    userList[i].balance = +userList[i].balance - Number(ops[j].amount);
+            }
+        }
+        
+
+        return userList;
     }
 
     async save(){

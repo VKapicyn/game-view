@@ -4,6 +4,7 @@ const roundModel = require('../models/round');
 var round = 1;
 
 exports.setRound = (req, res) => {
+    console.log(req.params.command)
     switch(req.params.command) {
         case 'pause':
             roundModel.status = 0;
@@ -13,9 +14,9 @@ exports.setRound = (req, res) => {
             roundModel.status = 1;
             res.send('Возобновлено')
             break;
-        case 'next':
+        case 'end':
             ++round;
-            res.send(round);
+            res.send('round');
             break;
         default:
             if (Number.isInteger(req.params.command))

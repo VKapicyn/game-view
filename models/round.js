@@ -12,4 +12,14 @@ exports.nextRound = () => {
     return Round.round;
 }
 
+exports.getRoundList = () => {
+    let rounds = [];
+
+    for (let i=1; i<=Round.round; i++) {
+        rounds.push(i);
+    }
+
+    return rounds;
+}
+
 module.exports.Round = Round
