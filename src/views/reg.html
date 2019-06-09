@@ -5,13 +5,20 @@
     <div class="col-lg-8 col-md-8 col-sm-12 col-12">
         <form action="/reg" method="POST">
             <h3>Регистрация</h3>
-            <input id="login" name="login" class="form-control" type="text" placeholder="Логин">
+            <br>
+            <p style="color:brown"><u><b>Выберите из списка логин соответствующий коду на вашем бейдже!</b></u></p>
+            <select name="login" id="login" class="selectpicker" data-show-subtext="true" data-live-search="true">
+                {% for item in logins %}
+                    <option value="{{item}}">{{item}}</option>
+                {% endfor %}
+            </select>
+            <br>
             <br>
             <input id="pass" name="pass" class="form-control" type="password" placeholder="Пароль">
             <br>
             <input id="pass1" name="pass1" class="form-control" type="password" placeholder="Повторите пароль">
             <br>
-            <button type="input" class="btn btn-success btn-xs">Зарегистрироваться</button>
+            <button type="input" class="btn btn-success">Зарегистрироваться</button>
         </form>
 
     </div>

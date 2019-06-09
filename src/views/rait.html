@@ -2,12 +2,12 @@
         <!-- Для шапки и футера однозначно нужен темплейт -->
 {% block content %}
 <div class="row">
-    <div class="col-lg-8 col-sm-12">
+    <div class="col-lg-10 col-sm-12">
         <br>
         <form action="/rait" method="POST">
           <div class="input-group">
-            <input type="text" class="form-control" name="mask" id="mask" placeholder="Введите маску поиска" aria-describedby="basic-addon2">
-              <button type="input" class="btn btn-success btn-xs">Фильтровать</button>
+            <input type="text" class="form-control" style="width:50%" name="mask" id="mask" placeholder="Введите маску поиска" aria-describedby="basic-addon2">
+            &nbsp;<button type="input" class="btn btn-success">Фильтровать</button>
           </div>  
         </form>
         <br>
@@ -17,7 +17,11 @@
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Логин</th>
+                {% if admin == true %}
+                  <th scope="col">ФИО</th>
+                {% endif %}
                 <th scope="col">Баланс</th>
+                <th scope="col">Лицензия</th>
               </tr>
             </thead>
             <tbody>
@@ -26,7 +30,11 @@
                 <tr>
                     <th scope="row">{{loop.index}}</th>
                     <td>{{item.login}}</td>
+                      {% if admin == true %}
+                      <td>{{item.name}} {{item.lastname}}</td>
+                      {% endif %}
                     <td>{{item.balance}}</td>
+                    <td>{{item.license}}</td>
                 </tr>
             {% set balance = balance + item.balance%}
             {% endfor %}
@@ -34,6 +42,7 @@
                 <th scope="row">#</th>
                 <td > </td>
                 <td ><b>{{balance}}</b></td>
+                <td ></td>
             </tr>
             </tbody>
           </table>

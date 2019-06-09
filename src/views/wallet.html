@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-8 col-md-8 col-sm-12 col-12">
-        <h2>На Вашем балансе: {{accaunt.balance}}</h2>
+        <h2>На Вашем балансе: {{user.balance}}</h2>
 
         {% if stop == false %}
         <hr>
@@ -13,10 +13,8 @@
             <br>
             <p>Получатель</p>
             <select name="responser" class="selectpicker" data-show-subtext="true" data-live-search="true">
-                {% for item in items %}
-                    {% if accaunt.login != item.login %}
-                    <option value="{{item.login}}">{{item.login}}</option>
-                    {% endif %}
+                {% for item in userList %}
+                    <option value="{{item}}">{{item}}</option>
                 {% endfor %}
                 <option value="Всем">Всем</option>
             </select>
@@ -24,27 +22,25 @@
             <br>
             <input id="text" name="text" class="form-control" type="text" placeholder="Комментарий к платежу">
             <br>
-            <button type="input" class="btn btn-success btn-xs">Перевести</button>
+            <button type="input" class="btn btn-success">Перевести</button>
         </form>
         <br>
 
-        {% if accaunt.login == "Bank" %}
+        {% if charge == true %}
         <hr>
         <h3>Списания:</h3>
         <form action="/charge" method="POST">
             <input id="amount" name="amount" class="form-control" type="text" placeholder="Сумма взыскания">
             <br>
-            <p>Получатель</p>
+            <p>Счета для взысканиия</p>
             <select name="responser" class="selectpicker" data-show-subtext="true" data-live-search="true">
-                {% for item in items %}
-                    {% if accaunt.login != item.login %}
-                    <option value="{{item.login}}">{{item.login}}</option>
-                    {% endif %}
+                {% for item in userList %}
+                    <option value="{{item}}">{{item}}</option>
                 {% endfor %}
             </select>
             <br>
             <br>
-            <button type="input" class="btn btn-success btn-xs">Взыскать</button>
+            <button type="input" class="btn btn-success">Взыскать</button>
         </form>
         <br>
         {% endif %}
@@ -62,14 +58,14 @@
                 <tbody>
                 {% for op in ops %}
                 <tr>
-                    {% if op.type == "output" %}
+                    {% if op.sender == user.login %}
                     <th scope="row">{{(ops.length - loop.index) + 1}}</th>
-                    <td>{{op.user}}</td>
+                    <td>{{op.responser}}</td>
                     <td>-{{op.amount}}</td>
                     <td>{{op.text}}</td>
                     {% else %}
                     <th scope="row">{{(ops.length - loop.index) + 1}}</th>
-                    <td>{{op.user}}</td>
+                    <td>{{op.sender}}</td>
                     <td>+{{op.amount}}</td>
                     <td>{{op.text}}</td>
                     {% endif %}
