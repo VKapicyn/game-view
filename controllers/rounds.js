@@ -1,22 +1,23 @@
 const roundModel = require('../models/round');
 
-//TODO: вынести на страницу админки
-var round = 1;
-
-exports.setRound = (req, res) => {
+exports.setRound = async (req, res) => {
     console.log(req.params.command)
     switch(req.params.command) {
         case 'pause':
-            roundModel.status = 0;
-            res.send('Приостановлено')
+            roundModel.Round.status = 0;
+            res.redirect('/admin/round')
             break;
         case 'start': 
-            roundModel.status = 1;
-            res.send('Возобновлено')
+            roundModel.Round.status = 1;
+            res.redirect('/admin/round')
             break;
-        case 'end':
-            ++round;
-            res.send('round');
+        case 'next':
+            await roundModel.nextRound();
+            res.redirect('/admin/round')
+            break;
+        case 'prev':
+            await roundModel.prevRound();
+            res.redirect('/admin/prev')
             break;
         default:
             if (Number.isInteger(req.params.command))
@@ -26,9 +27,9 @@ exports.setRound = (req, res) => {
 }
 
 exports.getRound = () => {
-    return round;
+    return roundModel.getRound();
 }
 
 exports.getRoundJSON = (req, res) => {
-    res.send(round);
+    res.send(roundModel.getRound());
 }

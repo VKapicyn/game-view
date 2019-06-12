@@ -1,0 +1,74 @@
+{% extends "templates/page.html" %}
+
+        {% block navbar %}
+        <nav class="navbar navbar-expand-lg row header">
+                <a class="navbar-brand col-lg-2 col-sm-2 col-2" href="/">
+                        <img src="/img/логотип1.png" width="90px" height="65px">
+                </a>
+                <div>
+                        <a href="/admin/license">
+                                Лицензии
+                        </a>&nbsp;&nbsp;
+                        <a href="/admin/round">
+                                Раунды 
+                        </a>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="/">
+                                К игре
+                        </a>&nbsp;&nbsp;
+                        <a href="/logout">
+                                Выйти 
+                        </a>
+                </div>
+        </nav>
+        <hr>                    
+        {% endblock %}
+
+{% block content %}
+
+<div class="row">
+        <div class="col-lg-4 col-xs-12">
+                <h4>Создать новый тип лицензии</h4>
+                <form action="/license/create" method="POST">
+                        <input class="form-control" type="text" name="licname" placeholder="Название типа лицензии"><br>
+                        <input class="form-control" type="text" name="ops" placeholder="Операция"><br>
+                        <input type="button" class="btn btn-xs btn-default" onclick="addPole()" value="Добавить поле"><br><br>
+                        <button type="input" class="btn btn-success">Создать</button>
+                </form>
+                <p></p>
+        </div>
+        <div class="col-lg-4 col-xs-12">
+                <h4>Продажа лицензий:</h4>
+                {% for lic in lics %}
+                <form action="/license/offer" method="POST">
+                        <p><b>{{lic.name}}</b> (
+                                {% for ops in lic.opsTypes %}
+                                        <span> {{ops}}; </span>
+                                {% endfor %}
+                        )</p>
+                        <select name="user" class="selectpicker" data-show-subtext="true" data-live-search="true">
+                                {% for user in users %}
+                                        {% set flag = "false" %}
+                                        {% for sent in lic.sentence %}
+                                                {% if (sent.login == user.login) and (sent.round == round) %}
+                                                        {% set flag = "true" %}
+                                                {% endif %}
+                                        {% endfor %}
+                                        {% if flag == "false" %}
+                                        <option value="{{user.login}}">{{user.login}}</option> 
+                                        {% endif %}
+                                {% endfor %}
+                                <option value="all">Всем без лицензий</option>
+                        </select><br>
+                        <input style="visibility: hidden" type="text" value="{{lic.name}}" name="licname">
+                        <input class="form-control" type="text" name="price" placeholder="Цена"><br>
+                        <input type="submit" class="btn btn-success" onclick="createLicense()" value="Предложить">
+                </form>
+                <hr>
+                {% endfor %}   
+        </div>
+        <div class="col-lg-4 col-xs-12">
+                <h4>Памятка по созданию лицензий:</h4>
+                <p>Зачем нужна, что поля означают</p>
+        </div>
+</div>
+{% endblock %}

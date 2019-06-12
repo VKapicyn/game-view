@@ -1,5 +1,6 @@
 const User = require('../models/user').User;
 const Ops = require('../models/ops').Operations;
+const License = require('../models/license').License;
 const roundModel = require('../models/round').Round
 
 exports.charge = async (req, res) => {
@@ -7,8 +8,7 @@ exports.charge = async (req, res) => {
         responser = req.session.user.login,
         amount = req.body.amount;
     
-    console.log(sender, responser, amount)
-    let operation = new Ops(sender, responser, amount, 'Возврат займа банку'),
+    let operation = new Ops(sender, responser, amount, 'Возврат займа банку', 'Кредит'),
         senderUser = await User.find(sender),
         responserUser = await User.find(responser);
 
@@ -26,13 +26,27 @@ exports.getWalletPage = async (req, res) => {
     let user = await User.find(req.session.user.login),
         ops = await Ops.getOpsByUser(req.session.user.login),
         userList = await User.getUserList(req.session.user.login),
-        charge = require('./admin').isAdmin(req.session.user.login);
+        charge = require('./admin').isAdmin(req.session.user.login),
+        baseLic = require('../config').baseLic,
+        licList = require('../config').lic;
+    
+    licTypes = await User.getActualLic(user.login);
+    licTypes = await License.find(licTypes);
+
+
+    if (licTypes != null) {
+        licTypes = licTypes.opsTypes;
+        licTypes.push('Зарплата');
+        licList = licList.concat(licTypes);
+    }
 
     res.render('wallet.html', {
+        baseLic,
+        licList,
         user,
         ops,
         userList,
-        stop: (roundModel.status == 1) ? false : true,
+        stop: charge ? false: (roundModel.status == 1 ? false : true),
         charge
     });
 }
@@ -46,16 +60,17 @@ exports.send = async (req, res) => {
             responser = req.body.responser,
             amount = req.body;
             text = req.body.text;
+            type = req.body.liclist;
     
-        let operation = new Ops(sender, responser, amount, text),
+        let operation = new Ops(sender, responser, amount, text, type),
             senderUser = await User.find(sender),
             responsersUser = await User.findAll();
 
         if (sender.balance >= amount * responsersUser.length && amount > 0) {
             operation = await operation.save();
-            senderUser.Ops(operations);
+            senderUser.Ops = operation;
             senderUser.updateDB();
-            responserUser.Ops(operations);
+            responserUser.Ops = operation;
             responserUser.updateDB();
         }
 
@@ -65,8 +80,9 @@ exports.send = async (req, res) => {
             responser = req.body.responser,
             amount = req.body.amount,
             text = req.body.text;
+            type = req.body.liclist;
     
-        let operation = new Ops(sender, responser, amount, text),
+        let operation = new Ops(sender, responser, amount, text, type),
             senderUser = await User.find(sender),
             responserUser = await User.find(responser);
 

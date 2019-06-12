@@ -17,6 +17,7 @@
         <a href="/reg">Страница регистрации...</a>
         {% else %}
         <br>
+        <h4>Персональные данные:</h4>
         <form action="/setfio" method="POST">
             {% if user.name == "" %}
                 <input id="text" name="Imya" class="form-control" type="text" placeholder="Имя">
@@ -32,7 +33,32 @@
             <button type="input" class="btn btn-success">Сохранить</button>
             {% endif%}
         </form>
-            
+        <br>
+        <h3>Управление лицензиями:</h3><br>
+        <h4>Предложение от банка: </h4>
+        {% if offLic.length != 0 %}
+        <span>Лицензия <b><span id="licoffer">{{offLic[0].name}}</b></span> за {{offLic[0].price}} у.е. </span>
+        <input type="button" onclick="oplata()" class="btn btn-xs btn-success" value="оплатить"><br>
+        {% else %}
+        <span> - </span>
+        {% endif %}<br>
+        
+        <h4>Текущая лицензия: </h4>
+        {% if actualLic != null %}
+        <span style="color:green"> <b><span id="licdecline">{{actualLic}}</span>  </b></span>&nbsp;<input type="button" onclick="otkaz()" class="btn btn-xs btn-default" value="отказаться"><br>
+        {% else %}
+        <span> - </span>
+        {% endif %}
+        <br>
+
+        <h4>История лицензий:</h4>
+        {% for lic in historyLic %}
+            {% if lic.status == true %}
+            <p>раунд {{lic.round}} : <span id="extend">{{lic.name}}</span> | <input type="button" onclick="prodlit()" class="btn btn-success btn-xs" value="продлить"> за {{defPrice}} у.е.</p>
+            {% else %}
+            <p>раунд {{lic.round}} : {{lic.name}}</p>
+            {% endif %}
+        {% endfor %}
         <br>
         <br>
         <h3>Вы авторизованы как {{user.login}}</h3>
@@ -40,5 +66,40 @@
         {% endif%}
     </div>
 </div>
+<script>
+    function otkaz() {
+        alert('уверен?');
+        $.post('/license/sell', {
+            licName: document.getElementById('licdecline').innerHTML
+        })
+        .done(document.location.reload(true));
+    }
+    function prodlit() {
+        $.ajax({
+            url: '/license/extend',
+            method: 'POST',
+            data: {licName: document.getElementById('extend').innerHTML},
+            asycn: true,
+            statusCode: {
+                200: function(message) {
+                    document.location.reload(true)
+                }
+            }
+        });
+    }
+    function oplata(){
+        $.ajax({
+            url: '/license/buy',
+            method: 'POST',
+            data: {licName: document.getElementById('licoffer').innerHTML},
+            asycn: true,
+            statusCode: {
+                200: function(message) {
+                    document.location.reload(true)
+                }
+            }
+        });
+    }
+</script>
 
 {% endblock %}

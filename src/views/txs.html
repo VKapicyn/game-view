@@ -4,6 +4,7 @@
 <div class="row">
     <div class="col-lg-12 col-sm-12">
         <h3>Все операции:</h3>
+        <a href="#">Визуализировать -></a>
         <table class="table">
             <thead>
                 <tr>
@@ -27,7 +28,7 @@
                     <td>{{op.amount}}</td>
                     <td>{{op.type}}</td>
                     <td>{{op.text}}</td>
-                    <td>{{op.date}}</td>
+                    <td>(раунд: {{op.round}}) {{op.date}}</td>
                 </tr>
                 {% endfor %}
             </tbody>

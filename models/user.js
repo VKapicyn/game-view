@@ -1,14 +1,17 @@
 const userDB = require('../server').userDB;
 const config = require('../config');
+const Round = require('../models/round');
+const License = require('../models/license').License;
 
 class User {
-    constructor(login, pass, ops, balance, name, lastname) {
+    constructor(login, pass, ops, balance, name, lastname, licenses) {
         this.login = login;
         this.pass = pass;
         this.ops = ops || []
         this.balance = balance || 0;
         this.name = name || '';
         this.lastname = lastname || '';
+        this.licenses = licenses || [];
     }
 
     set Ops(item) {
@@ -21,16 +24,54 @@ class User {
     }
 
     async updateDB(){
-        await userDB.update({
-            login: this.login
-        }, {
-            login: this.login, 
-            pass: this.pass, 
-            balance: this.balance,
-            ops: this.ops,
-            name: this.name,
-            lastname: this.lastname
-        }, {}, (err, replaced)=>{})
+        return new Promise((res, rej)=>{ 
+            userDB.update({
+                login: this.login
+            }, {
+                login: this.login, 
+                pass: this.pass, 
+                balance: this.balance,
+                ops: this.ops,
+                name: this.name,
+                lastname: this.lastname,
+                licenses: this.licenses
+            }, {}, (err, replaced)=>{res(replaced)})
+        })
+    }
+
+    async burnLicense(){
+        for (let i=0; i<this.licenses.length; i++) {
+            if (this.licenses[i].round == Round.getRound() && this.licenses[i].status == true){
+                this.licenses[i].status = false;
+                await this.updateDB();
+                break;
+            }
+        }
+    }
+
+    //TODO: 
+    async acceptLicense(name) {
+        //оплата
+
+        //обновление у себя
+        //проверка что такая лицензия есть
+
+        this.licenses.push({name: name, round: Round.getRound(), status: true})
+        await this.updateDB();
+        await License.acceptOffer(this.login, name)
+    }
+
+    //TODO: 
+    async toExtend(name) {
+        //оплата
+        
+        //обновление у себя
+        this.licenses.map( lic => {
+            if (lic.name == name && lic.round == (Round.getRound()-1))
+                lic.status = false;
+        });
+        this.licenses.push({name: name, round: Round.getRound(), status: true})
+        await this.updateDB();
     }
 
     static async find(login){
@@ -38,7 +79,7 @@ class User {
             userDB.find({login: login}, (err, uD) => {
                 if (uD.length>0) {
                     uD = uD[0];
-                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname);
+                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses);
                     res(user);
                 }
                 else 
@@ -50,14 +91,39 @@ class User {
         return new Promise((res, rej) => {
             userDB.find({}, (err, uDs) => {
                 let users = [];
-
                 for (let i=0; i<uDs.length; i++) {
-                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname))
+                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, uDs[i].licenses))
                 }
 
                 res(users)
             });
         });
+    }
+    
+    static async getActualLic(login) {
+        let round = Round.getRound();
+        let user = await User.find(login);
+
+        let actualLic = null;
+        user.licenses.map( lic => {
+            if (lic.round == round && lic.status == true)
+                actualLic = lic.name;
+        });
+
+        return actualLic;
+    }
+
+    static async getLicHistory(login) {
+        let round = Round.getRound();
+        let user = await User.find(login);
+
+        let histlLic = [];
+        user.licenses.map( lic => {
+            if (lic.round < round || (lic.round == round && !lic.status))
+                histlLic.push(lic);
+        });
+
+        return histlLic;
     }
 
     static async getUserList(without) {
@@ -134,6 +200,18 @@ class User {
         return userList;
     }
 
+    static removeAdmins(users) {
+        for (let i=0; i<users.length; i++) {
+            for(let j=0; j<config.adminLogins.length; j++) {
+                if (users[i].login == config.adminLogins[j]) {
+                    users.splice(i,1);
+                    --i
+                }   
+            }
+        }
+        return users;
+    }
+
     async save(){
         await userDB.insert({
             login: this.login, 
@@ -141,7 +219,8 @@ class User {
             balance: this.balance,
             ops: this.ops,
             name: this.name,
-            lastname: this.lastname
+            lastname: this.lastname,
+            licenses: this.licenses
         }, (err, item) => {})   
     }
 

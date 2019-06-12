@@ -1,5 +1,65 @@
 {% extends "templates/page.html" %}
-        <!-- Для шапки и футера однозначно нужен темплейт -->
-{% block content %}
-тут текст
-{% endblock %}
+
+        {% block navbar %}
+        <nav class="navbar navbar-expand-lg row header">
+                <a class="navbar-brand col-lg-2 col-sm-2 col-2" href="/">
+                        <img src="/img/логотип1.png" width="90px" height="65px">
+                </a>
+                <div>
+                        <a href="/admin/license">
+                                Лицензии
+                        </a>&nbsp;&nbsp;
+                        <a href="/admin/round">
+                                Раунды 
+                        </a>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="/">
+                                К игре
+                        </a>&nbsp;&nbsp;
+                        <a href="/logout">
+                                Выйти 
+                        </a>
+                </div>
+        </nav>
+        <hr>                    
+        {% endblock %}
+
+        {% block content %}
+        <div class="row">
+                <div class="col-lg-4 col-xs-12">
+                        <h3>Текущий раунд: {{round}}</h3><br>
+                        <button type="input" onclick="prev()" class="btn btn-danger">Назад</button>&nbsp;&nbsp;<button type="input" onclick="next()" class="btn btn-success">Следующий</button>
+                        <hr>
+                        {% if status == 1 %}
+                        <a class="btn btn-default btn-lg" href="/round/pause">Приостановить</a>
+                        {% else %}
+                        <a class="btn btn-default btn-lg" href="/round/start">Возобновить</a>
+                        {% endif %}
+                </div>
+        </div>
+        <script>
+                function prev(){
+                        $.ajax({
+                                url: '/round/prev',
+                                method: 'GET',
+                                asycn: true,
+                                statusCode: {
+                                        200: function(message) {
+                                        document.location.reload(true)
+                                        }
+                                }
+                        });
+                }
+                function next(){
+                        $.ajax({
+                                url: '/round/next',
+                                method: 'GET',
+                                asycn: true,
+                                statusCode: {
+                                        200: function(message) {
+                                        document.location.reload(true)
+                                        }
+                                }
+                        });
+                }
+        </script>
+        {% endblock %}

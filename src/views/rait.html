@@ -10,7 +10,7 @@
           &nbsp;<button type="input" class="btn btn-success">Фильтровать</button>
         </div>  
       </form-->
-      <form action="/rait2" method="POST">
+      <form action="/rait" method="POST">
         <div class="input-group">
           <label>Проектные группы: &nbsp;</label>
           <select name="group">
@@ -33,7 +33,8 @@
             <option value="{{round}}">{{round}}</option>
             {% endfor %}
           </select><br>
-          &nbsp;<button type="input" class="btn btn-success btn-xs">Фильтровать</button>
+          &nbsp;<button type="input" class="btn btn-success btn-xs">Фильтровать</button><br>
+          &nbsp;<a class="btn btn-default btn-xs" href="/rait">Сбросить</a>
         </div>  
       </form>
       <br>
@@ -64,7 +65,29 @@
                       <td>{{item.name}} {{item.lastname}}</td>
                       {% endif %}
                     <td>{{item.balance}}</td>
-                    <td>{{item.license}}</td>
+                    <td>
+                      {% set flag = false %}
+                      {% for lic in item.licenses %}
+                        {% if search != true %}
+                          {% if (lic.round == round) and (lic.status == true) %}
+                            {{lic.name}}
+                            {% set flag = true%}
+                          {% endif %}
+                        {% else %}
+                          {% if (lic.round == round) and (lic.status == true) %}
+                            <span style="color:green"> {{lic.name}} </span> 
+                            {% set flag = true%}
+                          {% endif %}
+                          {% if (lic.round == round) and (lic.status == false) %}
+                            <span> {{lic.name}} </span>
+                            {% set flag = true%}
+                          {% endif %}
+                        {% endif %}
+                      {% endfor %}
+                      {% if flag == false%}
+                      <span> <b>-</b> </span>
+                      {% endif %}
+                    </td>
                 </tr>
             {% set balance = balance + item.balance%}
             {% endfor %}
@@ -73,6 +96,9 @@
                 <td > </td>
                 <td ><b>{{balance}}</b></td>
                 <td > </td>
+                {% if admin == true %}
+                <td></td>
+                {% endif %}
             </tr>
             </tbody>
           </table>

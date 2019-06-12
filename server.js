@@ -12,9 +12,15 @@ let userDB = new Datastore({filename: 'users'});
 userDB.loadDatabase();
 let opsDB = new Datastore({filename: 'operations'});
 opsDB.loadDatabase();
+let licenseDB = new Datastore({filename: 'license'});
+licenseDB.loadDatabase();
+let roundDB = new Datastore({filename: 'round'});
+roundDB.loadDatabase();
 
 module.exports.userDB = userDB;
 module.exports.opsDB = opsDB;
+module.exports.licenseDB = licenseDB;
+module.exports.roundDB = roundDB;
 
 nunjucks.configure(__dirname + '/src/views', {
     autoescape: true,
@@ -44,6 +50,7 @@ app.use(
     }
 );
 
+require('./models/round').onLoad();
 module.exports.express = express;
 app.use('/', require('./router').router);
 app.listen(require('./config.js').port);
