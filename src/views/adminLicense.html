@@ -1,27 +1,8 @@
 {% extends "templates/page.html" %}
 
-        {% block navbar %}
-        <nav class="navbar navbar-expand-lg row header">
-                <a class="navbar-brand col-lg-2 col-sm-2 col-2" href="/">
-                        <img src="/img/логотип1.png" width="90px" height="65px">
-                </a>
-                <div>
-                        <a href="/admin/license">
-                                Лицензии
-                        </a>&nbsp;&nbsp;
-                        <a href="/admin/round">
-                                Раунды 
-                        </a>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <a href="/">
-                                К игре
-                        </a>&nbsp;&nbsp;
-                        <a href="/logout">
-                                Выйти 
-                        </a>
-                </div>
-        </nav>
-        <hr>                    
-        {% endblock %}
+{% block navbar %}
+{% include "templates/adminNabBar.html" %}                   
+{% endblock %}
 
 {% block content %}
 
@@ -30,7 +11,9 @@
                 <h4>Создать новый тип лицензии</h4>
                 <form action="/license/create" method="POST">
                         <input class="form-control" type="text" name="licname" placeholder="Название типа лицензии"><br>
-                        <input class="form-control" type="text" name="ops" placeholder="Операция"><br>
+                        <div id="input-container">
+                                <input class="form-control" type="text" name="ops0" placeholder="Операция"><br>
+                        </div>
                         <input type="button" class="btn btn-xs btn-default" onclick="addPole()" value="Добавить поле"><br><br>
                         <button type="input" class="btn btn-success">Создать</button>
                 </form>
@@ -61,7 +44,7 @@
                         </select><br>
                         <input style="visibility: hidden" type="text" value="{{lic.name}}" name="licname">
                         <input class="form-control" type="text" name="price" placeholder="Цена"><br>
-                        <input type="submit" class="btn btn-success" onclick="createLicense()" value="Предложить">
+                        <input type="submit" class="btn btn-success" value="Предложить">
                 </form>
                 <hr>
                 {% endfor %}   
@@ -71,4 +54,22 @@
                 <p>Зачем нужна, что поля означают</p>
         </div>
 </div>
+
+<script>
+        let i = 0;
+        function addPole() {
+                ++i;
+                let container = document.getElementById('input-container'),
+                        ops = document.createElement('input'),
+                        br = document.createElement('br');
+
+                ops.type = 'text';
+                ops.classList.add('form-control');
+                ops.name = 'ops'+i;
+                ops.placeholder = 'Еще операция';
+                
+                container.appendChild(ops);
+                container.appendChild(br);
+        }
+</script>
 {% endblock %}

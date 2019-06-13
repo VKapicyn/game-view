@@ -86,7 +86,7 @@ exports.send = async (req, res) => {
             senderUser = await User.find(sender),
             responserUser = await User.find(responser);
 
-        if (amount > 0) {
+        if (amount > 0 && senderUser.balance >= amount) {
             operation = await operation.save();
             senderUser.Ops = operation;
             senderUser.updateDB();

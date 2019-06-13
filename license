@@ -1,2 +1,3 @@
-{"name":"Test2","opsTypes":["ror"],"sentence":[{"login":"Test6","status":true,"price":"1","round":2},{"login":"Test6","status":true,"price":"1","round":5}],"_id":"F5aP0agf2Oopgzl9"}
-{"name":"Eest1","opsTypes":["ttt"],"sentence":[{"login":"Test6","status":true,"price":"1","round":5}],"_id":"ezgBUvBrBoPd2hQg"}
+{"name":"Test3","opsTypes":["123"],"sentence":[{"login":"X01","status":false,"price":"4","round":1}],"_id":"L2hFI0OyNaNRlDoZ"}
+{"name":"Test4","opsTypes":["123","234","345"],"sentence":[{"login":"X01","status":true,"price":"5","round":1}],"_id":"caLOpK2ArOKF705G"}
+{"name":"Test3","opsTypes":["123"],"sentence":[{"login":"X01","status":true,"price":"4","round":1}],"_id":"L2hFI0OyNaNRlDoZ"}

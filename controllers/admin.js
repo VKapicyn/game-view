@@ -30,9 +30,19 @@ exports.getLicensePage = async (req, res) => {
 
 exports.createLicense = async (req, res) => {
     let licName = req.body.licname,
-        ops = req.body.ops;
+        opsMass = [];
+        i = 0;
 
-    let lic = new License(licName, [ops]);
+    while (true) {
+        let opsName = 'ops'+i;
+        if (req.body[opsName] == undefined || req.body[opsName] == '') 
+            break;
+
+        opsMass.push(req.body[opsName]);
+        ++i;
+    }
+
+    let lic = new License(licName, opsMass);
         await lic.save()
     res.redirect('/admin/license');
 }

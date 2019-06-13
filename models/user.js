@@ -15,8 +15,11 @@ class User {
     }
 
     set Ops(item) {
-        if (item.sender == this.login)
-            this.balance = +this.balance - item.amount;
+        if (item.sender == this.login) {
+            //console.log(Number(item.amount), this.balance)
+            this.balance = +this.balance - Number(item.amount);
+            //console.log(this.balance)
+        }
         else  
             this.balance = +this.balance + Number(item.amount);
 
@@ -35,7 +38,9 @@ class User {
                 name: this.name,
                 lastname: this.lastname,
                 licenses: this.licenses
-            }, {}, (err, replaced)=>{res(replaced)})
+            }, {}, (err, replaced)=>{
+                res(replaced)
+            })
         })
     }
 
@@ -49,23 +54,13 @@ class User {
         }
     }
 
-    //TODO: 
     async acceptLicense(name) {
-        //оплата
-
-        //обновление у себя
-        //проверка что такая лицензия есть
-
         this.licenses.push({name: name, round: Round.getRound(), status: true})
         await this.updateDB();
         await License.acceptOffer(this.login, name)
     }
 
-    //TODO: 
     async toExtend(name) {
-        //оплата
-        
-        //обновление у себя
         this.licenses.map( lic => {
             if (lic.name == name && lic.round == (Round.getRound()-1))
                 lic.status = false;

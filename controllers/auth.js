@@ -1,5 +1,6 @@
 const User = require('../models/user').User;
 const License = require('../models/License').License;
+const Ops = require('../models/ops').Operations;
 const config = require('../config');
 
 exports.logout = (req, res) => {
@@ -68,9 +69,13 @@ exports.baseRoute = async (req, res) => {
 
 exports.buyLic = async (req, res) => {
     let login = req.session.user.login,
-        user = await User.find(login);
+        user = await User.find(login),
+        lic = await License.getAllOffersForUser(login);
 
-    await user.acceptLicense(req.body.licName);
+    if (await oplataLic(user, req.body.licName, lic[0].price)) {
+        await user.acceptLicense(req.body.licName);
+    }
+
     res.send('ok')
 }
 
@@ -83,12 +88,13 @@ exports.sellLic = async (req, res) => {
 }
 
 exports.extend = async (req, res) => {
-    console.log('ok')
     let login = req.session.user.login,
         user = await User.find(login);
+  
+    if (await oplataLic(user, req.body.licName, config.priceOfExtension)) {
+        await user.toExtend(req.body.licName);
+    }
 
-    await user.toExtend(req.body.licName);
-    console.log('upd')
     res.redirect('/')
 }
 
@@ -103,4 +109,27 @@ exports.setFio = async (req, res) => {
 
     user.updateDB()
     res.redirect('/');
+}
+
+async function oplataLic(senderUser, licName, amount) {
+    let responser = config.adminLogins[0],
+    text = `Покупка ${licName}`;
+    type = config.lic[0];
+
+    let operation = new Ops(senderUser.login, responser, amount, text, type)
+        responserUser = await User.find(responser);
+
+    if (amount > 0 && senderUser.balance >= amount) {
+        operation = await operation.save();
+        senderUser.Ops = operation;
+        console.log(senderUser.balance)
+        await senderUser.updateDB();
+        await User.find(senderUser.name);
+        console.log(senderUser.balance)
+        responserUser.Ops = operation;
+        await responserUser.updateDB();
+        return true;
+    } else {
+        return false;
+    }
 }

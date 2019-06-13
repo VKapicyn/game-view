@@ -68,37 +68,45 @@
 </div>
 <script>
     function otkaz() {
-        alert('уверен?');
-        $.post('/license/sell', {
-            licName: document.getElementById('licdecline').innerHTML
-        })
-        .done(document.location.reload(true));
+        let answer = confirm('Уверены? Вернуть лицензию будет крайне сложно.');
+        if (answer) {
+            $.post('/license/sell', {
+                licName: document.getElementById('licdecline').innerHTML
+            })
+            .done(document.location.reload(true));
+        }
     }
     function prodlit() {
-        $.ajax({
-            url: '/license/extend',
-            method: 'POST',
-            data: {licName: document.getElementById('extend').innerHTML},
-            asycn: true,
-            statusCode: {
-                200: function(message) {
-                    document.location.reload(true)
+        let answer = confirm('Уверены?');
+        if (answer) {
+            $.ajax({
+                url: '/license/extend',
+                method: 'POST',
+                data: {licName: document.getElementById('extend').innerHTML},
+                asycn: true,
+                statusCode: {
+                    200: function(message) {
+                        document.location.reload(true)
+                    }
                 }
-            }
-        });
+            });
+        }
     }
     function oplata(){
-        $.ajax({
-            url: '/license/buy',
-            method: 'POST',
-            data: {licName: document.getElementById('licoffer').innerHTML},
-            asycn: true,
-            statusCode: {
-                200: function(message) {
-                    document.location.reload(true)
+        let answer = confirm('Уверены? С вашего счета произойдет списание');
+        if (answer) {
+            $.ajax({
+                url: '/license/buy',
+                method: 'POST',
+                data: {licName: document.getElementById('licoffer').innerHTML},
+                asycn: true,
+                statusCode: {
+                    200: function(message) {
+                        document.location.reload(true)
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 </script>
 
