@@ -10,6 +10,7 @@ controller.wallet = require('./controllers/wallet');
 controller.rait = require('./controllers/rait');
 controller.txs = require('./controllers/txs');
 controller.admin = require('./controllers/admin');
+controller.board = require('./controllers/board');
 
 router = express.Router();
 
@@ -23,6 +24,7 @@ router.get('/round/:command', middleware.isAdmin, controller.rounds.setRound)
 router.get('/txs', controller.txs.getTxPage)
 router.get('/admin/license', middleware.isAdmin, controller.admin.getLicensePage)
 router.get('/admin/round', middleware.isAdmin, controller.admin.getPage)
+router.get('/board', controller.board.getPage)
 
 router.post('/reg', controller.auth.setUser)
 router.post('/log', controller.auth.login)
