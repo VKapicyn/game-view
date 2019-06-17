@@ -2,6 +2,7 @@ const User = require('../models/user').User;
 const License = require('../models/license').License;
 const Ops = require('../models/ops').Operations;
 const config = require('../config');
+const Round = require('../models/round');
 
 exports.logout = (req, res) => {
     delete req.session.user;
@@ -51,9 +52,10 @@ exports.getMainPage = async (req, res) => {
     let user = await User.find(login),
         offLic = await License.getAllOffersForUser(login),
         actualLic = await User.getActualLic(login),
-        historyLic = await User.getLicHistory(login);
+        historyLic = await User.getLicHistory(login),
+        round = Round.getRound();
     
-    res.render('main.html', {user, offLic, actualLic, historyLic, defPrice: config.priceOfExtension});
+    res.render('main.html', {user, offLic, actualLic, historyLic, defPrice: config.priceOfExtension, round});
 }
 
 exports.baseRoute = async (req, res) => {

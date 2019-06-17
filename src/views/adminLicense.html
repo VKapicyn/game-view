@@ -7,7 +7,7 @@
 {% block content %}
 
 <div class="row">
-        <div class="col-lg-4 col-xs-12">
+        <div class="col-lg-4 col-sm-12">
                 <h4>Создать новый тип лицензии</h4>
                 <form action="/license/create" method="POST">
                         <input class="form-control" type="text" name="licname" placeholder="Название типа лицензии"><br>
@@ -19,7 +19,7 @@
                 </form>
                 <p></p>
         </div>
-        <div class="col-lg-4 col-xs-12">
+        <div class="col-lg-4 col-sm-12">
                 <h4>Продажа лицензий:</h4>
                 {% for lic in lics %}
                 <form action="/license/offer" method="POST">
@@ -49,7 +49,7 @@
                 <hr>
                 {% endfor %}   
         </div>
-        <div class="col-lg-4 col-xs-12">
+        <div class="col-lg-4 col-sm-12">
                 <h4>Памятка по созданию лицензий:</h4>
                 <p>Зачем нужна, что поля означают</p>
         </div>

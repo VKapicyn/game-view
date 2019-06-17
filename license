@@ -1,4 +1,8 @@
-{"name":"Производитель2","opsTypes":["Покупка буквы"],"sentence":[],"_id":"JvylOmb3jlVVnDOs"}
-{"name":"Производитель","opsTypes":["Покупка буквы"],"sentence":[{"login":"all","status":false,"price":"1","round":2}],"_id":"OrcKIGar7YOqyvjp"}
-{"name":"Поставщик","opsTypes":["Покупка слова"],"sentence":[],"_id":"UIatiEoaTi4JKZFx"}
-{"name":"Инженер","opsTypes":["Покупка буквы"],"sentence":[],"_id":"c5byh4Ra5hidFH7i"}
+{"name":"Test1","opsTypes":["123"],"sentence":[],"_id":"kYTXFjUcadeL5eO0"}
+{"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1}],"_id":"kYTXFjUcadeL5eO0"}
+{"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1},{"login":"Bank","status":false,"price":"3","round":2}],"_id":"kYTXFjUcadeL5eO0"}
+{"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1},{"login":"Bank","status":true,"price":"3","round":2}],"_id":"kYTXFjUcadeL5eO0"}
+{"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1},{"login":"Bank","status":true,"price":"3","round":2},{"login":"Bank","status":false,"price":"1","round":3}],"_id":"kYTXFjUcadeL5eO0"}
+{"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1},{"login":"Bank","status":true,"price":"3","round":2},{"login":"Bank","status":true,"price":"1","round":3}],"_id":"kYTXFjUcadeL5eO0"}
+{"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1},{"login":"Bank","status":true,"price":"3","round":2},{"login":"Bank","status":true,"price":"1","round":3},{"login":"Bank","status":false,"price":"3","round":4}],"_id":"kYTXFjUcadeL5eO0"}
+{"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1},{"login":"Bank","status":true,"price":"3","round":2},{"login":"Bank","status":true,"price":"1","round":3},{"login":"Bank","status":true,"price":"3","round":4}],"_id":"kYTXFjUcadeL5eO0"}

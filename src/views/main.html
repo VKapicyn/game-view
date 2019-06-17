@@ -36,7 +36,7 @@
         <br>
         <h3>Управление лицензиями:</h3><br>
         <h4>Предложение от банка: </h4>
-        {% if offLic.length != 0 %}
+        {% if (offLic.length != 0) and (actualLic == null) %}
         <span>Лицензия <b><span id="licoffer">{{offLic[0].name}}</b></span> за {{offLic[0].price}} у.е. </span>
         <input type="button" onclick="oplata()" class="btn btn-xs btn-success" value="оплатить"><br>
         {% else %}
@@ -53,8 +53,10 @@
 
         <h4>История лицензий:</h4>
         {% for lic in historyLic %}
-            {% if lic.status == true %}
-            <p>раунд {{lic.round}} : <span id="extend">{{lic.name}}</span> | <input type="button" onclick="prodlit()" class="btn btn-success btn-xs" value="продлить"> за {{defPrice}} у.е.</p>
+            {% if (lic.status == true) and ((round-1)==lic.round) and (actualLic == null) %}
+            <p>раунд {{lic.round}} : <span id="extend">{{lic.name}}</span> 
+                | <input type="button" onclick="prodlit()" class="btn btn-success btn-xs" value="продлить"> за {{defPrice}} у.е.
+            </p>
             {% else %}
             <p>раунд {{lic.round}} : {{lic.name}}</p>
             {% endif %}
