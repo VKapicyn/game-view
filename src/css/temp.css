@@ -487,3 +487,35 @@
 .search-form{
   width: 50% !important;
 }
+
+.advert-1{
+  height: 300px;
+  border: 1px solid grey; 
+  padding:15px; 
+  border-radius: 5px 5px 5px 5px
+}
+
+.card-board{
+  padding: 5px; 
+}
+
+.card-board-inner{
+  margin: 5px; 
+  padding: 7px; 
+  height: 230px;
+  border-radius: 5px 5px 5px 5px
+}
+
+.advert{
+  height: 300px;
+  border: 1px solid green; 
+  padding:15px; 
+  border-radius: 5px 5px 5px 5px
+}
+
+.buy{
+  border: 1px solid green; 
+}
+.sell{
+  border: 1px solid brown; 
+}

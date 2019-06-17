@@ -119,13 +119,11 @@ async function oplataLic(senderUser, licName, amount) {
     let operation = new Ops(senderUser.login, responser, amount, text, type)
         responserUser = await User.find(responser);
 
-    if (amount > 0 && senderUser.balance >= amount) {
+    if (amount > 0 && await senderUser.Balance() >= amount) {
         operation = await operation.save();
         senderUser.Ops = operation;
-        console.log(senderUser.balance)
         await senderUser.updateDB();
         await User.find(senderUser.name);
-        console.log(senderUser.balance)
         responserUser.Ops = operation;
         await responserUser.updateDB();
         return true;

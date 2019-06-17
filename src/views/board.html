@@ -1,0 +1,111 @@
+{% extends "templates/page.html" %}
+{% block head %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block commonStyles %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />    
+    <link rel="stylesheet" href="/css/temp.css" />
+    {% endblock %}
+    <title></title>
+</head>
+<body>
+{% endblock %}
+{% block content %}
+<div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Обратите внимание!</h4>
+        <p>При принятии заявки, с заказчика списывается сумма, указанная в заявке, а исполнитель обязан до конца раунад реализовать заказ, в ином случае исполнитель - штрафуется.</p>
+        <p>Запрещено создавать объявления не соответствующие вашей лицензии.</p>
+        <p>Одновмеренно допустимо не более 10 нереализованных заявок.</p>
+    </div>
+<div class="row">
+    <div class="col-lg-4 col-sm-12">
+        <div class="advert-1">
+            <h4>Поиск объявлений:</h4>
+            <form method="GET" action="/board/search">
+                <input type="radio" name="predmet" value="package" checked>&nbsp;<labeL>Пакет</labeL><br>
+                <input type="radio" name="predmet" value="word">&nbsp;<labeL>Слово</labeL><br>
+                <input type="radio" name="predmet" value="letter" >&nbsp;<labeL>Буква</labeL>
+                <hr>
+                <input type="radio" name="buysell" value="buy" checked>&nbsp;<labeL>Хотят купить</labeL><br>
+                <input type="radio" name="buysell" value="sel" >&nbsp;<labeL>Хотят продать</labeL><br>
+                <input type="submit" class="btn btn-success" value="Найти">
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-12">
+        <div class="advert-1">
+            <h4>Создать объявление: ({{myActiveAds.length}}/10)</h4>
+            <form method="POST" action="/advert/create">
+                <input type="radio" name="predmet" value="package" checked>&nbsp;<labeL>Пакет</labeL><br>
+                <input type="radio" name="predmet" value="word">&nbsp;<labeL>Слово</labeL><br>
+                <input type="radio" name="predmet" value="letter" >&nbsp;<labeL>Буква</labeL><br>
+                <input type="text" name="fizPrice" placeholder="Цена">
+                <input type="text" name="fizPredmet" placeholder="Предмет сделки">
+                <hr>
+                <input type="radio" name="buysell" value="buy" checked>&nbsp;<labeL>Куплю</labeL><br>
+                <input type="radio" name="buysell" value="sel" >&nbsp;<labeL>Продам</labeL><br>
+                <input type="submit" class="btn btn-warning" value="Создать">
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-2 col-sm-6">
+        <h4>Ваши заявки:</h4> 
+        {% for item in myActiveAds %}
+        <span style="cursor: pointer" onclick="myads({{item.num}},'{{item.offerType}}','{{item.predmet}}',{{item.price}})">Объявление #{{item.num}}</span> <a href="/cancel/ad/{{item.num}}" class="btn btn-default btn-xs">Отменить</a></br>
+        {% endfor %}
+
+    </div>  
+    <div class="col-lg-2 col-sm-6">
+        <h4>Ваши обязательства:</h4>  
+        {% for ob in obligation %}
+            {% if ob.actual == 1 %}
+            <b>{{ob.responser}}</b> - ( {{ob.predmet}} )<br>
+            {% else %}
+            <span style="color:grey"><b>{{ob.responser}}</b> - ( {{ob.predmet}} )<br></span>
+            {% endif %}
+        {% endfor %}
+    </div>
+        
+
+</div>  
+    <hr>
+    <!--div class="container-fluid"-->
+    <h3>Доступные объявления:</h3>
+        <div class="row">
+                {% for ad in ads %}
+                    <div class="col-lg-3 col-md-6 col-xs-12 card-board">
+                        {% if ad.offerType == "sel" %}
+                            <div class="card-board-inner buy">
+                                <h4>Объявление #{{ad.num}}</h4>
+                                <p>Автор: {{ad.author}}</p>
+                                <p>Тип заявки: На продажу</p>
+                                <p>Предмет: {{ad.predmetType}}<br>( {{ad.predmet}} )</p>
+                                <p>Цена: {{ad.price}} у.е. </p>
+                                <a href="/advert/buy/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-success btn-xs">Купить</a>
+                            </div>
+                        {% else %}
+                            <div class="card-board-inner sell">
+                                <h4>Объявление #{{ad.num}}</h4>
+                                <p>Автор: {{ad.author}}</p>
+                                <p>Тип заявки: Закупка</p>
+                                <p>Предмет: {{ad.predmetType}}<br>( {{ad.predmet}} )</p>
+                                <p>Цена: {{ad.price}} у.е. </p>
+                                <a href="/advert/sell/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-danger btn-xs">Поставить</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+        </div>  
+</div>
+<script>
+    function myads(num, _type, predemt, price){
+        alert(`Тип объявления: ${(_type=='buy'?'Покупка':'Продажа')}
+        Предемет сделки: ${predemt}
+        Цена: ${price}`);
+    }
+</script>
+{% endblock %}

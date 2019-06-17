@@ -16,11 +16,14 @@ let licenseDB = new Datastore({filename: 'license'});
 licenseDB.loadDatabase();
 let roundDB = new Datastore({filename: 'round'});
 roundDB.loadDatabase();
+let advertDB = new Datastore({filename: 'advert'});
+advertDB.loadDatabase();
 
 module.exports.userDB = userDB;
 module.exports.opsDB = opsDB;
 module.exports.licenseDB = licenseDB;
 module.exports.roundDB = roundDB;
+module.exports.advertDB = advertDB;
 
 nunjucks.configure(__dirname + '/src/views', {
     autoescape: true,

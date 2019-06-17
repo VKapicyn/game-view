@@ -3,7 +3,14 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-7 col-md-7 col-sm-12 col-12">
-        <h2>На Вашем балансе: {{user.balance}}</h2>
+        <h2>На Вашем балансе: 
+            {% if (user.balance == specBalance) %}
+                {{user.balance}}
+            {% else %}
+                {% set dolg = user.balance-specBalance %}
+                {{specBalance}} (залог: {{dolg}})
+            {% endif %}
+        </h2>
 
         {% if stop == false %}
         <hr>

@@ -2,6 +2,8 @@ const userDB = require('../server').userDB;
 const config = require('../config');
 const Round = require('../models/round');
 const License = require('../models/license').License;
+const Advert = require('../models/advert').Advert;
+const advertDB = require('../server').advertDB;
 
 class User {
     constructor(login, pass, ops, balance, name, lastname, licenses) {
@@ -24,6 +26,18 @@ class User {
             this.balance = +this.balance + Number(item.amount);
 
         this.ops.push(item._id);
+    }
+
+    async Balance() {
+        return new Promise((res, rej) => {
+            advertDB.find({author: this.login, offerType: 'buy', contrAgent: '', status: true}, (err, items) => {
+                let minus = 0;
+                items.map(item => {
+                    minus = Number(minus)+Number(item.price)
+                })
+                res(this.balance-minus)
+            })
+        })
     }
 
     async updateDB(){

@@ -1,7 +1,6 @@
 const roundModel = require('../models/round');
 
 exports.setRound = async (req, res) => {
-    console.log(req.params.command)
     switch(req.params.command) {
         case 'pause':
             roundModel.Round.status = 0;

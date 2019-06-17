@@ -11,6 +11,7 @@ controller.rait = require('./controllers/rait');
 controller.txs = require('./controllers/txs');
 controller.admin = require('./controllers/admin');
 controller.board = require('./controllers/board');
+controller.analitic = require('./controllers/analitic');
 
 router = express.Router();
 
@@ -24,7 +25,12 @@ router.get('/round/:command', middleware.isAdmin, controller.rounds.setRound)
 router.get('/txs', controller.txs.getTxPage)
 router.get('/admin/license', middleware.isAdmin, controller.admin.getLicensePage)
 router.get('/admin/round', middleware.isAdmin, controller.admin.getPage)
-router.get('/board', controller.board.getPage)
+router.get('/board', middleware.isReged, controller.board.getPage)
+router.get('/analitic', controller.analitic.getPage)
+router.get('/cancel/ad/:num', controller.board.cancelAd)
+router.get('/advert/buy/:num', controller.board.buyAd)
+router.get('/advert/sell/:num', controller.board.sellAd)
+router.get('/board/search', controller.board.search)
 
 router.post('/reg', controller.auth.setUser)
 router.post('/log', controller.auth.login)
@@ -37,5 +43,6 @@ router.post('/license/offer', middleware.isAdmin, controller.admin.addOffer)
 router.post('/license/buy', middleware.isReged, controller.auth.buyLic)
 router.post('/license/sell', middleware.isReged, controller.auth.sellLic)
 router.post('/license/extend', middleware.isReged, controller.auth.extend)
+router.post('/advert/create', middleware.isReged, controller.board.createAdv)
 
 module.exports.router = router

@@ -28,7 +28,9 @@ exports.getWalletPage = async (req, res) => {
         userList = await User.getUserList(req.session.user.login),
         charge = require('./admin').isAdmin(req.session.user.login),
         baseLic = require('../config').baseLic,
-        licList = require('../config').lic;
+        licList = require('../config').lic,
+        specBalance = await user.Balance();
+
     
     licTypes = await User.getActualLic(user.login);
     licTypes = await License.find(licTypes);
@@ -47,7 +49,8 @@ exports.getWalletPage = async (req, res) => {
         ops,
         userList,
         stop: charge ? false: (roundModel.status == 1 ? false : true),
-        charge
+        charge,
+        specBalance
     });
 }
 
@@ -57,21 +60,26 @@ exports.send = async (req, res) => {
 
     if (req.body.responser == 'Всем') {
         let sender = req.session.user.login,
-            responser = req.body.responser,
-            amount = req.body;
+            amount = req.body.amount;
             text = req.body.text;
             type = req.body.liclist;
     
-        let operation = new Ops(sender, responser, amount, text, type),
-            senderUser = await User.find(sender),
+        let senderUser = await User.find(sender),
             responsersUser = await User.findAll();
 
-        if (sender.balance >= amount * responsersUser.length && amount > 0) {
-            operation = await operation.save();
-            senderUser.Ops = operation;
-            senderUser.updateDB();
-            responserUser.Ops = operation;
-            responserUser.updateDB();
+
+        if (await senderUser.Balance() >= amount * responsersUser.length && amount > 0) {
+            for( let i=0; i<responsersUser.length; i++) {
+                if (responsersUser[i].login != senderUser.login) {
+                    let operation = new Ops(sender, responsersUser[i].login, amount, text, type);
+
+                    operation = await operation.save();
+                    senderUser.Ops = operation;
+                    await senderUser.updateDB();
+                    responsersUser[i].Ops = operation;
+                    await responsersUser[i].updateDB();
+                }
+            }          
         }
 
         res.redirect('/wallet')
@@ -86,7 +94,7 @@ exports.send = async (req, res) => {
             senderUser = await User.find(sender),
             responserUser = await User.find(responser);
 
-        if (amount > 0 && senderUser.balance >= amount) {
+        if (amount > 0 && await senderUser.Balance() >= amount) {
             operation = await operation.save();
             senderUser.Ops = operation;
             senderUser.updateDB();

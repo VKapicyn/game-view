@@ -13,31 +13,47 @@
 {% endblock %}
 
 {% block navbar %}
-<nav class="navbar navbar-expand-lg row header">
-    <a class="navbar-brand col-lg-2 col-sm-2 col-2" href="/">
-      <img src="/img/логотип1.png" width="90px" height="65px">
-    </a>
-    <div>
-        <a href="/">
-            ЛК
-        </a>&nbsp;&nbsp;
-        <a href="/wallet">
-            Кошелек 
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-main" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <a class="navbar-brand" href="#">
+            <img src="/img/логотип1.png" width="60" height="45" class="d-inline-block align-top" alt="">
         </a>
-        </a>&nbsp;&nbsp;
-        <a href="/rait">
-        Рейтинг
-        </a>&nbsp;&nbsp;
-        <a href="/txs">
-            Транзакции 
-        </a>
-        <a href="/board">
-            Объявления 
-        </a>
-        </a>&nbsp;&nbsp;
-        <a href="/logout">
-            Выйти 
-        </a>
+        <div class="collapse navbar-collapse" id="navbar-main">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/">
+                        ЛК
+                    </a>&nbsp;&nbsp;
+                </li>
+                <li>
+                    <a href="/wallet">
+                        Кошелек 
+                    </a>&nbsp;&nbsp;
+                </li>
+                <li>
+                    <a href="/rait">
+                        Рейтинг
+                    </a>&nbsp;&nbsp;
+                </li>
+                <li>
+                    <a href="/txs">
+                        Транзакции 
+                    </a>&nbsp;&nbsp;
+                </li>
+                <li>
+                    <a href="/board">
+                        Объявления 
+                    </a>&nbsp;&nbsp;
+                </li>
+                <li>
+                    <a href="/logout">
+                        Выйти 
+                    </a>
+                </li>
     </div>
   </nav>
   <hr>
@@ -65,15 +81,14 @@
 <hr>
 <footer>
         <div class="foot">
-               <p>Copyright 2019</p> 
+            <table width="100%"><tr>
+                <td width="33%"></td>
+                <td width="33%"><p align="center">2019 System-2 ©</p></td>
+                <td width="33%"><p align="right" style="padding-right: 10%;"><a href="http://t2ch.ru">Created by Time2Chain</a</p></td>
+            </table></tr>
         </div>
     </footer>  
     {% block commonJS %}
-    <!--script
-    src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous"></script-->
-    <!--script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
