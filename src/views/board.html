@@ -53,7 +53,7 @@
     </div>
 
     <div class="col-lg-2 col-sm-6">
-        <h4>Ваши заявки:</h4> 
+        <h4>Ваши объявления:</h4> 
         {% for item in myActiveAds %}
         <span style="cursor: pointer" onclick="myads({{item.num}},'{{item.offerType}}','{{item.predmet}}',{{item.price}})">Объявление #{{item.num}}</span> <a href="/cancel/ad/{{item.num}}" class="btn btn-default btn-xs">Отменить</a></br>
         {% endfor %}
@@ -104,7 +104,7 @@
 <script>
     function myads(num, _type, predemt, price){
         alert(`Тип объявления: ${(_type=='buy'?'Покупка':'Продажа')}
-        Предемет сделки: ${predemt}
+        Предмет сделки: ${predemt}
         Цена: ${price}`);
     }
 </script>

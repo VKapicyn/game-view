@@ -1,5 +1,5 @@
 const User = require('../models/user').User;
-const License = require('../models/License').License;
+const License = require('../models/license').License;
 const Ops = require('../models/ops').Operations;
 const config = require('../config');
 
@@ -113,7 +113,7 @@ exports.setFio = async (req, res) => {
 
 async function oplataLic(senderUser, licName, amount) {
     let responser = config.adminLogins[0],
-    text = `Покупка ${licName}`;
+    text = `Оплата лицнзии "${licName}"`;
     type = config.lic[0];
 
     let operation = new Ops(senderUser.login, responser, amount, text, type)

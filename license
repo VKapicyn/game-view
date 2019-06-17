@@ -1,0 +1,4 @@
+{"name":"Производитель2","opsTypes":["Покупка буквы"],"sentence":[],"_id":"JvylOmb3jlVVnDOs"}
+{"name":"Производитель","opsTypes":["Покупка буквы"],"sentence":[{"login":"all","status":false,"price":"1","round":2}],"_id":"OrcKIGar7YOqyvjp"}
+{"name":"Поставщик","opsTypes":["Покупка слова"],"sentence":[],"_id":"UIatiEoaTi4JKZFx"}
+{"name":"Инженер","opsTypes":["Покупка буквы"],"sentence":[],"_id":"c5byh4Ra5hidFH7i"}

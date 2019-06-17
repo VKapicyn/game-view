@@ -104,15 +104,15 @@ function isNumeric(value) {
 }
 
 async function oplataAd(sender, responser, ad) {
-    let text = `Покупка ( ${ad.predmet} )`;
+    let text = `Купля-продажа ( ${ad.predmet} )`;
 
     //TODO: переделать соответствии с лицензиями
     let type = ad.predmetType;
-    switch(ad.predmetType) {
-        case 'Слово': type = 'Покупка слова'; break;
+    /*switch(ad.predmetType) {
+        case 'Слово': type = 'Сделка со словом'; break;
         case 'Буква': predmetType = 'Покупка буквы'; break;
         case 'Пакет': predmetType = 'Покупка пакета'; break;
-    }
+    }*/
 
     let operation = new Ops(sender, responser, ad.price, text, type)
         responserUser = await User.find(responser),
