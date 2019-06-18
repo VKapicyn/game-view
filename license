@@ -1,8 +1,1 @@
-{"name":"Test1","opsTypes":["123"],"sentence":[],"_id":"kYTXFjUcadeL5eO0"}
-{"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1}],"_id":"kYTXFjUcadeL5eO0"}
-{"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1},{"login":"Bank","status":false,"price":"3","round":2}],"_id":"kYTXFjUcadeL5eO0"}
-{"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1},{"login":"Bank","status":true,"price":"3","round":2}],"_id":"kYTXFjUcadeL5eO0"}
-{"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1},{"login":"Bank","status":true,"price":"3","round":2},{"login":"Bank","status":false,"price":"1","round":3}],"_id":"kYTXFjUcadeL5eO0"}
-{"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1},{"login":"Bank","status":true,"price":"3","round":2},{"login":"Bank","status":true,"price":"1","round":3}],"_id":"kYTXFjUcadeL5eO0"}
-{"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1},{"login":"Bank","status":true,"price":"3","round":2},{"login":"Bank","status":true,"price":"1","round":3},{"login":"Bank","status":false,"price":"3","round":4}],"_id":"kYTXFjUcadeL5eO0"}
 {"name":"Test1","opsTypes":["123"],"sentence":[{"login":"Bank","status":false,"price":"1","round":1},{"login":"Bank","status":true,"price":"3","round":2},{"login":"Bank","status":true,"price":"1","round":3},{"login":"Bank","status":true,"price":"3","round":4}],"_id":"kYTXFjUcadeL5eO0"}
