@@ -1,0 +1,4 @@
+{"num":1,"author":"X01","offerType":"sel","predmet":"топор","predmetType":"Слово","price":"40","round":5,"status":true,"contrAgent":"","_id":"kzcYlHFSukeo9Yqf"}
+{"num":1,"author":"X01","offerType":"sel","predmet":"топор","price":"40","round":5,"status":true,"contrAgent":"X02","_id":"kzcYlHFSukeo9Yqf"}
+{"num":2,"author":"X01","offerType":"sel","predmet":"Дом","predmetType":"Слово","price":"20","round":5,"status":true,"contrAgent":"","_id":"qyxyOrteliIFJIau"}
+{"num":2,"author":"X01","offerType":"sel","predmet":"Дом","price":"20","round":5,"status":true,"contrAgent":"X02","_id":"qyxyOrteliIFJIau"}

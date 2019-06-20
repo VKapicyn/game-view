@@ -116,9 +116,10 @@ async function oplataAd(sender, responser, ad) {
 
     let operation = new Ops(sender, responser, ad.price, text, type)
         responserUser = await User.find(responser),
-        senderUser = await User.find(sender);
+        senderUser = await User.find(sender),
+        isAdExist = await Advert.find(ad.num);
 
-    if (ad.price > 0 && senderUser.balance >= ad.price) {
+    if (isAdExist && ad.price > 0 && senderUser.balance >= ad.price) {
         operation = await operation.save();
         senderUser.Ops = operation;
         await senderUser.updateDB();
