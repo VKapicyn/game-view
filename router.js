@@ -31,6 +31,7 @@ router.get('/cancel/ad/:num', controller.board.cancelAd)
 router.get('/advert/buy/:num', controller.board.buyAd)
 router.get('/advert/sell/:num', controller.board.sellAd)
 router.get('/board/search', controller.board.search)
+router.get('/board/err/:type', controller.board.err)
 
 router.post('/reg', controller.auth.setUser)
 router.post('/log', controller.auth.login)

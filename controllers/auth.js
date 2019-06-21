@@ -37,7 +37,7 @@ exports.setUser = async (req, res) => {
         req.session.save();
         res.redirect('/wallet');
     } else {
-        res.redirect('/main/regerr');
+        res.redirect('/reg');
     }
 }
 

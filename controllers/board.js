@@ -64,9 +64,10 @@ exports.buyAd = async (req, res) => {
         ad.contrAgent = buyer;
         ad.round = Round.getRound();
         await ad.updateDB();
+        res.redirect('/board/err/ok');
     }
-    
-    res.redirect('/board')
+    else 
+        res.redirect('/board/err/neok');
 }
 
 exports.sellAd = async (req, res) => {
@@ -81,9 +82,10 @@ exports.sellAd = async (req, res) => {
         ad.contrAgent = seller;
         ad.round = Round.getRound();
         await ad.updateDB();
-    }    
-
-    res.redirect('/board')
+        res.redirect('/board/err/ok');
+    }
+    else 
+        res.redirect('/board/err/neok');
 }
 
 exports.search = async (req, res) => {
@@ -99,6 +101,10 @@ exports.search = async (req, res) => {
     res.render('board.html', {myActiveAds, obligation, ads});
 }
 
+exports.err = async (req, res) => {
+    res.render('boarderr.html', {err: (req.params.type=='ok')?1:0});
+}
+
 function isNumeric(value) {
     return /^\d+$/.test(value);
 }
@@ -108,18 +114,13 @@ async function oplataAd(sender, responser, ad) {
 
     //TODO: переделать соответствии с лицензиями
     let type = ad.predmetType;
-    /*switch(ad.predmetType) {
-        case 'Слово': type = 'Сделка со словом'; break;
-        case 'Буква': predmetType = 'Покупка буквы'; break;
-        case 'Пакет': predmetType = 'Покупка пакета'; break;
-    }*/
+
 
     let operation = new Ops(sender, responser, ad.price, text, type)
         responserUser = await User.find(responser),
-        senderUser = await User.find(sender),
-        isAdExist = await Advert.find(ad.num);
+        senderUser = await User.find(sender);
 
-    if (isAdExist && ad.price > 0 && senderUser.balance >= ad.price) {
+    if (ad.contrAgent === '' && ad.price > 0 && senderUser.balance >= ad.price) {
         operation = await operation.save();
         senderUser.Ops = operation;
         await senderUser.updateDB();

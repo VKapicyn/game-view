@@ -1,0 +1,31 @@
+{% extends "templates/page.html" %}
+{% block head %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block commonStyles %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />    
+    <link rel="stylesheet" href="/css/temp.css" />
+    {% endblock %}
+    <title></title>
+</head>
+<body>
+{% endblock %}
+{% block content %}
+{% if err == 0 %}
+<div class="alert alert-warning" role="alert">
+        <h4 class="alert-heading">Не удалось выполнить операцию.</h4>
+        <p>Данное объявление либо устарело, либо недостаточно средств для его исполнения.</p>
+        <h3><a href="/board">Вернуться к объявлениям.</a></h3>
+</div>
+{% else %}
+<div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">Сделка заключена.</h4>
+    <p>Информацию о своих покупках вы можете отследить во вкладке "Кошелек" в разделе "Мои операции".</p>
+    <p>Сделки по продаже вы можете отследить во вкладке "Объявления" в разделе "Ваши обязательства".</p>
+    <h3><a href="/board">Вернуться к объявлениям.</a></h3>
+</div>
+{% endif %}
+{% endblock %}
