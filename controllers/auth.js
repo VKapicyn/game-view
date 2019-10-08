@@ -31,6 +31,29 @@ exports.setUser = async (req, res) => {
 
     if (isReged == null) {
         let user = new User(req.body.login, req.body.pass);
+            user.name = req.body.name;
+            user.lastname = req.body.lastname;
+            user.email = req.body.email;
+            
+        await user.save();
+        
+    user.updateDB()
+
+        req.session.user = {id: user._id, login: user.login, session: req.sessionID}
+        req.session.save();
+        res.redirect('/wallet');
+    } else {
+        res.redirect('/reg');
+    }
+}
+
+exports.setPrjct = async (req, res) => {
+    let isReged = await User.find(req.body.login);
+
+    if (isReged == null) {
+        let user = new User(req.body.login, req.body.pass);
+            user.name = req.body.name;
+
         await user.save();
 
         req.session.user = {id: user._id, login: user.login, session: req.sessionID}
@@ -44,6 +67,11 @@ exports.setUser = async (req, res) => {
 exports.getRegPage = async (req, res) => {
     let logins = await User.getAccessableLogins();
     res.render('reg.html', {logins});
+}
+
+exports.getRegPrjctPage = async (req, res) => {
+    let logins = await User.getProjectLogins();
+    res.render('regPrjct.html', {logins});
 }
 
 exports.getMainPage = async (req, res) => {

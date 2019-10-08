@@ -6,6 +6,7 @@ exports.userDB = 'game_users';
 exports.opsDB = 'game_ops';
 exports.projectGoups = ['01','02','03','04','05','06'];
 exports.tables = ['X', 'Y', 'Z'];
+exports.newProjects = ['Project_1', 'Project_2', 'Project_3', 'Project_4', 'Project_5', 'Project_6', 'Project_7', 'Project_8', 'Project_9', 'Project_10']
 exports.lic = ['Покупка лицензии', 'За изменение правил', 'Другое'];
 exports.baseLic = 'Другое';
 exports.creditLimit = 200;

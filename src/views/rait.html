@@ -16,14 +16,7 @@
       </form-->
       <form action="/rait" method="POST">
         <div class="input-group">
-          <label>Проектные группы: &nbsp;</label>
-          <select name="group">
-            <option value="all">Все</option>
-            {% for group in groups %}
-            <option value="{{group}}">{{group}}</option>
-            {% endfor %}
-          </select><br>
-          <label>Столы: &nbsp;</label>
+          <label>Лицензии: &nbsp;</label>
           <select name="table">
             <option value="all">Все</option>
             {% for table in tables %}
@@ -54,6 +47,7 @@
                 <th scope="col">Логин</th>
                 {% if admin == true %}
                   <th scope="col">ФИО</th>
+                  <th scope="col">Email</th>
                 {% endif %}
                 <th scope="col">Баланс</th>
                 <th scope="col">Лицензия</th>
@@ -67,6 +61,7 @@
                     <td>{{item.login}}</td>
                       {% if admin == true %}
                       <td>{{item.name}} {{item.lastname}}</td>
+                      <td>{{item.email}}</td>
                       {% endif %}
                     <td>{{item.balance}}</td>
                     <td>
@@ -101,6 +96,7 @@
                 <td ><b>{{balance}}</b></td>
                 <td > </td>
                 {% if admin == true %}
+                <td></td>
                 <td></td>
                 {% endif %}
             </tr>

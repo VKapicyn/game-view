@@ -6,7 +6,7 @@ const Advert = require('../models/advert').Advert;
 const advertDB = require('../server').advertDB;
 
 class User {
-    constructor(login, pass, ops, balance, name, lastname, licenses) {
+    constructor(login, pass, ops, balance, name, lastname, licenses, email) {
         this.login = login;
         this.pass = pass;
         this.ops = ops || []
@@ -14,6 +14,7 @@ class User {
         this.name = name || '';
         this.lastname = lastname || '';
         this.licenses = licenses || [];
+        this.email = email || '';
     }
 
     set Ops(item) {
@@ -51,7 +52,8 @@ class User {
                 ops: this.ops,
                 name: this.name,
                 lastname: this.lastname,
-                licenses: this.licenses
+                licenses: this.licenses,
+                email: this.email
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -88,7 +90,7 @@ class User {
             userDB.find({login: login}, (err, uD) => {
                 if (uD.length>0) {
                     uD = uD[0];
-                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses);
+                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email);
                     res(user);
                 }
                 else 
@@ -101,7 +103,7 @@ class User {
             userDB.find({}, (err, uDs) => {
                 let users = [];
                 for (let i=0; i<uDs.length; i++) {
-                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, uDs[i].licenses))
+                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, uDs[i].licenses, uDs[i].email))
                 }
 
                 res(users)
@@ -148,6 +150,22 @@ class User {
                 res(userList)
             });
         });
+    }
+
+    static async getProjectLogins() {
+        let loginList = config.newProjects;
+
+        let regedUsers = await User.getUserList(null);
+        for (let i=0; i<loginList.length; i++) {
+            for (let j=0; j<regedUsers.length; j++) {
+                if (loginList[i] == regedUsers[j]) {
+                    loginList.splice(loginList.indexOf(loginList[i]),1)
+                    --i;
+                }
+            }
+        }
+        
+        return loginList;
     }
 
     static async getAccessableLogins() {
@@ -229,7 +247,8 @@ class User {
             ops: this.ops,
             name: this.name,
             lastname: this.lastname,
-            licenses: this.licenses
+            licenses: this.licenses, 
+            email: this.email
         }, (err, item) => {})   
     }
 
