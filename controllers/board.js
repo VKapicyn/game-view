@@ -2,15 +2,17 @@ const Advert = require('../models/advert').Advert;
 const Round = require('../models/round');
 const User = require('../models/user').User;
 const Ops = require('../models/ops').Operations;
+const roundModel = require('../models/round').Round;
 
 exports.getPage = async (req, res) => {
     let login = req.session.user.login;
 
     let myActiveAds = await Advert.getMyActiveAds(login),
         obligation = await Advert.myObligation(login),
+        stop = roundModel.status == 1 ? false : true,
         ads = await Advert.getActiveAds(login, null, null);
 
-    res.render('board.html', {myActiveAds, obligation, ads});
+    res.render('board.html', {myActiveAds, obligation, ads, stop});
 }
 
 exports.createAdv = async (req, res) => {

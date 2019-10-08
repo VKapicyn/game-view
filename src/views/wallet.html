@@ -60,6 +60,9 @@
         </form>
         <br>
         {% endif %}
+    {% else %}
+    <h3>Раунд завершён. Чтобы совершить перевод, дождитесь следующего раунда.</h3>
+    {% endif %}
         <hr>
         <h3>Мои операции:</h3>
         <table class="table">
@@ -89,9 +92,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        {% else %}
-            <h3>Раунд завершён. Чтобы совершить перевод, дождитесь следующего раунда.</h3>
-        {% endif %}
+
     </div>
     <div class="col-lg-5 col-md-12 col-12">
         <h3 style="color:brown">Правила использованиия счёта</h3>
@@ -110,7 +111,11 @@
                 <input id="credit" name="credit" class="form-control" type="text" placeholder="Сумма кредита">
                 
                 <span><i>Доступный лимит на этот раунд: {{creditLimit}}</i></span><br><br>
-                <button type="input" class="btn btn-success" disabled>Получить кредит</button>
+                {% if stop == false %}
+                    <button type="input" class="btn btn-success">Получить кредит</button>
+                {% else %}
+                    <button type="input" class="btn btn-success" disabled>Получить кредит</button>
+                {% endif %}
             </form>
         </p>
     </div>

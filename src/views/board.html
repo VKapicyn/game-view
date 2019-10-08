@@ -14,12 +14,19 @@
 <body>
 {% endblock %}
 {% block content %}
-<div class="alert alert-danger" role="alert">
+    {% if stop == false %}
+    <div class="alert alert-danger" role="alert">
         <h4 class="alert-heading">Обратите внимание!</h4>
         <p>При принятии заявки, с заказчика списывается сумма, указанная в заявке, а исполнитель обязан до конца раунад реализовать заказ, в ином случае исполнитель - штрафуется.</p>
         <p>Запрещено создавать объявления не соответствующие вашей лицензии.</p>
         <p>Одновмеренно допустимо не более 10 нереализованных заявок.</p>
     </div>
+    {% else %}
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Раунд завершён!</h4>
+        <p>Чтобы разместить объявлениие или совершить сделку, дождитесь следующего раунда.</p>
+    </div>
+    {% endif %}
 <div class="row">
     <div class="col-lg-4 col-md-12">
         <div class="advert-1">
@@ -47,7 +54,11 @@
                 <hr>
                 <input type="radio" name="buysell" value="buy" checked>&nbsp;<labeL>Куплю</labeL><br>
                 <input type="radio" name="buysell" value="sel" >&nbsp;<labeL>Продам</labeL><br>
+                {% if stop == false %}
                 <input type="submit" class="btn btn-warning" value="Создать">
+                {% else %}
+                <input type="submit" class="btn btn-warning" value="Создать" disabled>
+                {% endif %}
             </form>
         </div>
     </div>
@@ -85,7 +96,11 @@
                                 <p>Тип заявки: На продажу</p>
                                 <p>Предмет: {{ad.predmetType}}<br>( {{ad.predmet}} )</p>
                                 <p>Цена: {{ad.price}} у.е. </p>
+                                {% if stop == false %}
                                 <a href="/advert/buy/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-success btn-xs">Купить</a>
+                                {% else %}
+                                <a href="/advert/buy/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-success btn-xs" disabled>Купить</a>
+                                {% endif %}
                             </div>
                         {% else %}
                             <div class="card-board-inner sell">
@@ -94,7 +109,11 @@
                                 <p>Тип заявки: Закупка</p>
                                 <p>Предмет: {{ad.predmetType}}<br>( {{ad.predmet}} )</p>
                                 <p>Цена: {{ad.price}} у.е. </p>
+                                {% if stop == false %}
                                 <a href="/advert/sell/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-danger btn-xs">Поставить</a>
+                                {% else %}
+                                <a href="/advert/sell/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-danger btn-xs" disabled>Поставить</a>
+                                {% endif %}
                             </div>
                         {% endif %}
                     </div>
