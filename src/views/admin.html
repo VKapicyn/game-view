@@ -22,7 +22,7 @@
                         $.ajax({
                                 url: '/round/prev',
                                 method: 'GET',
-                                asycn: true,
+                                async: true,
                                 statusCode: {
                                         200: function(message) {
                                         document.location.reload(true)
@@ -34,7 +34,7 @@
                         $.ajax({
                                 url: '/round/next',
                                 method: 'GET',
-                                asycn: true,
+                                async: true,
                                 statusCode: {
                                         200: function(message) {
                                         document.location.reload(true)

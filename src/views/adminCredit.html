@@ -1,0 +1,35 @@
+{% extends "templates/page.html" %}
+
+        {% block navbar %}
+                {% include "templates/adminNabBar.html" %}                   
+        {% endblock %}
+
+        {% block content %}
+        <div class="row">
+                <div class="col-lg-4 col-md-12">
+                    <h3>Текущий раунд: {{round}}</h3><br>
+                    <button type="input" onclick="rePayment()" class="btn btn-success">Списать долги</button>
+                    <br><span>Раунд списания:<input id="rround" class="form-control" value="{{round}}"></input></span>
+                    <br><br>
+                    <b>Раунд | Логин | Сумма | Статус</b><br> -------------------------------------- <br>
+                    {% for crdt in credits %} 
+                        {{crdt.round}} | {{crdt.login}} | {{crdt.amount}} | {% if crdt.status>0 %} Погашен {% else %} Задолженность {% endif %}<br>
+                    {% endfor %}
+                </div>
+        </div>
+        <script>
+                function rePayment(){
+                        $.ajax({
+                                url: '/credit/rePayment',
+                                method: 'POST',
+                                async: true,
+                                data: {round: document.getElementById('rround').value},
+                                statusCode: {
+                                        200: function(message) {
+                                        document.location.reload(true)
+                                        }
+                                }
+                        });
+                }
+        </script>
+        {% endblock %}

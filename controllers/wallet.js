@@ -1,18 +1,43 @@
 const User = require('../models/user').User;
 const Ops = require('../models/ops').Operations;
 const License = require('../models/license').License;
-const roundModel = require('../models/round').Round
+const roundModel = require('../models/round').Round;
+const Round = require('../models/round');
+const Credit = require('../models/credit').Credit;
+const config = require('../config');
 
 exports.charge = async (req, res) => {
     let sender = req.body.responser,
         responser = req.session.user.login,
         amount = req.body.amount;
     
-    let operation = new Ops(sender, responser, amount, 'Возврат займа банку', 'Кредит'),
+    let operation = new Ops(sender, responser, amount, 'Взыскание банком', 'Взыскание'),
         senderUser = await User.find(sender),
         responserUser = await User.find(responser);
 
     if (amount > 0) {
+        operation = await operation.save();
+        senderUser.Ops = operation;
+        senderUser.updateDB();
+        responserUser.Ops = operation;
+        responserUser.updateDB();
+    }
+    res.redirect('/wallet');
+}
+
+exports.credit = async (req, res) => {
+    let sender = config.adminLogins[0],
+        responser = req.session.user.login,
+        amount = req.body.credit,
+        rounds = await Round.getRoundList();
+    
+    let operation = new Ops(sender, responser, amount, 'Выдача займа', 'Кредит'),
+        senderUser = await User.find(sender),
+        responserUser = await User.find(responser);
+
+    if (amount > 0 && (await Credit.getCreditLimit(responserUser.login)) >= amount) {
+        let credit = new Credit(responserUser.login, rounds[rounds.length-1], amount);
+        credit.save();
         operation = await operation.save();
         senderUser.Ops = operation;
         senderUser.updateDB();
@@ -50,7 +75,8 @@ exports.getWalletPage = async (req, res) => {
         userList,
         stop: charge ? false: (roundModel.status == 1 ? false : true),
         charge,
-        specBalance
+        specBalance,
+        creditLimit: await Credit.getCreditLimit(req.session.user.login)
     });
 }
 

@@ -18,12 +18,15 @@ let roundDB = new Datastore({filename: 'round'});
 roundDB.loadDatabase();
 let advertDB = new Datastore({filename: 'advert'});
 advertDB.loadDatabase();
+let creditDB = new Datastore({filename: 'credit'});
+creditDB.loadDatabase();
 
 module.exports.userDB = userDB;
 module.exports.opsDB = opsDB;
 module.exports.licenseDB = licenseDB;
 module.exports.roundDB = roundDB;
 module.exports.advertDB = advertDB;
+module.exports.creditDB = creditDB;
 
 nunjucks.configure(__dirname + '/src/views', {
     autoescape: true,
