@@ -9,10 +9,13 @@ exports.getPage = async (req, res) => {
 
     let myActiveAds = await Advert.getMyActiveAds(login),
         obligation = await Advert.myObligation(login),
+        bought = await Advert.myBoughting(login),
         stop = roundModel.status == 1 ? false : true,
-        ads = await Advert.getActiveAds(null, null, null);
+        ads = await Advert.getActiveAds(null, null, null),
+        user = await User.find(req.session.user.login),
+        specBalance = await user.Balance();
 
-    res.render('board.html', {myActiveAds, obligation, ads, stop, login});
+    res.render('board.html', {myActiveAds, obligation, bought, ads, stop, login, user, specBalance});
 }
 
 exports.createAdv = async (req, res) => {
@@ -29,7 +32,7 @@ exports.createAdv = async (req, res) => {
         switch(predmetType) {
             case 'word': predmetType = 'Слово'; break;
             case 'letter': predmetType = 'Буква'; break;
-            case 'package': predmetType = 'Пакет'; break;
+            case 'package': predmetType = 'Упаковка'; break;
         }
 
         if ( !(offertype=='buy' && fizPrice>(await(await User.find(author)).Balance())) ) {
@@ -98,9 +101,11 @@ exports.search = async (req, res) => {
 
     let myActiveAds = await Advert.getMyActiveAds(login),
         obligation = await Advert.myObligation(login),
-        ads = await Advert.getActiveAds(login, predmet, buysell);
+        ads = await Advert.getActiveAds(login, predmet, buysell),
+        user = await User.find(req.session.user.login),
+        specBalance = await user.Balance();
 
-    res.render('board.html', {myActiveAds, obligation, ads});
+    res.render('board.html', {myActiveAds, obligation, ads, stop: roundModel.status == 1 ? false : true,  user, specBalance});
 }
 
 exports.err = async (req, res) => {

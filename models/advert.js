@@ -98,7 +98,7 @@ class Advert{
                 switch(predmet) {
                     case 'word': predmet = 'Слово'; break;
                     case 'letter': predmet = 'Буква'; break;
-                    case 'package': predmet = 'Пакет'; break;
+                    case 'package': predmet = 'Упаковка'; break;
                 }
                 search.predmetType = predmet;
             }
@@ -142,6 +142,33 @@ class Advert{
                 } else res(null);
             })
         })
+    }
+
+    static async myBoughting(login) {
+        return new Promise( (res, rej)=> {
+            advertDB.find({'$or': [{author: login, offerType: 'buy'}, {contrAgent: login, offerType: 'sel'}]}, (err, items)=> {
+                let _items = [];
+                items.map( x => {
+                    if (x.contrAgent == login || (x.author == login && x.contrAgent != '')) {
+                        if (x.round == Round.getRound())
+                            _items.push({
+                                actual: 1, 
+                                responser: x.contrAgent == login ? x.author : x.contrAgent,
+                                predmet: x.predmet
+                            });
+                        else
+                            _items.push({
+                                actual: 0, 
+                                responser: x.contrAgent == login ? x.author : x.contrAgent,
+                                predmet: x.predmet
+                            });
+                    }
+                });
+                _items.sort((x, y) => {return y.actual-x.actual});
+
+                res(_items);
+            });
+        });
     }
 
     static async myObligation(login) {

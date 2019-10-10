@@ -28,11 +28,22 @@
     </div>
     {% endif %}
 <div class="row">
+    <div class="col-lg-12 col-md-12">
+        <h3>Текущий баланс: 
+        {% if (user.balance == specBalance) %}
+            {{user.balance}}
+        {% else %}
+            {% set dolg = user.balance-specBalance %}
+            {{specBalance}} (залог: {{dolg}})
+        {% endif %}</h3>
+    </div>
+</div>
+<div class="row">
     <div class="col-lg-4 col-md-12">
         <div class="advert-1">
             <h4>Поиск объявлений:</h4>
             <form method="GET" action="/board/search">
-                <input type="radio" name="predmet" value="package" checked>&nbsp;<labeL>Пакет</labeL><br>
+                <input type="radio" name="predmet" value="package" checked>&nbsp;<labeL>Упаковка</labeL><br>
                 <input type="radio" name="predmet" value="word">&nbsp;<labeL>Слово</labeL><br>
                 <input type="radio" name="predmet" value="letter" >&nbsp;<labeL>Буква</labeL>
                 <hr>
@@ -46,7 +57,7 @@
         <div class="advert-1">
             <h4>Создать объявление: ({{myActiveAds.length}}/10)</h4>
             <form method="POST" action="/advert/create">
-                <input type="radio" name="predmet" value="package" checked>&nbsp;<labeL>Пакет</labeL><br>
+                <input type="radio" name="predmet" value="package" checked>&nbsp;<labeL>Упаковка</labeL><br>
                 <input type="radio" name="predmet" value="word">&nbsp;<labeL>Слово</labeL><br>
                 <input type="radio" name="predmet" value="letter" >&nbsp;<labeL>Буква</labeL><br>
                 <input type="text" name="fizPredmet" placeholder="Предмет сделки"><br>
@@ -71,12 +82,20 @@
 
     </div>  
     <div class="col-lg-2 col-sm-6">
-        <h4>Ваши обязательства:</h4>  
+        <h4>Архив сделок:</h4>  
         {% for ob in obligation %}
             {% if ob.actual == 1 %}
-            <b>{{ob.responser}}</b> - ( {{ob.predmet}} )<br>
+            <span style="color:rgb(10, 175, 10)"><b>Вам поставляют: {{ob.responser}}</b> - ( {{ob.predmet}} )</span><br>
             {% else %}
-            <span style="color:grey"><b>{{ob.responser}}</b> - ( {{ob.predmet}} )<br></span>
+            <span style="color:grey"><b>Вам поставляет: {{ob.responser}}</b> - ( {{ob.predmet}} )<br></span>
+            {% endif %}
+        {% endfor %}
+        <hr>
+        {% for ob in bought %}
+            {% if ob.actual == 1 %}
+            <span style="color:rgb(218, 29, 129)"><b>Вы поставляете: {{ob.responser}}</b> - ( {{ob.predmet}} )</span><br>
+            {% else %}
+            <span style="color:grey"><b>Вы поставляете: {{ob.responser}}</b> - ( {{ob.predmet}} )<br></span>
             {% endif %}
         {% endfor %}
     </div>
@@ -96,7 +115,7 @@
                                 <p>Тип заявки: На продажу</p>
                                 <p>Предмет: {{ad.predmetType}}<br>( {{ad.predmet}} )</p>
                                 <p>Цена: {{ad.price}} у.е. </p>
-                                {% if stop == false %}
+                                {% if stop == false and ad.author != login %}
                                 <a href="/advert/buy/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-success btn-xs">Купить</a>
                                 {% else %}
                                 <a href="/advert/buy/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-success btn-xs" disabled>Купить</a>
@@ -109,7 +128,7 @@
                                 <p>Тип заявки: Закупка</p>
                                 <p>Предмет: {{ad.predmetType}}<br>( {{ad.predmet}} )</p>
                                 <p>Цена: {{ad.price}} у.е. </p>
-                                {% if stop == false %}
+                                {% if stop == false and ad.author != login %}
                                 <a href="/advert/sell/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-danger btn-xs">Поставить</a>
                                 {% else %}
                                 <a href="/advert/sell/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-danger btn-xs" disabled>Поставить</a>
