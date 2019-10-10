@@ -111,8 +111,8 @@ class User {
         });
     }
     
-    static async getActualLic(login) {
-        let round = Round.getRound();
+    static async getActualLic(login, _round) {
+        let round = _round || Round.getRound();
         let user = await User.find(login);
 
         let actualLic = null;
@@ -190,23 +190,14 @@ class User {
         return loginList;
     }
 
-    static async recalcBalances(table, group, ops) {
+    static async recalcBalances(ops, lic, __round) {
         let userList = await User.findAll();
-        // на слючай изменения числа участников
-        let count = config.tables[0].length;
+        __round = __round === 'all' ? Round.getRound() : __round;
 
-        if (table != 'all') {
+        if (lic != 'all') {
             for (let i=0; i<userList.length; i++) {
-                if (userList[i].login.substr(0, count) != table){
-                    userList.splice(i, 1);
-                    --i;
-                }
-            }
-        }
-
-        if (group != 'all') {
-            for (let i=0; i<userList.length; i++) {
-                if (userList[i].login.slice(count) != group) {
+                if ((await User.getActualLic(userList[i].login, __round)) != lic) {
+                    //TODO: если не так лицензия
                     userList.splice(i, 1);
                     --i;
                 }

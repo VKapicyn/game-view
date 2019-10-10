@@ -17,17 +17,35 @@
       <form action="/rait" method="POST">
         <div class="input-group">
           <label>Лицензии: &nbsp;</label>
-          <select name="table">
+          <select name="lic">
             <option value="all">Все</option>
-            {% for table in tables %}
-            <option value="{{table}}">{{table}}</option>
+            {% for lic in lices %}
+              {% if selected.length>0 %}
+                {% if selected[0] == lic %}
+                  <option value="{{lic}}" selected>{{lic}}</option>
+                {% else %}
+                  <option value="{{lic}}">{{lic}}</option>
+                {% endif %}
+              {% else %}
+                <option value="{{lic}}">{{lic}}</option>
+              {% endif %}
             {% endfor %}
           </select><br>
           <label>Раунды: &nbsp;</label>
           <select name="round">
             <option value="all">Все</option>
-            {% for round in rounds %}
-            <option value="{{round}}">{{round}}</option>
+            {% for _round in rounds %}
+              
+
+               {% if selected.length>0 %}
+                {% if selected[1] == _round %}
+                  <option value="{{_round}}" selected>{{_round}}</option>
+                {% else %}
+                  <option value="{{_round}}">{{_round}}</option>
+                {% endif %}
+              {% else %}
+                <option value="{{_round}}">{{_round}}</option>
+              {% endif %}
             {% endfor %}
           </select><br>
           &nbsp;<button type="input" class="btn btn-success btn-xs">Фильтровать</button><br>

@@ -49,8 +49,8 @@
                 <input type="radio" name="predmet" value="package" checked>&nbsp;<labeL>Пакет</labeL><br>
                 <input type="radio" name="predmet" value="word">&nbsp;<labeL>Слово</labeL><br>
                 <input type="radio" name="predmet" value="letter" >&nbsp;<labeL>Буква</labeL><br>
+                <input type="text" name="fizPredmet" placeholder="Предмет сделки"><br>
                 <input type="text" name="fizPrice" placeholder="Цена">
-                <input type="text" name="fizPredmet" placeholder="Предмет сделки">
                 <hr>
                 <input type="radio" name="buysell" value="buy" checked>&nbsp;<labeL>Куплю</labeL><br>
                 <input type="radio" name="buysell" value="sel" >&nbsp;<labeL>Продам</labeL><br>
@@ -90,7 +90,7 @@
                 {% for ad in ads %}
                     <div class="col-lg-3 col-md-12 card-board">
                         {% if ad.offerType == "sel" %}
-                            <div class="card-board-inner buy">
+                            <div class="card-board-inner {% if ad.author == login %} authors-buy {% endif %} buy">
                                 <h4>Объявление #{{ad.num}}</h4>
                                 <p>Автор: {{ad.author}}</p>
                                 <p>Тип заявки: На продажу</p>
@@ -103,7 +103,7 @@
                                 {% endif %}
                             </div>
                         {% else %}
-                            <div class="card-board-inner sell">
+                            <div class="card-board-inner {% if ad.author == login %} authors-sell {% endif %} sell">
                                 <h4>Объявление #{{ad.num}}</h4>
                                 <p>Автор: {{ad.author}}</p>
                                 <p>Тип заявки: Закупка</p>

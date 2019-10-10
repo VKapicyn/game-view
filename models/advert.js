@@ -109,7 +109,7 @@ class Advert{
             advertDB.find(search, (err, items)=>{
                 let _items = [];
                 items.map( x => {
-                    if (x.contrAgent == '' && x.status && x.author != without){
+                    if (x.contrAgent == '' && x.status && (without ? (x.author != without) : true)){
                         _items.push(x);
                     }
                 })

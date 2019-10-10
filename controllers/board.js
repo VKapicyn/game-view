@@ -10,9 +10,9 @@ exports.getPage = async (req, res) => {
     let myActiveAds = await Advert.getMyActiveAds(login),
         obligation = await Advert.myObligation(login),
         stop = roundModel.status == 1 ? false : true,
-        ads = await Advert.getActiveAds(login, null, null);
+        ads = await Advert.getActiveAds(null, null, null);
 
-    res.render('board.html', {myActiveAds, obligation, ads, stop});
+    res.render('board.html', {myActiveAds, obligation, ads, stop, login});
 }
 
 exports.createAdv = async (req, res) => {

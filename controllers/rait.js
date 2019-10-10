@@ -3,11 +3,11 @@ const User = require('../models/user').User;
 const Ops = require('../models/ops').Operations;
 const Round = require('../models/round');
 const config = require('../config');
+const License = require('../models/license').License;
 
-exports.getRaitPage = (req, res) => {
+exports.getRaitPage = async (req, res) => {
     let admin,
-        groups = config.projectGoups,
-        tables = config.tables, 
+
         rounds = Round.getRoundList(),
         round = Round.getRound();
     
@@ -16,18 +16,17 @@ exports.getRaitPage = (req, res) => {
     else 
         admin = false;
 
-    userDB.find({}).sort({balance: -1}).exec( (err, items) => {
-        res.render('rait.html', {items, admin, groups, tables, rounds, round});
+    userDB.find({}).sort({balance: -1}).exec( async (err, items) => {
+        res.render('rait.html', {items, admin, lices: await License.getAllTypes(), rounds, round});
     });
 }
 
 exports.raitSearchV2 = async (req, res) => {
     let round = req.body.round,
-        table = req.body.table,
-        group = req.body.group;
+        baseLic = req.body.lic;
 
     let ops = await Ops.getByRound(round);
-    let users = await User.recalcBalances(table, group, ops);
+    let users = await User.recalcBalances(ops, baseLic, round);
 
     users = User.removeAdmins(users);
     users.sort((x, y) => {
@@ -36,8 +35,6 @@ exports.raitSearchV2 = async (req, res) => {
 
     //---
     let admin,
-        groups = config.projectGoups,
-        tables = config.tables, 
         rounds = Round.getRoundList();
     
     if (req.session.user)
@@ -45,12 +42,13 @@ exports.raitSearchV2 = async (req, res) => {
     else 
         admin = false;
     //---
-
     res.render('rait.html', {
         items: users,
-        admin, groups, tables, rounds, 
+        admin, rounds, baseLic,
+        lices: await License.getAllTypes(), 
         round: (round=='all'?Round.getRound():round), 
-        search: true
+        search: true,
+        selected: [baseLic,round]
     })
 }
 
