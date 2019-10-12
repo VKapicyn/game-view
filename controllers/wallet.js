@@ -57,17 +57,17 @@ exports.getWalletPage = async (req, res) => {
         specBalance = await user.Balance();
 
     
-    licTypes = await User.getActualLic(user.login);
-    licTypes = await License.find(licTypes);
+    let _licTypes = await User.getActualLic(user.login),
+        __licTypes = await License.find(_licTypes);
 
-
-    if (licTypes != null) {
-        licTypes = licTypes.opsTypes;
+    if (__licTypes != null) {
+        licTypes = __licTypes.opsTypes;
         licTypes.push('Зарплата');
         licList = licList.concat(licTypes);
     }
 
     res.render('wallet.html', {
+        actualLic: __licTypes,
         baseLic,
         licList,
         user,

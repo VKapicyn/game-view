@@ -2,11 +2,70 @@
         <!-- Для шапки и футера однозначно нужен темплейт -->
 {% block content %}
 <div class="row">
+    <div class="col-lg-12 col-md-12">
+        <h3>Аналитика:</h3><br>
+    </div>
+    <div class="col-lg-4 col-md-12" style="border: 1px solid green; margin:10px; border-radius: 5px 5px 5px 5px;">
+        <br>
+      <form action="/analitic" method="POST">
+        <div class="input-group">
+          <label>Сортировка: &nbsp;</label>
+          <select name="sort">
+            <option value="all">Все</option>
+                <option value="txs">Число транзакций</option>
+                <option value="volume">Оборот средств</option>
+                <option value="netOne">Сеть 1-го ранга</option>
+                <option value="netTwo">Сеть 2-го ранга</option>
+          </select><br>
+          <label>Раунды: &nbsp;</label>
+          <select name="round">
+            <option value="all">Все</option>
+            {% for _round in rounds %}
+               {% if selected.length>0 %}
+                {% if selected[1] == _round %}
+                  <option value="{{_round}}" selected>{{_round}}</option>
+                {% else %}
+                  <option value="{{_round}}">{{_round}}</option>
+                {% endif %}
+              {% else %}
+                <option value="{{_round}}">{{_round}}</option>
+              {% endif %}
+            {% endfor %}
+          </select><br>
+          &nbsp;<button type="input" class="btn btn-success btn-xs">Посчитать</button><br>
+        </div>  
+      </form>
+      <br>
+  </div>
+
     <div class="col-lg-12 col-sm-12">
-        <h3>Аналитика:</h3>
-        <br><p>*Раунд*</p>
-        <br><br>
-        <div id="container"></div>
+        <h4></h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Логин</th>
+                    <th scope="col">Число транзакций</th>
+                    <th scope="col">Оборот средств</th>
+                    <th scope="col">Сеть 1-го ранга</th>
+                    <th scope="col">Сеть 2-го ранга</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <th scope="row">{{loop.index}}</th>
+                        <td>{{user.login}}</td>
+                        <td>{{user.txs}}</td>
+                        <td>{{user.volume}}</td>
+                        <td>{{user.netOne}}</td>
+                        <td>{{user.netTwo}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+                
+        <!--div id="container"></div-->
     </div>
 </div>
 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -81,42 +140,7 @@ Highcharts.chart('container', {
             linkFormat: ''
         },
         id: 'lang-tree',
-        data: [
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['1','a'],
-        ['2','a'],
-        ['2','a'],
-        ['2','a'],
-        ['2','b'],
-        ['2','b'],
-        ['3','b'],
-        ['2','3'],
-        ['1','3']
-    ]//{{data | safe}}
+        data: []
     }]
 });</script>
 {% endblock %}

@@ -11,6 +11,7 @@
                 <h4>Создать новый тип лицензии</h4>
                 <form action="/license/create" method="POST">
                         <input class="form-control" type="text" name="licname" placeholder="Название типа лицензии"><br>
+                        <textarea class="form-control" type="text" name="sub" placeholder="Памятка к лицензии"></textarea><br>
                         <div id="input-container">
                                 <input class="form-control" type="text" name="ops0" placeholder="Операция"><br>
                         </div>
@@ -50,8 +51,28 @@
                 {% endfor %}   
         </div>
         <div class="col-lg-4 col-md-12">
-                <h4>Памятка по созданию лицензий:</h4>
-                <p>Зачем нужна, что поля означают</p>
+                <h4>Администрирование лицензий:</h4><br>
+                {% for lic in lics %}
+                        <p>Название: {{lic.name}}</p>
+                        <p>Описание: <br>"{{lic.sub | striptags(true) | escape | nl2br }}"</p>
+                        <p>Операции: 
+                                {% for op in lic.opsTypes%}
+                                        {{op}},
+                                {% endfor %}
+                        </p>
+                        {% for sent in lic.sentence %}
+                                {% if sent.round == round %}
+                                <p> • {{sent.login}}, за {{sent.price}}, 
+                                        {% if sent.status == true %}
+                                                <a class="btn btn-sm btn-warning">Изъять</a> 
+                                        {% else %}
+                                                <a class="btn btn-sm btn-default">Отозвать пр.</a> 
+                                        {% endif %}
+                                </p>
+                                {% endif %}
+                        {% endfor %}
+                        <hr>
+                {% endfor %}
         </div>
 </div>
 

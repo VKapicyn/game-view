@@ -67,6 +67,7 @@ exports.getCreditPage = async (req, res) => {
 
 exports.createLicense = async (req, res) => {
     let licName = req.body.licname,
+        sub = req.body.sub,
         opsMass = [];
         i = 0;
 
@@ -79,7 +80,7 @@ exports.createLicense = async (req, res) => {
         ++i;
     }
 
-    let lic = new License(licName, opsMass);
+    let lic = new License(licName, opsMass, [], sub);
         await lic.save()
     res.redirect('/admin/license');
 }

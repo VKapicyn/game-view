@@ -3,6 +3,19 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-7 col-md-12 col-12">
+        <p>
+            {% if actualLic != null %}
+                <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">Памятка к лицензии!</h4>
+                    <p>{{actualLic.sub | striptags(true) | escape | nl2br }}</p>
+                </div>          
+            {% else %}
+                <div class="alert alert-warning" role="alert">
+                    <h4 class="alert-heading">Внимание!</h4>
+                    <p>У вас нет актуальных лицензий</p>
+                </div>
+            {% endif %}
+        </p>
         <h2>На Вашем балансе: 
             {% if (user.balance == specBalance) %}
                 {{user.balance}}

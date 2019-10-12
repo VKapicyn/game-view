@@ -2,8 +2,9 @@ const Round = require('./round');
 const licenseDB = require('../server').licenseDB;
 
 class License{
-    constructor(name, opsTypes, sentence){
+    constructor(name, opsTypes, sentence, sub){
         this.name = name || '';
+        this.sub = sub || '';
         this.opsTypes = opsTypes || [];
         this.sentence = sentence || [];
     }
@@ -22,6 +23,7 @@ class License{
         new Promise((res, rej) => {
             licenseDB.insert({
                 name: this.name, 
+                sub: this.sub,
                 opsTypes: this.opsTypes, 
                 sentence: this.sentence
             }, (err, item) => {res(item)}) 
@@ -34,6 +36,7 @@ class License{
                 name: this.name
             }, {
                 name: this.name, 
+                sub: this.sub,
                 opsTypes: this.opsTypes, 
                 sentence: this.sentence
             }, {}, (err, replaced)=>{res(replaced)})
@@ -49,7 +52,7 @@ class License{
                     if (license.sentence[j].login == login && license.sentence[j].round == Round.getRound()) {
                         license.sentence[j].status = true;
 
-                        await (new License(license.name, license.opsTypes, license.sentence)).updateDB();
+                        await (new License(license.name, license.opsTypes, license.sentence, license.sub)).updateDB();
                         break;
                     }
                 }
@@ -80,7 +83,7 @@ class License{
     static async getLisense(name) {
         return new Promise((res, rej) => {
             licenseDB.find({name: name}, (err, license) =>{
-                res(new License(license[0].name, license[0].opsTypes, license[0].sentence));
+                res(new License(license[0].name, license[0].opsTypes, license[0].sentence, license[0].sub));
             });
         })
     }
