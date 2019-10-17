@@ -1,5 +1,6 @@
 const User = require('../models/user').User;
 const Ops = require('../models/ops').Operations;
+const config = require('../config');
 
 
 exports.getPage = async (req, res) => {
@@ -13,13 +14,16 @@ exports.getPage = async (req, res) => {
             volume = 0,
             netOne = new Set();
         for(let j=0; j<ops.length; j++) {
-            if (ops[j].sender == users[i]) {
+            if (ops[j].sender === users[i] && ops[j].responser !== config.adminLogins[0]) {
                 ++txs;
                 netOne.add(ops[j].responser);
                 volume = +volume + Number(ops[j].amount);
             } 
-            if (ops[j].responser == users[i])
-                volume = +volume + Number(ops[j].amount); 
+            if (ops[j].responser === users[i] && ops[j].sender !== config.adminLogins[0]) {
+                ++txs;
+                netOne.add(ops[j].responser);
+                volume = +volume + Number(ops[j].amount);
+            } 
         }
 
         result.push({login: users[i], txs, volume, netOne: netOne.size, netTwo: '-'})

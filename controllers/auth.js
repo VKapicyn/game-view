@@ -81,9 +81,10 @@ exports.getMainPage = async (req, res) => {
         offLic = await License.getAllOffersForUser(login),
         actualLic = await User.getActualLic(login),
         historyLic = await User.getLicHistory(login),
+        balance = await user.Balance(),
         round = Round.getRound();
     
-    res.render('main.html', {user, offLic, actualLic, historyLic, defPrice: config.priceOfExtension, round});
+    res.render('main.html', {user, offLic, actualLic, historyLic, defPrice: config.priceOfExtension, round, balance});
 }
 
 exports.baseRoute = async (req, res) => {

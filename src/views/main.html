@@ -83,35 +83,44 @@
         }
     }
     function prodlit() {
-        let answer = confirm('Уверены?');
-        if (answer) {
-            $.ajax({
-                url: '/license/extend',
-                method: 'POST',
-                data: {licName: document.getElementById('extend').innerHTML},
-                asycn: true,
-                statusCode: {
-                    200: function(message) {
-                        document.location.reload(true)
+        if (Number({{defPrice}})>Number({{balance}})) {
+            alert('У вас недостаточно средств для продления лицензии!!!')
+        } else {
+
+            let answer = confirm('Уверены?');
+            if (answer) {
+                $.ajax({
+                    url: '/license/extend',
+                    method: 'POST',
+                    data: {licName: document.getElementById('extend').innerHTML},
+                    asycn: true,
+                    statusCode: {
+                        200: function(message) {
+                            document.location.reload(true)
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
     function oplata(){
-        let answer = confirm('Уверены? С вашего счета произойдет списание');
-        if (answer) {
-            $.ajax({
-                url: '/license/buy',
-                method: 'POST',
-                data: {licName: document.getElementById('licoffer').innerHTML},
-                asycn: true,
-                statusCode: {
-                    200: function(message) {
-                        document.location.reload(true)
+        if (Number({{defPrice}})>Number({{balance}})) {
+            alert('У вас недостаточно средств для продления лицензии!!!')
+        } else {
+            let answer = confirm('Уверены? С вашего счета произойдет списание');
+            if (answer) {
+                $.ajax({
+                    url: '/license/buy',
+                    method: 'POST',
+                    data: {licName: document.getElementById('licoffer').innerHTML},
+                    asycn: true,
+                    statusCode: {
+                        200: function(message) {
+                            document.location.reload(true)
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 </script>

@@ -85,17 +85,17 @@
         <h4>Архив сделок:</h4>  
         {% for ob in obligation %}
             {% if ob.actual == 1 %}
-            <span style="color:rgb(10, 175, 10)"><b>Вам поставляют: {{ob.responser}}</b> - ( {{ob.predmet}} )</span><br>
+            <span style="color:rgb(10, 175, 10)"><b>Вы поставляете: {{ob.responser}}</b> - ( {{ob.predmet}} )</span><br>
             {% else %}
-            <span style="color:grey"><b>Вам поставляет: {{ob.responser}}</b> - ( {{ob.predmet}} )<br></span>
+            <span style="color:grey"><b>Вы поставляете: {{ob.responser}}</b> - ( {{ob.predmet}} )<br></span>
             {% endif %}
         {% endfor %}
         <hr>
         {% for ob in bought %}
             {% if ob.actual == 1 %}
-            <span style="color:rgb(218, 29, 129)"><b>Вы поставляете: {{ob.responser}}</b> - ( {{ob.predmet}} )</span><br>
+            <span style="color:rgb(218, 29, 129)"><b>Вам поставляют: {{ob.responser}}</b> - ( {{ob.predmet}} )</span><br>
             {% else %}
-            <span style="color:grey"><b>Вы поставляете: {{ob.responser}}</b> - ( {{ob.predmet}} )<br></span>
+            <span style="color:grey"><b>Вам поставляют: {{ob.responser}}</b> - ( {{ob.predmet}} )<br></span>
             {% endif %}
         {% endfor %}
     </div>
