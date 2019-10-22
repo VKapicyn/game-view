@@ -1,0 +1,22 @@
+{% extends "templates/page.html" %}
+{% block head %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block commonStyles %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />    
+    <link rel="stylesheet" href="/css/temp.css" />
+    {% endblock %}
+    <title></title>
+</head>
+<body>
+{% endblock %}
+{% block content %}
+<div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Ошибка</h4>
+    <p>{{err}}</p>
+    <h3><a href="/reg"><-- Вернуться</a></h3>
+</div>
+{% endblock %}

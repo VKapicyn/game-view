@@ -11,6 +11,23 @@
                 <h4>Создать новый тип лицензии</h4>
                 <form action="/license/create" method="POST">
                         <input class="form-control" type="text" name="licname" placeholder="Название типа лицензии"><br>
+                        <label>Доступно к покупке</label><br>
+                        <select name="tobuy" class="selectpicker" data-show-subtext="true" data-live-search="true" multiple>
+                                {% for obj in objects %}
+                                        <option value="{{obj}}">{{obj}}</option>
+                                {% endfor %}
+                        </select><br><br>
+                        <label>Доступно к продаже</label><br>
+                        <select name="tosell" class="selectpicker" data-show-subtext="true" data-live-search="true" multiple>
+                                {% for obj in objects %}
+                                        <option value="{{obj}}">{{obj}}</option>
+                                {% endfor %}
+                        </select><br><br>
+                        <label>Субсидии</label>
+                        <select name="subsidy">
+                                <option value="false">Нет</option>
+                                <option value="true">Да</option>
+                        </select><br>
                         <textarea class="form-control" type="text" name="sub" placeholder="Памятка к лицензии"></textarea><br>
                         <div id="input-container">
                                 <input class="form-control" type="text" name="ops0" placeholder="Операция"><br>

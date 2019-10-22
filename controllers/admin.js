@@ -28,7 +28,7 @@ exports.getLicensePage = async (req, res) => {
     let lics = await License.findAll();
     let round = Round.getRound();
 
-    res.render('adminLicense.html', {lics, users, round})
+    res.render('adminLicense.html', {lics, users, round, objects: config.objects})
 }
 
 exports.repayment = async (req, res) => {
@@ -39,7 +39,7 @@ exports.repayment = async (req, res) => {
     let responserUser = await User.find(responser);
 
     for (let i=0; i<userCredits.length; i++) {
-        let operation = new Ops(userCredits[i].login, responser, Math.round(userCredits[i].amount*110)/100, 'Возврат кредита', 'Взыскание'),
+        let operation = new Ops(userCredits[i].login, responser, Math.round(userCredits[i].amount*(+100+config.bankProcent))/100, 'Возврат кредита', 'Взыскание'),
             senderUser = await User.find(userCredits[i].login);
         
         if (!userCredits[i].status && userCredits[i].round === Number(round)) {
@@ -67,10 +67,15 @@ exports.getCreditPage = async (req, res) => {
 
 exports.createLicense = async (req, res) => {
     let licName = req.body.licname,
+        subsidy = req.body.subsidy,
+        objectsCanBuy = req.body.tobuy,
+        objectsCanSell = req.body.tosell,
         sub = req.body.sub,
         opsMass = [];
         i = 0;
 
+        console.log(req.body.tobuy);
+        console.log(req.body.tosell);
     while (true) {
         let opsName = 'ops'+i;
         if (req.body[opsName] == undefined || req.body[opsName] == '') 
@@ -80,7 +85,7 @@ exports.createLicense = async (req, res) => {
         ++i;
     }
 
-    let lic = new License(licName, opsMass, [], sub);
+    let lic = new License(licName, opsMass, [], sub, subsidy, objectsCanBuy, objectsCanSell);
         await lic.save()
     res.redirect('/admin/license');
 }

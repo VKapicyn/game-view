@@ -28,8 +28,15 @@ exports.login = async (req, res) => {
 
 exports.setUser = async (req, res) => {
     let isReged = await User.find(req.body.login);
-
-    if (isReged == null) {
+    let err = null;
+    
+    err = (req.body.pass !== '' && req.body.pass === req.body.pass1 && req.body.pass.length>5) ? err : 'Некорреытнй пароль или пароли не совпадают';
+    err = req.body.name ? err : 'Некорректное имя';
+    err = req.body.lastname ? err : 'Некорректная фамилия';
+    err = req.body.email ? err : 'Некорректный email';
+    err = isReged ? 'Такой пользователь уже зарегистрирован' : err;
+    
+    if (isReged == null && err == null && req.body.login !== '') {
         let user = new User(req.body.login, req.body.pass);
             user.name = req.body.name;
             user.lastname = req.body.lastname;
@@ -43,7 +50,7 @@ exports.setUser = async (req, res) => {
         req.session.save();
         res.redirect('/wallet');
     } else {
-        res.redirect('/reg');
+        res.render('err.html', {err})
     }
 }
 
@@ -145,7 +152,7 @@ exports.setFio = async (req, res) => {
 async function oplataLic(senderUser, licName, amount) {
     let responser = config.adminLogins[0],
     text = `Оплата лицнзии "${licName}"`;
-    type = config.lic[0];
+    type = `Покупка лицензии`;
 
     let operation = new Ops(senderUser.login, responser, amount, text, type)
         responserUser = await User.find(responser);
