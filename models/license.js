@@ -41,6 +41,9 @@ class License{
             licenseDB.update({
                 name: this.name
             }, {
+                subsidy: this.subsidy,
+                objectsCanBuy: this.objectsCanBuy,
+                objectsCanSell: this.objectsCanSell,
                 name: this.name, 
                 sub: this.sub,
                 opsTypes: this.opsTypes, 

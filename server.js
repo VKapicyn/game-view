@@ -20,6 +20,8 @@ let advertDB = new Datastore({filename: 'advert'});
 advertDB.loadDatabase();
 let creditDB = new Datastore({filename: 'credit'});
 creditDB.loadDatabase();
+let subsidyDB = new Datastore({filename: 'subsidy'});
+subsidyDB.loadDatabase();
 
 module.exports.userDB = userDB;
 module.exports.opsDB = opsDB;
@@ -27,6 +29,7 @@ module.exports.licenseDB = licenseDB;
 module.exports.roundDB = roundDB;
 module.exports.advertDB = advertDB;
 module.exports.creditDB = creditDB;
+module.exports.subsidyDB = subsidyDB;
 
 nunjucks.configure(__dirname + '/src/views', {
     autoescape: true,

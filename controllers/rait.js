@@ -10,6 +10,8 @@ exports.getRaitPage = async (req, res) => {
 
         rounds = Round.getRoundList(),
         round = Round.getRound();
+
+    let ops = await Ops.getByRound('all');
     
     if (req.session.user)
         admin = require('./admin').isAdmin(req.session.user.login);
@@ -17,13 +19,37 @@ exports.getRaitPage = async (req, res) => {
         admin = false;
 
     userDB.find({}).sort({balance: -1}).exec( async (err, items) => {
-        res.render('rait.html', {items, admin, lices: await License.getAllTypes(), rounds, round});
+        let objectTypes = [];
+        config.objects.map(ob => {
+            if (ob.status == 0) {
+                objectTypes.push(ob.value);
+            }
+        })
+        items.map(x => {
+            config.objects.map(ob => {
+                if (!x.objects)
+                    x.objects = {};
+
+                if (ob.status == 0) {
+                    x.objects[ob.value] = 0;
+                }
+            })
+    
+            ops.map(o => {
+                if (o.responser == x.login) {
+                    if (x.objects[o.type]>=0)
+                        x.objects[o.type] += +o.count;
+                }
+            })
+        })
+        res.render('rait.html', {items, admin, lices: await License.getAllTypes(), rounds, round, objectTypes});
     });
 }
 
 exports.raitSearchV2 = async (req, res) => {
     let round = req.body.round,
-        baseLic = req.body.lic;
+        baseLic = req.body.lic
+        baseComp = req.body.companytype;
 
     let ops = await Ops.getByRound(round);
     let users = await User.recalcBalances(ops, baseLic, round);
@@ -31,6 +57,51 @@ exports.raitSearchV2 = async (req, res) => {
     users = User.removeAdmins(users);
     users.sort((x, y) => {
         return Number(y.balance) - Number(x.balance)
+    })
+
+    for (let i=0; i<users.length; i++) {
+        if (baseComp == 'all')
+            break;
+        
+        if (baseComp == 'prj') {
+            if (!(await User.isProject(users[i]))) {
+                users.splice(users.indexOf(users[i]), 1)
+                --i;
+            }
+        }
+        else 
+            if (baseComp == 'ind')
+                if (await User.isProject(users[i])) {
+                    users.splice(users.indexOf(users[i]), 1)
+                    --i;
+                }
+        
+    }
+
+    users.map(x => {
+        if (!x.objects) {
+            x.objects = {};
+        }
+
+        config.objects.map(ob => {
+            if (ob.status == 0) {
+                x.objects[ob.value] = 0;
+            }
+        })
+
+        ops.map(o => {
+            if (o.responser == x.login) {
+                if (x.objects[o.type]>=0)
+                    x.objects[o.type] += +o.count;
+            }
+        })
+    })
+
+    let objectTypes = [];
+    config.objects.map(ob => {
+        if (ob.status == 0) {
+            objectTypes.push(ob.value);
+        }
     })
 
     //---
@@ -48,7 +119,8 @@ exports.raitSearchV2 = async (req, res) => {
         lices: await License.getAllTypes(), 
         round: (round=='all'?Round.getRound():round), 
         search: true,
-        selected: [baseLic,round]
+        selected: [baseLic,round,baseComp],
+        objectTypes
     })
 }
 

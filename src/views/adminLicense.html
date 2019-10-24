@@ -14,13 +14,13 @@
                         <label>Доступно к покупке</label><br>
                         <select name="tobuy" class="selectpicker" data-show-subtext="true" data-live-search="true" multiple>
                                 {% for obj in objects %}
-                                        <option value="{{obj}}">{{obj}}</option>
+                                        <option value="{{obj.value}}">{{obj.value}}</option>
                                 {% endfor %}
                         </select><br><br>
                         <label>Доступно к продаже</label><br>
                         <select name="tosell" class="selectpicker" data-show-subtext="true" data-live-search="true" multiple>
                                 {% for obj in objects %}
-                                        <option value="{{obj}}">{{obj}}</option>
+                                        <option value="{{obj.value}}">{{obj.value}}</option>
                                 {% endfor %}
                         </select><br><br>
                         <label>Субсидии</label>
@@ -45,7 +45,18 @@
                                 {% for ops in lic.opsTypes %}
                                         <span> {{ops}}; </span>
                                 {% endfor %}
-                        )</p>
+                        )
+                        <span style="color:green">[
+                                {% for buy in lic.objectsCanBuy %}
+                                        <span> {{buy}}; </span>
+                                {% endfor %}
+                        ]</span>
+                        <span style="color:brown">[
+                                {% for sell in lic.objectsCanSell %}
+                                        <span> {{sell}}; </span>
+                                {% endfor %}
+                        ]</span>
+                        </p>
                         <select name="user" class="selectpicker" data-show-subtext="true" data-live-search="true">
                                 {% for user in users %}
                                         {% set flag = "false" %}

@@ -50,7 +50,7 @@ exports.setUser = async (req, res) => {
         req.session.save();
         res.redirect('/wallet');
     } else {
-        res.render('err.html', {err})
+        res.render('err.html', {err, url: '/reg'})
     }
 }
 
@@ -90,8 +90,10 @@ exports.getMainPage = async (req, res) => {
         historyLic = await User.getLicHistory(login),
         balance = await user.Balance(),
         round = Round.getRound();
+        startLic = await License.getAllOffersForUser(login);
+        acceptPrice = startLic.length>0 ? startLic[0].price: null;
     
-    res.render('main.html', {user, offLic, actualLic, historyLic, defPrice: config.priceOfExtension, round, balance});
+    res.render('main.html', {user, offLic, actualLic, historyLic, defPrice: config.priceOfExtension, acceptPrice, round, balance});
 }
 
 exports.baseRoute = async (req, res) => {

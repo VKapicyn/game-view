@@ -2,7 +2,7 @@
         <!-- Для шапки и футера однозначно нужен темплейт -->
 {% block content %}
 <div class="row">
-    <div class="col-lg-7 col-md-12 col-12">
+    <div class="col-lg-7 col-md-7 col-12">
         <p>
             {% if actualLic != null %}
                 <div class="alert alert-success" role="alert">
@@ -41,14 +41,20 @@
             </select>
             <br>
             <br>
+            {% if charge == true %}
+                <input type="radio" id="Банк" name="liclist" value="Банк" checked>
+                <label for="Банк">Банк</label><br>
+            {% endif %}
             {% for lic in licList %}
-                {% if baseLic == lic %}
+                {% if loop.index == 0 %}
                 <input type="radio" id="{{lic}}" name="liclist" value="{{lic}}" checked>
                 {% else %}
                 <input type="radio" id="{{lic}}" name="liclist" value="{{lic}}">
                 {% endif %}
                 <label for="{{lic}}">{{lic}}</label><br>
             {% endfor %}
+            <br>
+            <input id="number" name="count" class="form-control" type="number" placeholder="Кол-во единиц">
             <br>
             <input id="text" name="text" class="form-control" type="text" placeholder="Предмет оплаты">
             <br>
@@ -111,7 +117,7 @@
         </table>
 
     </div>
-    <div class="col-lg-5 col-md-12 col-12">
+    <div class="col-lg-5 col-md-5 col-12">
         <h3 style="color:brown">Правила использованиия счёта</h3>
         <p>
             <ul>
@@ -123,7 +129,8 @@
         <br>
         <p>Банк в праве запросить разъяснение по операциям типа "другое", а также запросить доказательства реальности сделки. <b> В случае отказа от разъяснений или выявления фиктивности сделки - блокировка счёта.</b></p>
         <br>
-        <p><b><span style="font-size: 15pt; color:rgb(0, 46, 121);">В банке можно взять кредит</span></b> на один раунд под 3% за раунд.<br>Деньги списываются автоматически по итогу раунда.<br>
+        {% if actualLic.subsidy != "true" %}
+        <p><b><span style="font-size: 15pt; color:rgb(0, 46, 121);">В банке можно взять кредит</span></b> на один раунд под {{bankProcent}}% за раунд.<br>Деньги списываются автоматически по итогу раунда.<br>
             <form action="/getcredit" method="POST">
                 <input id="credit" name="credit" class="form-control" type="text" placeholder="Сумма кредита">
                 
@@ -135,6 +142,23 @@
                 {% endif %}
             </form>
         </p>
+        {% else %}
+        <p>
+            <b><span style="font-size: 15pt; color:rgb(0, 46, 121);">Вам доступна субсидия</span></b>
+            <br>Размер субсидии до 3000 на один раунд.<br>Непотраченная часть субсидии списывается по итогу раунда.<br>
+            На расходуемую часть субсидии налагается {{subsidyProcent}}%, списывается по итогу раунда вместе с нерасходуемой частью.<br>
+            <form action="/getsubsidy" method="POST">
+                <input id="subsidy" name="subsidy" class="form-control" type="text" placeholder="Сумма субсидии">
+                
+                <span><i>Доступный лимит на этот раунд: {{subsidyLimit}}</i></span><br><br>
+                {% if stop == false %}
+                    <button type="input" class="btn btn-success">Получить субсидию</button>
+                {% else %}
+                    <button type="input" class="btn btn-success" disabled>Получить субсидию</button>
+                {% endif %}
+            </form>
+        </p>
+        {% endif %}
     </div>
 </div>
 

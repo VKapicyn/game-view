@@ -2,11 +2,12 @@ const opsDB = require('../server').opsDB;
 const roundModel = require('../models/round');
 
 class Operations {
-    constructor(sender, responser, amount, text, type){
+    constructor(sender, responser, amount, text, type, count){
         this.sender = sender;
         this.responser = responser;
         this.amount = amount;
         this.text = text;
+        this.count = count || 1;
         this.date = new Date();
         this.type = type || 'Другое';
         this.round = roundModel.getRound()
@@ -19,6 +20,7 @@ class Operations {
                 responser: this.responser,
                 amount: this.amount,
                 text:  this.text,
+                count: this.count,
                 date: this.date,
                 round: this.round,
                 type: this.type

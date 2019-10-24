@@ -29,8 +29,6 @@
           <select name="round">
             <option value="all">Все</option>
             {% for _round in rounds %}
-              
-
                {% if selected.length>0 %}
                 {% if selected[1] == _round %}
                   <option value="{{_round}}" selected>{{_round}}</option>
@@ -41,6 +39,12 @@
                 <option value="{{_round}}">{{_round}}</option>
               {% endif %}
             {% endfor %}
+          </select><br>
+          <label>Компании: &nbsp;</label>
+          <select name="companytype">
+            <option value="all" {% if selected[2] == "all" %}selected{% endif %}>Все</option>
+            <option value="prj" {% if selected[2] == "prj" %}selected{% endif %}>Проектные</option>
+            <option value="ind" {% if selected[2] == "ind" %}selected{% endif %}>Индивидуальные</option>
           </select><br>
           &nbsp;<button type="input" class="btn btn-success btn-xs">Фильтровать</button><br>
           &nbsp;<a class="btn btn-default btn-xs" href="/rait">Сбросить</a>
@@ -62,6 +66,7 @@
                   <th scope="col">Email</th>
                 {% endif %}
                 <th scope="col">Баланс</th>
+                <th scope="col">Изделия</th>
                 <th scope="col">Лицензия</th>
               </tr>
             </thead>
@@ -76,6 +81,13 @@
                       <td>{{item.email}}</td>
                       {% endif %}
                     <td>{{item.balance}}</td>
+                    <td>
+                      {% for ob in objectTypes %}
+                        {% if item.objects[ob] != 0%}
+                        {{ob}}: {{item.objects[ob]}}
+                        {% endif %}
+                      {% endfor %}
+                    </td>
                     <td>
                       {% set flag = false %}
                       {% for lic in item.licenses %}
@@ -106,6 +118,7 @@
                 <th scope="row">#</th>
                 <td > </td>
                 <td ><b>{{balance}}</b></td>
+                <td > </td>
                 <td > </td>
                 {% if admin == true %}
                 <td></td>

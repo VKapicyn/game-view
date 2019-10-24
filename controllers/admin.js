@@ -3,6 +3,7 @@ const License = require('../models/license').License;
 const Round = require('../models/round');
 const Ops = require('../models/ops').Operations;
 const Credit = require('../models/credit').Credit;
+const Subsidy = require('../models/subsidy').Subsidy;
 const config = require('../config');
 
 exports.getPage = async (req, res) => {
@@ -56,6 +57,35 @@ exports.repayment = async (req, res) => {
     res.redirect('/admin/credits');
 }
 
+exports.subsidyRepayment = async (req, res) => {
+    let responser = config.adminLogins[0],
+        round = req.body.round;
+
+    let userSubsidy = await Subsidy.findAll();
+    let responserUser = await User.find(responser);
+
+    for (let i=0; i<userSubsidy.length; i++) {
+        let procent = 0;
+        let ostatok = 0;
+        let itog = 0;
+
+        let operation = new Ops(userSubsidy[i].login, responser, itog, 'Возврат cубсидии', 'Взыскание'),
+            senderUser = await User.find(userSubsidy[i].login);
+        
+        if (!userSubsidy[i].status && userSubsidy[i].round === Number(round)) {
+            let subsidy = await Subsidy.findOne(userSubsidy[i].login, userSubsidy[i].amount, userSubsidy[i].round);
+            operation = await operation.save();
+            senderUser.Ops = operation;
+            senderUser.updateDB();
+            responserUser.Ops = operation;
+            responserUser.updateDB();
+            subsidy.updateDB(1);
+        } else continue;
+    }
+
+    res.redirect('/admin/subsidy');
+}
+
 exports.getCreditPage = async (req, res) => {
     let credits = await Credit.findAll();
     let rounds = await Round.getRoundList();
@@ -63,6 +93,14 @@ exports.getCreditPage = async (req, res) => {
     credits.sort((a, b) => a.round > b.round ? -1 : 1)
 
     res.render('adminCredit.html', {credits, round})
+}
+exports.getSubsidyPage = async (req, res) => {
+    let subsidy = await Subsidy.findAll();
+    let rounds = await Round.getRoundList();
+    let round = rounds[rounds.length-1];
+    subsidy.sort((a, b) => a.round > b.round ? -1 : 1)
+
+    res.render('adminSubsidy.html', {subsidy, round})
 }
 
 exports.createLicense = async (req, res) => {
@@ -74,8 +112,6 @@ exports.createLicense = async (req, res) => {
         opsMass = [];
         i = 0;
 
-        console.log(req.body.tobuy);
-        console.log(req.body.tosell);
     while (true) {
         let opsName = 'ops'+i;
         if (req.body[opsName] == undefined || req.body[opsName] == '') 

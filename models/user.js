@@ -117,7 +117,7 @@ class User {
 
         let actualLic = null;
         user.licenses.map( lic => {
-            if (lic.round == round && lic.status == true)
+            if (lic.round == round && ((!_round && lic.status == true) || _round))
                 actualLic = lic.name;
         });
 
@@ -190,6 +190,18 @@ class User {
         return loginList;
     }
 
+    static async isProject(user) {
+        let result = false;
+
+        for (let i=0; i<config.newProjects.length; i++) {
+            if (user.login == config.newProjects[i]) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
     static async recalcBalances(ops, lic, __round) {
         let userList = await User.findAll();
         __round = __round === 'all' ? Round.getRound() : __round;
@@ -197,7 +209,6 @@ class User {
         if (lic != 'all') {
             for (let i=0; i<userList.length; i++) {
                 if ((await User.getActualLic(userList[i].login, __round)) != lic) {
-                    //TODO: если не так лицензия
                     userList.splice(i, 1);
                     --i;
                 }

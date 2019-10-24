@@ -4,6 +4,7 @@ const License = require('../models/license').License;
 const roundModel = require('../models/round').Round;
 const Round = require('../models/round');
 const Credit = require('../models/credit').Credit;
+const Subsidy = require('../models/subsidy').Subsidy;
 const config = require('../config');
 
 exports.charge = async (req, res) => {
@@ -16,6 +17,28 @@ exports.charge = async (req, res) => {
         responserUser = await User.find(responser);
 
     if (amount > 0) {
+        operation = await operation.save();
+        senderUser.Ops = operation;
+        senderUser.updateDB();
+        responserUser.Ops = operation;
+        responserUser.updateDB();
+    }
+    res.redirect('/wallet');
+}
+
+exports.subsidy = async (req, res) => {
+    let sender = config.adminLogins[0],
+        responser = req.session.user.login,
+        amount = req.body.subsidy,
+        rounds = await Round.getRoundList();
+    
+    let operation = new Ops(sender, responser, amount, 'Выдача субсидии', 'Субсидия'),
+        senderUser = await User.find(sender),
+        responserUser = await User.find(responser);
+
+    if (amount > 0 && (await Subsidy.getSubsidyLimit(responserUser.login)) >= amount) {
+        let subsidy = new Subsidy(responserUser.login, rounds[rounds.length-1], amount);
+        subsidy.save();
         operation = await operation.save();
         senderUser.Ops = operation;
         senderUser.updateDB();
@@ -52,7 +75,6 @@ exports.getWalletPage = async (req, res) => {
         ops = await Ops.getOpsByUser(req.session.user.login),
         userList = await User.getUserList(req.session.user.login),
         charge = require('./admin').isAdmin(req.session.user.login),
-        baseLic = require('../config').baseLic,
         licList = require('../config').lic,
         specBalance = await user.Balance();
 
@@ -62,13 +84,13 @@ exports.getWalletPage = async (req, res) => {
 
     if (__licTypes != null) {
         licTypes = __licTypes.opsTypes;
-        licTypes.push('Зарплата');
+        licTypes = licTypes.concat(config.licExp);
+        licTypes = licTypes.concat(__licTypes.objectsCanBuy);
         licList = licList.concat(licTypes);
     }
 
     res.render('wallet.html', {
         actualLic: __licTypes,
-        baseLic,
         licList,
         user,
         ops,
@@ -76,58 +98,67 @@ exports.getWalletPage = async (req, res) => {
         stop: charge ? false: (roundModel.status == 1 ? false : true),
         charge,
         specBalance,
+        bankProcent: config.bankProcent,
+        subsidyProcent: config.subsidyProcent,
+        subsidyLimit: await Subsidy.getSubsidyLimit(req.session.user.login),
         creditLimit: await Credit.getCreditLimit(req.session.user.login)
     });
 }
 
 exports.send = async (req, res) => {
-    if (req.body.text == '')
-        req.body.text = 'Без комментария'
+    if (req.body.amount && req.body.text && req.body.liclist && req.body.count) {
+        if (req.body.text == '')
+            req.body.text = 'Без комментария'
 
-    if (req.body.responser == 'Всем') {
-        let sender = req.session.user.login,
-            amount = req.body.amount;
-            text = req.body.text;
-            type = req.body.liclist;
-    
-        let senderUser = await User.find(sender),
-            responsersUser = await User.findAll();
-
-
-        if (await senderUser.Balance() >= amount * responsersUser.length && amount > 0) {
-            for( let i=0; i<responsersUser.length; i++) {
-                if (responsersUser[i].login != senderUser.login) {
-                    let operation = new Ops(sender, responsersUser[i].login, amount, text, type);
-
-                    operation = await operation.save();
-                    senderUser.Ops = operation;
-                    await senderUser.updateDB();
-                    responsersUser[i].Ops = operation;
-                    await responsersUser[i].updateDB();
-                }
-            }          
-        }
-
-        res.redirect('/wallet')
-    } else {
-        let sender = req.session.user.login,
-            responser = req.body.responser,
-            amount = req.body.amount,
-            text = req.body.text;
-            type = req.body.liclist;
-    
-        let operation = new Ops(sender, responser, amount, text, type),
-            senderUser = await User.find(sender),
-            responserUser = await User.find(responser);
-
-        if (amount > 0 && await senderUser.Balance() >= amount) {
-            operation = await operation.save();
-            senderUser.Ops = operation;
-            senderUser.updateDB();
-            responserUser.Ops = operation;
-            responserUser.updateDB();
-        }
+        if (req.body.responser == 'Всем') {
+            let sender = req.session.user.login,
+                amount = req.body.amount;
+                text = req.body.text;
+                type = req.body.liclist;
+                count = req.body.count;
         
-        res.redirect('/wallet');
+            let senderUser = await User.find(sender),
+                responsersUser = await User.findAll();
+
+
+            if (await senderUser.Balance() >= amount * responsersUser.length && amount > 0) {
+                for( let i=0; i<responsersUser.length; i++) {
+                    if (responsersUser[i].login != senderUser.login) {
+                        let operation = new Ops(sender, responsersUser[i].login, amount, text, type, count);
+
+                        operation = await operation.save();
+                        senderUser.Ops = operation;
+                        await senderUser.updateDB();
+                        responsersUser[i].Ops = operation;
+                        await responsersUser[i].updateDB();
+                    }
+                }          
+            }
+
+            res.redirect('/wallet')
+        } else {
+            let sender = req.session.user.login,
+                responser = req.body.responser,
+                amount = req.body.amount,
+                text = req.body.text;
+                type = req.body.liclist;
+                count = req.body.count;
+        
+            let operation = new Ops(sender, responser, amount, text, type, count),
+                senderUser = await User.find(sender),
+                responserUser = await User.find(responser);
+
+            if (amount > 0 && await senderUser.Balance() >= amount) {
+                operation = await operation.save();
+                senderUser.Ops = operation;
+                senderUser.updateDB();
+                responserUser.Ops = operation;
+                responserUser.updateDB();
+            }
+            
+            res.redirect('/wallet');
+        }
+    } else {
+        res.render('err.html', {err: 'Необходимо заполнить все поля!', url: '/wallet'});
     }
 }
