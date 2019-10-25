@@ -2,7 +2,7 @@ const Round = require('../models/round');
 const advertDB = require('../server').advertDB;
 
 class Advert{
-    constructor(author, offerType, predmetType, predmet, round, num, price , status, contrAgent){
+    constructor(author, offerType, predmetType, predmet, round, num, price , status, contrAgent, count){
         this.author = author;
         this.offerType = offerType;
         this.predmet = predmet;
@@ -12,6 +12,7 @@ class Advert{
         this.num = num || 0;
         this.status = (status==null||status==undefined)? true: status;
         this.contrAgent = contrAgent || '';
+        this.count = count || 1;
     }
 
     static async getNewNum(){
@@ -34,7 +35,8 @@ class Advert{
                     item.num, 
                     item.price, 
                     item.status, 
-                    item.contrAgent)
+                    item.contrAgent,
+                    item.count)
                 res(ad);
             })
         })
@@ -51,7 +53,8 @@ class Advert{
                 price: this.price,
                 round: this.round,
                 status: this.status,
-                contrAgent: this.contrAgent
+                contrAgent: this.contrAgent,
+                count: this.count
             }, (err, item) => {res(item)})
         });
     }
@@ -69,7 +72,8 @@ class Advert{
                 round: this.round,
                 roundAc: this.roundAc,
                 status: this.status,
-                contrAgent: this.contrAgent
+                contrAgent: this.contrAgent,
+                count: this.count
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -103,11 +107,6 @@ class Advert{
         return new Promise((res, rej) => {
             let search = {};
             if (predmet!=null) {
-                switch(predmet) {
-                    case 'word': predmet = 'Слово'; break;
-                    case 'letter': predmet = 'Буква'; break;
-                    case 'package': predmet = 'Упаковка'; break;
-                }
                 search.predmetType = predmet;
             }
             if (buysell!=null) {
@@ -141,7 +140,8 @@ class Advert{
                         item.num, 
                         item.price, 
                         false, 
-                        item.contrAgent
+                        item.contrAgent,
+                        item.count
                     )
                     if (item.contrAgent == '')
                         await ad.updateDB();

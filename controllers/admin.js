@@ -111,8 +111,8 @@ exports.getSubsidyPage = async (req, res) => {
 exports.createLicense = async (req, res) => {
     let licName = req.body.licname,
         subsidy = req.body.subsidy,
-        objectsCanBuy = req.body.tobuy,
-        objectsCanSell = req.body.tosell,
+        objectsCanBuy = typeof req.body.tobuy == 'string' ? [req.body.tobuy] : req.body.tobuy,
+        objectsCanSell = typeof req.body.tosell == 'string' ? [req.body.tosell] : req.body.tosell,
         sub = req.body.sub,
         opsMass = [];
         i = 0;

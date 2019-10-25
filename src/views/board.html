@@ -39,32 +39,40 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-4 col-md-12">
+    <div class="col-lg-4 col-md-6 col-6">
         <div class="advert-1">
             <h4>Поиск объявлений:</h4>
             <form method="GET" action="/board/search">
-                <input type="radio" name="predmet" value="package" checked>&nbsp;<labeL>Упаковка</labeL><br>
-                <input type="radio" name="predmet" value="word">&nbsp;<labeL>Слово</labeL><br>
-                <input type="radio" name="predmet" value="letter" >&nbsp;<labeL>Буква</labeL>
+                {% for pr in predmets %}
+                    <input type="radio" name="predmet" value="{{pr}}" {% if selected[0] == pr %}checked{% endif %}>&nbsp;<labeL>{{pr}}</labeL><br>
+                {% endfor %}
                 <hr>
-                <input type="radio" name="buysell" value="buy" checked>&nbsp;<labeL>Хотят купить</labeL><br>
-                <input type="radio" name="buysell" value="sel" >&nbsp;<labeL>Хотят продать</labeL><br>
-                <input type="submit" class="btn btn-success" value="Найти">
+                <input type="radio" name="buysell" value="buy" {% if selected[1] == "buy" %}checked{% endif %}>&nbsp;<labeL>Хотят купить</labeL><br>
+                <input type="radio" name="buysell" value="sel" {% if selected[1] == "sel" %}checked{% endif %}>&nbsp;<labeL>Хотят продать</labeL><br>
+                <input type="submit" class="btn btn-success" value="Найти">&nbsp;&nbsp;&nbsp;
+                <a class="btn btn-default" href="/board">Сбросить</a>
             </form>
         </div>
     </div>
-    <div class="col-lg-4 col-md-12">
+    <div class="col-lg-4 col-md-6 col-6">
         <div class="advert-1">
             <h4>Создать объявление: ({{myActiveAds.length}}/10)</h4>
             <form method="POST" action="/advert/create">
-                <input type="radio" name="predmet" value="package" checked>&nbsp;<labeL>Упаковка</labeL><br>
-                <input type="radio" name="predmet" value="word">&nbsp;<labeL>Слово</labeL><br>
-                <input type="radio" name="predmet" value="letter" >&nbsp;<labeL>Буква</labeL><br>
+                <div id="buysell_div">
+                {% for pr in canSell %}
+                    <input type="radio" name="predmet" value="{{pr}}" {% if loop.index == 1 %} checked {% endif %}>&nbsp;<labeL>{{pr}}</labeL><br>
+                {% endfor %}
+                {% if canSell.length == 0 %}
+                    <p>Ваша лицензия не предусматривает продажу изделий</p>
+                {% endif %}
+                </div>
+
                 <input type="text" name="fizPredmet" placeholder="Предмет сделки"><br>
-                <input type="text" name="fizPrice" placeholder="Цена">
+                <input type="number" name="count" placeholder="Кол-во предметов"><br>
+                <input type="number" name="fizPrice" placeholder="Цена">
                 <hr>
-                <input type="radio" name="buysell" value="buy" checked>&nbsp;<labeL>Куплю</labeL><br>
-                <input type="radio" name="buysell" value="sel" >&nbsp;<labeL>Продам</labeL><br>
+                <input type="radio" onclick="buysellradio(this);" name="buysell" value="buy" >&nbsp;<labeL>Куплю</labeL><br>
+                <input type="radio" onclick="buysellradio(this);" name="buysell" value="sel" checked>&nbsp;<labeL>Продам</labeL><br>
                 {% if stop == false %}
                 <input type="submit" class="btn btn-warning" value="Создать">
                 {% else %}
@@ -74,14 +82,14 @@
         </div>
     </div>
 
-    <div class="col-lg-2 col-sm-6">
+    <div class="col-lg-2 col-md-6 col-6">
         <h4>Ваши объявления:</h4> 
         {% for item in myActiveAds %}
         <span style="cursor: pointer" onclick="myads({{item.num}},'{{item.offerType}}','{{item.predmet}}',{{item.price}})">Объявление #{{item.num}}</span> <a href="/cancel/ad/{{item.num}}" class="btn btn-default btn-xs">Отменить</a></br>
         {% endfor %}
 
     </div>  
-    <div class="col-lg-2 col-sm-6">
+    <div class="col-lg-2 col-md-6 col-6">
         <h4>Архив сделок:</h4>  
         {% for ob in obligation %}
             {% if ob.actual == 1 %}
@@ -104,7 +112,7 @@
 </div>  
     <hr>
     <!--div class="container-fluid"-->
-    <h3>Доступные объявления:</h3>
+    <h3>Актуальные объявления:</h3>
         <div class="row">
                 {% for ad in ads %}
                     <div class="col-lg-3 col-md-12 card-board">
@@ -113,9 +121,15 @@
                                 <h4>Объявление #{{ad.num}}</h4>
                                 <p>Автор: {{ad.author}}</p>
                                 <p>Тип заявки: На продажу</p>
-                                <p>Предмет: {{ad.predmetType}}<br>( {{ad.predmet}} )</p>
+                                <p>Предмет: {{ad.predmetType}}<br>( {{ad.predmet}} ) {{ad.count}} шт.</p>
                                 <p>Цена: {{ad.price}} у.е. </p>
-                                {% if stop == false and ad.author != login %}
+                                {% set iCanBuy = false %}
+                                {% for can in canBuy %}
+                                    {% if can == ad.predmetType%}
+                                        {% set iCanBuy = true %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if (stop == false and ad.author != login) and (iCanBuy == true) %}
                                 <a href="/advert/buy/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-success btn-xs">Купить</a>
                                 {% else %}
                                 <a href="/advert/buy/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-success btn-xs" disabled>Купить</a>
@@ -126,9 +140,15 @@
                                 <h4>Объявление #{{ad.num}}</h4>
                                 <p>Автор: {{ad.author}}</p>
                                 <p>Тип заявки: Закупка</p>
-                                <p>Предмет: {{ad.predmetType}}<br>( {{ad.predmet}} )</p>
+                                <p>Предмет: {{ad.predmetType}}<br>( {{ad.predmet}} ) {{ad.count}} шт.</p>
                                 <p>Цена: {{ad.price}} у.е. </p>
-                                {% if stop == false and ad.author != login %}
+                                {% set iCanSell = false %}
+                                {% for can in canSell %}
+                                    {% if can == ad.predmetType%}
+                                        {% set iCanSell = true %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if (stop == false and ad.author != login) and (iCanSell == true) %}
                                 <a href="/advert/sell/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-danger btn-xs">Поставить</a>
                                 {% else %}
                                 <a href="/advert/sell/{{ad.num}}" onclick='return confirm("Уверены?")' class="btn btn-danger btn-xs" disabled>Поставить</a>
@@ -144,6 +164,35 @@
         alert(`Тип объявления: ${(_type=='buy'?'Покупка':'Продажа')}
         Предмет сделки: ${predemt}
         Цена: ${price}`);
+    }
+    function buysellradio(event) {
+        let toBuy = '{{canBuy}}'.split(',');
+        let toSell =  '{{canSell}}'.split(',');
+
+        let div = document.getElementById('buysell_div');
+        div.innerHTML= ``;
+
+        if (event.value == 'buy') {
+            if (toBuy == '' || toBuy.length == 0)
+                div.innerHTML += `<p>Ваша лицензия не предусматривает покупку изделий</p>`;
+            else
+                for(let i=0; i<toBuy.length; i++) {
+                    if (i==0)
+                        div.innerHTML += `<input type="radio" name="predmet" value="${toBuy[i]}" checked>&nbsp;<labeL>${toBuy[i]}</labeL><br>`;
+                    else 
+                        div.innerHTML += `<input type="radio" name="predmet" value="${toBuy[i]}">&nbsp;<labeL>${toBuy[i]}</labeL><br>`;
+                }
+        } else {
+            if (toSell.length == 0 || toSell == '')
+                div.innerHTML += `<p>Ваша лицензия не предусматривает продажу изделий</p>`;
+            else
+                for(let i=0; i<toSell.length; i++) {
+                    if (i==0)
+                        div.innerHTML += `<input type="radio" name="predmet" value="${toSell[i]}" checked>&nbsp;<labeL>${toSell[i]}</labeL><br>`;
+                    else 
+                        div.innerHTML += `<input type="radio" name="predmet" value="${toSell[i]}">&nbsp;<labeL>${toSell[i]}</labeL><br>`;
+                }
+        }
     }
 </script>
 {% endblock %}
