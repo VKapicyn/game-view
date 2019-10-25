@@ -6,7 +6,7 @@ const Advert = require('../models/advert').Advert;
 const advertDB = require('../server').advertDB;
 
 class User {
-    constructor(login, pass, ops, balance, name, lastname, licenses, email) {
+    constructor(login, pass, ops, balance, name, lastname, licenses, email, permission) {
         this.login = login;
         this.pass = pass;
         this.ops = ops || []
@@ -15,13 +15,12 @@ class User {
         this.lastname = lastname || '';
         this.licenses = licenses || [];
         this.email = email || '';
+        this.permission = permission || null;
     }
 
     set Ops(item) {
         if (item.sender == this.login) {
-            //console.log(Number(item.amount), this.balance)
             this.balance = +this.balance - Number(item.amount);
-            //console.log(this.balance)
         }
         else  
             this.balance = +this.balance + Number(item.amount);
@@ -53,7 +52,8 @@ class User {
                 name: this.name,
                 lastname: this.lastname,
                 licenses: this.licenses,
-                email: this.email
+                email: this.email,
+                permission: this.permission
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -90,7 +90,7 @@ class User {
             userDB.find({login: login}, (err, uD) => {
                 if (uD.length>0) {
                     uD = uD[0];
-                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email);
+                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission);
                     res(user);
                 }
                 else 
@@ -103,7 +103,7 @@ class User {
             userDB.find({}, (err, uDs) => {
                 let users = [];
                 for (let i=0; i<uDs.length; i++) {
-                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, uDs[i].licenses, uDs[i].email))
+                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, uDs[i].licenses, uDs[i].email, uDs[i].permission))
                 }
 
                 res(users)
@@ -251,7 +251,8 @@ class User {
             name: this.name,
             lastname: this.lastname,
             licenses: this.licenses, 
-            email: this.email
+            email: this.email, 
+            permission: this.permission
         }, (err, item) => {})   
     }
 

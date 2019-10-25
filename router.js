@@ -3,6 +3,7 @@ let controller = {}, middleware = {};
 
 middleware.isAdmin = require('./middleware').isAdmin;
 middleware.isReged = require('./middleware').isReged;
+middleware.isPremium = require('./middleware').isPremium;
 
 controller.rounds = require('./controllers/rounds');
 controller.auth = require('./controllers/auth');
@@ -30,13 +31,13 @@ router.get('/admin/credits', middleware.isAdmin, controller.admin.getCreditPage)
 router.get('/admin/subsidy', middleware.isAdmin, controller.admin.getSubsidyPage)
 router.get('/admin/license', middleware.isAdmin, controller.admin.getLicensePage)
 router.get('/admin/round', middleware.isAdmin, controller.admin.getPage)
-router.get('/board', middleware.isReged, controller.board.getPage)
+router.get('/board', middleware.isPremium, controller.board.getPage)
 router.get('/analitic', controller.analitic.getPage)
 router.get('/cancel/ad/:num', controller.board.cancelAd)
 router.get('/advert/buy/:num', controller.board.buyAd)
 router.get('/advert/sell/:num', controller.board.sellAd)
-router.get('/board/search', controller.board.search)
-router.get('/board/err/:type', controller.board.err)
+router.get('/board/search', middleware.isPremium, controller.board.search)
+router.get('/board/err/:type', middleware.isPremium, controller.board.err)
 router.get('/an/data', controller.analitic.getJsonData)
 
 //API
@@ -53,6 +54,7 @@ router.post('/rait', controller.rait.raitSearchV2)
 router.post('/getcredit', middleware.isReged, controller.wallet.credit )
 router.post('/getsubsidy', middleware.isReged, controller.wallet.subsidy )
 router.post('/charge', middleware.isAdmin, controller.wallet.charge)
+router.post('/permission', middleware.isReged, controller.wallet.permission)
 router.post('/send', middleware.isReged, controller.wallet.send)
 router.post('/setfio', middleware.isReged, controller.auth.setFio)
 router.post('/license/create', middleware.isAdmin, controller.admin.createLicense)

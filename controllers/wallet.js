@@ -26,6 +26,30 @@ exports.charge = async (req, res) => {
     res.redirect('/wallet');
 }
 
+exports.permission = async (req, res) => {
+    let sender = req.session.user.login,
+        responser = config.adminLogins[0],
+        round = Round.getRound().toString(),
+        amount = Number(round) == 2 ? 10 : 25;
+    
+    let operation = new Ops(sender, responser, amount, 'Оплата услуг проектной группы', 'Маркетплейс'),
+        senderUser = await User.find(sender),
+        responserUser = await User.find(responser);
+
+        //console.log(senderUser)
+    if (amount > 0 && !senderUser.permission[round]) {
+        operation = await operation.save();
+        let obj = {};
+            obj[round] = true;
+        senderUser.permission = obj;
+        console.log(senderUser)
+        senderUser.Ops = operation;
+        senderUser.updateDB();
+        responserUser.Ops = operation;
+        responserUser.updateDB();
+    }
+    res.redirect('/board');
+}
 exports.subsidy = async (req, res) => {
     let sender = config.adminLogins[0],
         responser = req.session.user.login,
@@ -95,7 +119,7 @@ exports.getWalletPage = async (req, res) => {
         user,
         ops,
         userList,
-        stop: charge ? false: (roundModel.status == 1 ? false : true),
+        stop: (charge || await User.isProject(req.session.user.login)) ? false: (roundModel.status == 1 ? false : true),
         charge,
         specBalance,
         bankProcent: config.bankProcent,
