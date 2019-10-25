@@ -2,7 +2,7 @@
         <!-- Для шапки и футера однозначно нужен темплейт -->
 {% block content %}
 <div class="row">
-    <h3 style="margin-left:10px;">Текущий раунд: {{rounds[rounds.length-1]}}</h3>
+    <h3 style="margin-left:10px;">Текущий гейм: {{rounds[rounds.length-1]}}</h3>
 </div>
 <div class="row">
    
@@ -25,7 +25,7 @@
               {% endif %}
             {% endfor %}
           </select><br>
-          <label>Раунды: &nbsp;</label>
+          <label>Геймы: &nbsp;</label>
           <select name="round">
             <option value="all">Все</option>
             {% for _round in rounds %}
@@ -44,7 +44,7 @@
           <select name="companytype">
             <option value="all" {% if selected[2] == "all" %}selected{% endif %}>Все</option>
             <option value="prj" {% if selected[2] == "prj" %}selected{% endif %}>Проектные</option>
-            <option value="ind" {% if selected[2] == "ind" %}selected{% endif %}>Индивидуальные</option>
+            <option value="ind" {% if selected[2] == "ind" %}selected{% endif %}>Технологические</option>
           </select><br>
           &nbsp;<button type="input" class="btn btn-success btn-xs">Фильтровать</button><br>
           &nbsp;<a class="btn btn-default btn-xs" href="/rait">Сбросить</a>

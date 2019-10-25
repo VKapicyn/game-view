@@ -61,26 +61,31 @@ exports.subsidyRepayment = async (req, res) => {
     let responser = config.adminLogins[0],
         round = req.body.round;
 
-    let userSubsidy = await Subsidy.findAll();
+    let userSubsidy = await Subsidy.findAllByRound(round);
     let responserUser = await User.find(responser);
 
     for (let i=0; i<userSubsidy.length; i++) {
-        let procent = 0;
-        let ostatok = 0;
-        let itog = 0;
+        let login = Object.keys(userSubsidy[i])[0],
+            subValue = Number(Object.values(userSubsidy[i])[0]),
+            ops = await Ops.getOpsBySenderAndRound(login, round),
+            sum = 0;
 
-        let operation = new Ops(userSubsidy[i].login, responser, itog, 'Возврат cубсидии', 'Взыскание'),
-            senderUser = await User.find(userSubsidy[i].login);
+        ops.map(o => {
+            if (o.responser != config.adminLogins[0])
+                sum += Number(o.amount);
+        })
+
+        let procent = (sum >= subValue) ? Math.round(100*subValue*(config.subsidyProcent/100))/100 : Math.round(100*sum*(config.subsidyProcent/100))/100,
+            amount = (sum >= subValue) ? procent : (subValue-sum)+Number(procent);
         
-        if (!userSubsidy[i].status && userSubsidy[i].round === Number(round)) {
-            let subsidy = await Subsidy.findOne(userSubsidy[i].login, userSubsidy[i].amount, userSubsidy[i].round);
+        let operation = new Ops(login, responser, amount, 'Возврат cубсидии', 'Взыскание'),
+            senderUser = await User.find(login);
+
             operation = await operation.save();
             senderUser.Ops = operation;
             senderUser.updateDB();
             responserUser.Ops = operation;
             responserUser.updateDB();
-            subsidy.updateDB(1);
-        } else continue;
     }
 
     res.redirect('/admin/subsidy');

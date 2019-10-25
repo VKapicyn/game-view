@@ -41,6 +41,18 @@ class Operations {
         });
     }
 
+    static async getOpsBySenderAndRound(login, round) {
+        return new Promise( (res, rej) => {
+            opsDB.find({'$and': [
+                {sender: login},
+                 {round: Number(round)}
+                ]})
+            .exec((err, item) => {
+                res(item)
+            });
+        });
+    }
+
     static async getByRound(round) {
         return new Promise( (res, req) => {
             let search = {};

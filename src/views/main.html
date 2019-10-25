@@ -58,11 +58,11 @@
         <h4>История лицензий:</h4>
         {% for lic in historyLic %}
             {% if (lic.status == true) and ((round-1)==lic.round) and (actualLic == null) %}
-            <p>раунд {{lic.round}} : <span id="extend">{{lic.name}}</span> 
+            <p>гейм {{lic.round}} : <span id="extend">{{lic.name}}</span> 
                 | <input type="button" onclick="prodlit()" class="btn btn-success btn-xs" value="продлить"> за {{defPrice}} у.е.
             </p>
             {% else %}
-            <p>раунд {{lic.round}} : {{lic.name}}</p>
+            <p>гейм {{lic.round}} : {{lic.name}}</p>
             {% endif %}
         {% endfor %}
         <br>

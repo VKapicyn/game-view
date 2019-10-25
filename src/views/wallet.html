@@ -84,7 +84,7 @@
         <br>
         {% endif %}
     {% else %}
-    <h3>Раунд завершён. Чтобы совершить перевод, дождитесь следующего раунда.</h3>
+    <h3>Гейм завершён. Чтобы совершить перевод, дождитесь следующего гейма.</h3>
     {% endif %}
         <hr>
         <h3>Мои операции:</h3>
@@ -130,11 +130,11 @@
         <p>Банк в праве запросить разъяснение по операциям типа "другое", а также запросить доказательства реальности сделки. <b> В случае отказа от разъяснений или выявления фиктивности сделки - блокировка счёта.</b></p>
         <br>
         {% if actualLic.subsidy != "true" %}
-        <p><b><span style="font-size: 15pt; color:rgb(0, 46, 121);">В банке можно взять кредит</span></b> на один раунд под {{bankProcent}}% за раунд.<br>Деньги списываются автоматически по итогу раунда.<br>
+        <p><b><span style="font-size: 15pt; color:rgb(0, 46, 121);">В банке можно взять кредит</span></b> на один гейм под {{bankProcent}}% за гейм.<br>Деньги списываются автоматически по итогу гейма.<br>
             <form action="/getcredit" method="POST">
                 <input id="credit" name="credit" class="form-control" type="text" placeholder="Сумма кредита">
                 
-                <span><i>Доступный лимит на этот раунд: {{creditLimit}}</i></span><br><br>
+                <span><i>Доступный лимит на этот гейм: {{creditLimit}}</i></span><br><br>
                 {% if stop == false %}
                     <button type="input" class="btn btn-success">Получить кредит</button>
                 {% else %}
@@ -145,12 +145,12 @@
         {% else %}
         <p>
             <b><span style="font-size: 15pt; color:rgb(0, 46, 121);">Вам доступна субсидия</span></b>
-            <br>Размер субсидии до 3000 на один раунд.<br>Непотраченная часть субсидии списывается по итогу раунда.<br>
-            На расходуемую часть субсидии налагается {{subsidyProcent}}%, списывается по итогу раунда вместе с нерасходуемой частью.<br>
+            <br>Размер субсидии до 3000 на один гейм.<br>Непотраченная часть субсидии списывается по итогу гейма.<br>
+            На расходуемую часть субсидии налагается {{subsidyProcent}}%, списывается по итогу гейма вместе с нерасходуемой частью.<br>
             <form action="/getsubsidy" method="POST">
                 <input id="subsidy" name="subsidy" class="form-control" type="text" placeholder="Сумма субсидии">
                 
-                <span><i>Доступный лимит на этот раунд: {{subsidyLimit}}</i></span><br><br>
+                <span><i>Доступный лимит на этот гейм: {{subsidyLimit}}</i></span><br><br>
                 {% if stop == false %}
                     <button type="input" class="btn btn-success">Получить субсидию</button>
                 {% else %}

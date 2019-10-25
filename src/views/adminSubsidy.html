@@ -20,7 +20,9 @@
         </div>
         <script>
                 function rePayment(){
-                        $.ajax({
+                        let answer = confirm('Точно?');
+                        if (answer) {
+                                $.ajax({
                                 url: '/subsidy/rePayment',
                                 method: 'POST',
                                 async: true,
@@ -31,6 +33,7 @@
                                         }
                                 }
                         });
+                        }
                 }
         </script>
         {% endblock %}

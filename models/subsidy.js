@@ -34,6 +34,30 @@ class Subsidy{
         return new Promise((res, rej) => {
             SubsidyDB.find({}, (err, credits) => {
                 res(credits);
+            });
+        });
+    }
+
+    static async findAllByRound(round) {
+        return new Promise((res, rej) => {
+            SubsidyDB.find({}, (err, credits) => {
+                let response = {};
+                for (let i=0; i<credits.length; i++) {
+                    if (credits[i].round == round || !round) {
+                        if (response[credits[i].login]) 
+                            response[credits[i].login] = +response[credits[i].login] +Number(credits[i].amount);
+                        else
+                            response[credits[i].login] = Number(credits[i].amount);
+                    }
+                }
+
+                var result = Object.keys(response).map(function(key) {
+                    let obj = {};
+                    obj[key] = response[key]
+                    return obj;
+                  });
+
+                res(result);
             })
         });
     }
