@@ -194,7 +194,7 @@ class User {
         let result = false;
 
         for (let i=0; i<config.newProjects.length; i++) {
-            if (user.login == config.newProjects[i]) {
+            if (user.login == config.newProjects[i] || user == config.newProjects[i]) {
                 result = true;
                 break;
             }

@@ -12,6 +12,7 @@ controller.txs = require('./controllers/txs');
 controller.admin = require('./controllers/admin');
 controller.board = require('./controllers/board');
 controller.analitic = require('./controllers/analitic');
+controller.api = require('./controllers/api');
 
 router = express.Router();
 
@@ -37,6 +38,12 @@ router.get('/advert/sell/:num', controller.board.sellAd)
 router.get('/board/search', controller.board.search)
 router.get('/board/err/:type', controller.board.err)
 router.get('/an/data', controller.analitic.getJsonData)
+
+//API
+router.get('/api/v1/status', controller.api.status);
+router.get('/api/v1/txs', controller.api.txs);
+router.get('/api/v1/credits', controller.api.credits);
+router.get('/api/v1/adverts', controller.api.adverts);
 
 router.post('/analitic', controller.analitic.getPage)
 router.post('/reg', controller.auth.setUser)

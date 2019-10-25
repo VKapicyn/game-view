@@ -12,10 +12,16 @@
           <label>Сортировка: &nbsp;</label>
           <select name="sort">
             <option value="all">Все</option>
-                <option value="txs">Число транзакций</option>
-                <option value="volume">Оборот средств</option>
-                <option value="netOne">Сеть 1-го ранга</option>
-                <option value="netTwo">Сеть 2-го ранга</option>
+                <option value="txs" {% if selected[0] == "txs" %}selected{% endif %}>Число транзакций</option>
+                <option value="volume" {% if selected[0] == "volume" %}selected{% endif %}>Оборот средств</option>
+                <option value="netOne" {% if selected[0] == "netOne" %}selected{% endif %}>Сеть 1-го ранга</option>
+                <option value="netTwo" {% if selected[0] == "netTwo" %}selected{% endif %}>Сеть 2-го ранга</option>
+          </select><br>
+          <label>Компании: &nbsp;</label>
+          <select name="companytype">
+            <option value="all" {% if selected[2] == "all" %}selected{% endif %}>Все</option>
+            <option value="prj" {% if selected[2] == "prj" %}selected{% endif %}>Проектные</option>
+            <option value="ind" {% if selected[2] == "ind" %}selected{% endif %}>Технологические</option>
           </select><br>
           <label>Геймы: &nbsp;</label>
           <select name="round">
@@ -33,6 +39,7 @@
             {% endfor %}
           </select><br>
           &nbsp;<button type="input" class="btn btn-success btn-xs">Посчитать</button><br>
+          &nbsp;<a class="btn btn-default btn-xs" href="/analitic">Сбросить</a>
         </div>  
       </form>
       <br>

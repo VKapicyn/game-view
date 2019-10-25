@@ -91,6 +91,14 @@ class Advert{
         })
     }
 
+    static async findAll() {
+        return new Promise((res, rej) => {
+            advertDB.find({}, (err, result) => {
+                res(result);
+            })
+        })
+    }
+
     static async getActiveAds(without, predmet, buysell) {
         return new Promise((res, rej) => {
             let search = {};

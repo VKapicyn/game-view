@@ -1,13 +1,35 @@
 const User = require('../models/user').User;
+const Round = require('../models/round');
 const Ops = require('../models/ops').Operations;
 const config = require('../config');
 
 
 exports.getPage = async (req, res) => {
-    let users = await User.getUserList();
-    let result = [];
-    let round = req.body.round || 'all';
-    let ops = await Ops.getByRound(round);
+    let users = await User.getUserList(),
+        result = [],
+        rounds = Round.getRoundList(),
+        round = req.body.round || 'all',
+        baseComp = req.body.companytype,
+        ops = await Ops.getByRound(round);
+
+    for (let i=0; i<users.length; i++) {
+        if (baseComp == 'all')
+            break;
+        
+        if (baseComp == 'prj') {
+            if (!(await User.isProject(users[i]))) {
+                users.splice(users.indexOf(users[i]), 1)
+                --i;
+            }
+        }
+        else 
+            if (baseComp == 'ind')
+                if (await User.isProject(users[i])) {
+                    users.splice(users.indexOf(users[i]), 1)
+                    --i;
+                }
+        
+    }
 
     for( let i=0; i<users.length; i++ ) {
         let txs = 0,
@@ -46,7 +68,7 @@ exports.getPage = async (req, res) => {
         }
     }
 
-    res.render('analitic.html', {users: result})
+    res.render('analitic.html', {users: result, rounds, selected:[req.body.sort, round, baseComp]})
 }
 
 exports.getJsonData = (req, res) => {
