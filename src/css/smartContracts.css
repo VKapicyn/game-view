@@ -1,0 +1,35 @@
+.modal-header .close {
+  padding: 1rem;
+  margin: -1rem -1rem -1rem auto;
+}
+
+.card.text-center th {
+  text-align: center !important;
+}
+
+.vh-75 {
+  height: 75vh;
+}
+
+.overflow-auto {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.h-90 {
+  height: 90% !important;
+}
+
+@media (max-width: 768px) {
+  .vh-75 {
+    height: auto;
+  }
+
+  .col-block {
+    height: 80vh !important;
+  }
+
+  .first-block {
+    margin-bottom: 1.5rem;
+  }
+}

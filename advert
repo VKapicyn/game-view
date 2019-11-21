@@ -2,11 +2,11 @@
 {"num":7,"author":"X05","offerType":"buy","predmet":"1","price":"12","round":8,"status":true,"contrAgent":"X01","_id":"5Aw4KN1cgPr4qD1n"}
 {"num":3,"author":"X01","offerType":"buy","predmet":"1","price":"1","round":7,"status":true,"contrAgent":"X05","_id":"HBgaWNGNAPgyYTzE"}
 {"num":8,"author":"Bank","offerType":"buy","predmet":"qwe","price":"123","round":12,"status":false,"contrAgent":"","count":1,"_id":"NRmSaLOvUFqjxuBu"}
-{"num":13,"author":"X03","offerType":"sel","predmet":"123","predmetType":"Продукт","price":"123","round":12,"status":true,"contrAgent":"","count":123,"_id":"NWK4rhJkNKJp8x8T"}
-{"num":15,"author":"X03","offerType":"sel","predmet":"123","predmetType":"Продукт","price":"123","round":12,"status":true,"contrAgent":"","count":123,"_id":"Vi52TAlXp7eW1jn1"}
-{"num":12,"author":"X03","offerType":"buy","predmet":"fffff","predmetType":"Вторсырье","price":"22","round":12,"status":true,"contrAgent":"","count":12,"_id":"Z54JE31fXMShtn64"}
+{"num":13,"author":"X03","offerType":"sel","predmet":"123","price":"123","round":12,"status":false,"contrAgent":"","count":123,"_id":"NWK4rhJkNKJp8x8T"}
+{"num":15,"author":"X03","offerType":"sel","predmet":"123","price":"123","round":12,"status":false,"contrAgent":"","count":123,"_id":"Vi52TAlXp7eW1jn1"}
+{"num":12,"author":"X03","offerType":"buy","predmet":"fffff","price":"22","round":12,"status":false,"contrAgent":"","count":12,"_id":"Z54JE31fXMShtn64"}
 {"num":6,"author":"Bank","offerType":"sel","predmet":"1","price":"1","round":7,"status":true,"contrAgent":"X05","_id":"ZbLrUpH7xQpQst9k"}
-{"num":16,"author":"X03","offerType":"buy","predmet":"12","predmetType":"Вторсырье","price":"112","round":12,"status":true,"contrAgent":"","count":12,"_id":"ggzzSIv5xMssmFaL"}
+{"num":16,"author":"X03","offerType":"buy","predmet":"12","price":"112","round":12,"status":false,"contrAgent":"","count":12,"_id":"ggzzSIv5xMssmFaL"}
 {"num":11,"author":"Bank","offerType":"sel","predmet":"123123","predmetType":"Вторсырье","price":"2","round":12,"status":true,"contrAgent":"","count":2,"_id":"kfd5AlBK5Nxmw7VD"}
 {"num":1,"author":"X01","offerType":"sel","predmet":"топор","price":"40","round":5,"status":true,"contrAgent":"X02","_id":"kzcYlHFSukeo9Yqf"}
 {"num":5,"author":"Bank","offerType":"buy","predmet":"1","price":"1","round":7,"status":false,"contrAgent":"","_id":"lrK2MwkZEXBEJ7fE"}
@@ -14,7 +14,3 @@
 {"num":9,"author":"Bank","offerType":"sel","predmet":"Якорь","predmetType":"Продукт","price":"20","round":12,"status":true,"contrAgent":2,"count":1,"_id":"qOwXBjqb05s6lzrP"}
 {"num":2,"author":"X01","offerType":"sel","predmet":"Дом","price":"20","round":5,"status":true,"contrAgent":"X02","_id":"qyxyOrteliIFJIau"}
 {"num":4,"author":"Bank","offerType":"buy","predmet":"1","price":"1","round":7,"status":false,"contrAgent":"","_id":"u1LosrAAuhsvmMU5"}
-{"num":16,"author":"X03","offerType":"buy","predmet":"12","price":"112","round":12,"status":false,"contrAgent":"","count":12,"_id":"ggzzSIv5xMssmFaL"}
-{"num":15,"author":"X03","offerType":"sel","predmet":"123","price":"123","round":12,"status":false,"contrAgent":"","count":123,"_id":"Vi52TAlXp7eW1jn1"}
-{"num":13,"author":"X03","offerType":"sel","predmet":"123","price":"123","round":12,"status":false,"contrAgent":"","count":123,"_id":"NWK4rhJkNKJp8x8T"}
-{"num":12,"author":"X03","offerType":"buy","predmet":"fffff","price":"22","round":12,"status":false,"contrAgent":"","count":12,"_id":"Z54JE31fXMShtn64"}

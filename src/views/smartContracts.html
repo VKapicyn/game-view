@@ -1,0 +1,192 @@
+{% extends "templates/page.html" %}
+{% block head %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% block commonStyles %}
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+  <link rel="stylesheet" href="/css/smartContracts.css" />
+  {% endblock %}
+  <title>Контракты</title>
+</head>
+
+<body>
+  {% endblock %}
+  {% block content %}
+  <div class="row vh-75">
+    <!-- Block 1: Write code + Show Blocks -->
+    <div class="first-block col-12 col-sm-12 col-md-8 col-lg-8">
+      <!-- SubBlock 1: Write code -->
+      <div class="col-block row mb-4 h-50">
+        <div class="col">
+          <div class="card text-center h-100">
+            <div class="card-header font-weight-bold">
+              Новый контракт
+            </div>
+            <div class="card-body">
+              <textarea class="form-control h-90" id="smart-contract-code"
+                placeholder="Введите код контракта здесь"></textarea>
+              <div id="code-error" class="invalid-feedback">
+                Please choose a username.
+              </div>
+            </div>
+            <div class="card-footer">
+              <button id="send-code" class="btn btn-block btn-primary">Отправить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SubBlock 2: Show Blocks -->
+      <div class="col-block row h-50">
+        <div class="col h-100">
+          <div class="card text-center h-100">
+            <div class="card-header font-weight-bold">
+              Блоки
+            </div>
+            <div class="card-body overflow-auto">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Время</th>
+                      <th>Автор</th>
+                      <th>???</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>123</td>
+                      <td>fwgw</td>
+                      <td>???</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>123</td>
+                      <td>fwgw</td>
+                      <td>???</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td>123</td>
+                      <td>fwgw</td>
+                      <td>???</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Block 2: Show contracts -->
+    <div class="col-block col-12 col-sm-12 col-md-4 col-lg-4 h-100">
+      <div class="card h-100">
+        <div class="card-header text-center font-weight-bold">
+          Контракты (<span id="round">{{round}}</span> раунд)
+        </div>
+        <div class="card-body h-100">
+          <div class="accordion h-100 overflow-auto" id="contractsList">
+            <div class="card">
+              <div class="card-header">
+                <button class="btn btn-block dropdown-toggle" type="button" data-toggle="collapse"
+                  data-target="#collapse1">
+                  id: 1
+                </button>
+              </div>
+
+              <div id="collapse1" class="collapse show" data-parent="#contractsList">
+                <div class="card-body">
+                  <div class="row mb-2">
+                    <div class="col">
+                      <button class="btn btn-block btn-info" data-toggle="modal" data-target="#codeModal">Код</button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="form-group form-row">
+                        <div class="col-9 col-sm-10 col-md-9 col-lg-10">
+                          <input type="text" class="form-control" placeholder="???" />
+                        </div>
+                        <div class="col-3 col-sm-2 col-md-3 col-lg-2">
+                          <button class="btn btn-success btn-block">&#10004;</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <button class="btn btn-block dropdown-toggle" type="button" data-toggle="collapse"
+                  data-target="#collapse2">
+                  id: 1
+                </button>
+              </div>
+
+              <div id="collapse2" class="collapse show" data-parent="#contractsList">
+                <div class="card-body">
+                  <div class="row mb-2">
+                    <div class="col">
+                      <button class="btn btn-block btn-info" data-toggle="modal" data-target="#codeModal">Код</button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="form-group form-row">
+                        <div class="col-9 col-sm-10 col-md-9 col-lg-10">
+                          <input type="text" class="form-control" placeholder="???" />
+                        </div>
+                        <div class="col-3 col-sm-2 col-md-3 col-lg-2">
+                          <button class="btn btn-success btn-block">&#10004;</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="codeModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="codeModalLabel">Код контракта №?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <textarea class="form-control" id="source-code" rows="5" disabled></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}
+  {% block commonJS %}
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="/js/contractPageConf.js"></script>
+  <script src="/js/createContract.js"></script>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  {% endblock %}

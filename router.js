@@ -13,6 +13,7 @@ controller.txs = require('./controllers/txs');
 controller.admin = require('./controllers/admin');
 controller.board = require('./controllers/board');
 controller.analitic = require('./controllers/analitic');
+controller.smartContracts = require('./controllers/smartcontracts');
 controller.api = require('./controllers/api');
 
 router = express.Router();
@@ -39,6 +40,7 @@ router.get('/advert/sell/:num', controller.board.sellAd)
 router.get('/board/search', middleware.isPremium, controller.board.search)
 router.get('/board/err/:type', middleware.isPremium, controller.board.err)
 router.get('/an/data', controller.analitic.getJsonData)
+router.get('/smartcontracts', middleware.isReged, controller.smartContracts.getPage)
 
 //API
 router.get('/api/v1/status', controller.api.status);
