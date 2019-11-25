@@ -67,5 +67,7 @@ router.post('/license/buy', middleware.isReged, controller.auth.buyLic)
 router.post('/license/sell', middleware.isReged, controller.auth.sellLic)
 router.post('/license/extend', middleware.isReged, controller.auth.extend)
 router.post('/advert/create', middleware.isReged, controller.board.createAdv)
+router.post('/sc/create', middleware.isReged, controller.smartContracts.createSC)
+router.post('/sc/field', middleware.isReged, controller.smartContracts.callField)
 
 module.exports.router = router

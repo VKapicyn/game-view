@@ -22,6 +22,8 @@ let creditDB = new Datastore({filename: 'credit'});
 creditDB.loadDatabase();
 let subsidyDB = new Datastore({filename: 'subsidy'});
 subsidyDB.loadDatabase();
+let BlockChain = new Datastore({filename: 'blockchain'});
+BlockChain.loadDatabase();
 
 module.exports.userDB = userDB;
 module.exports.opsDB = opsDB;
@@ -30,6 +32,7 @@ module.exports.roundDB = roundDB;
 module.exports.advertDB = advertDB;
 module.exports.creditDB = creditDB;
 module.exports.subsidyDB = subsidyDB;
+module.exports.BlockChain = BlockChain;
 
 nunjucks.configure(__dirname + '/src/views', {
     autoescape: true,

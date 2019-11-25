@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
   <link rel="stylesheet" href="/css/smartContracts.css" />
   {% endblock %}
-  <title>Контракты</title>
+  <title>Смарт-контракты</title>
 </head>
 
 <body>
@@ -21,22 +21,28 @@
     <!-- Block 1: Write code + Show Blocks -->
     <div class="first-block col-12 col-sm-12 col-md-8 col-lg-8">
       <!-- SubBlock 1: Write code -->
+      
       <div class="col-block row mb-4 h-50">
         <div class="col">
           <div class="card text-center h-100">
             <div class="card-header font-weight-bold">
-              Новый контракт
+              Новый смарт-контракт
             </div>
+            <form action="/sc/create" method="post">
             <div class="card-body">
-              <textarea class="form-control h-90" id="smart-contract-code"
+              <textarea name="scText" class="form-control h-90" id="smart-contract-code"
                 placeholder="Введите код контракта здесь"></textarea>
               <div id="code-error" class="invalid-feedback">
-                Please choose a username.
+                {% if err %}
+                Обнаружена ошибка в контракте:
+                {{err}}
+                {% endif %}
               </div>
             </div>
             <div class="card-footer">
               <button id="send-code" class="btn btn-block btn-primary">Отправить</button>
             </div>
+          </form>
           </div>
         </div>
       </div>
@@ -46,7 +52,7 @@
         <div class="col h-100">
           <div class="card text-center h-100">
             <div class="card-header font-weight-bold">
-              Блоки
+              Обозреватель блоков
             </div>
             <div class="card-body overflow-auto">
               <div class="table-responsive">
@@ -63,6 +69,30 @@
                   <tbody>
                     <tr>
                       <th scope="row">1</th>
+                      <td>123</td>
+                      <td>fwgw</td>
+                      <td>???</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>123</td>
+                      <td>fwgw</td>
+                      <td>???</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>123</td>
+                      <td>fwgw</td>
+                      <td>???</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>123</td>
+                      <td>fwgw</td>
+                      <td>???</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
                       <td>123</td>
                       <td>fwgw</td>
                       <td>???</td>
@@ -92,99 +122,107 @@
     <div class="col-block col-12 col-sm-12 col-md-4 col-lg-4 h-100">
       <div class="card h-100">
         <div class="card-header text-center font-weight-bold">
-          Контракты (<span id="round">{{round}}</span> раунд)
+          Смарт-контракты (<span id="round">{{round}}</span> раунд)
         </div>
         <div class="card-body h-100">
+            {% for sc in scs %}
           <div class="accordion h-100 overflow-auto" id="contractsList">
+
             <div class="card">
               <div class="card-header">
                 <button class="btn btn-block dropdown-toggle" type="button" data-toggle="collapse"
                   data-target="#collapse1">
-                  id: 1
+                  id: {{sc._id}} (Баланс: 0)
                 </button>
               </div>
-
               <div id="collapse1" class="collapse show" data-parent="#contractsList">
                 <div class="card-body">
                   <div class="row mb-2">
                     <div class="col">
-                      <button class="btn btn-block btn-info" data-toggle="modal" data-target="#codeModal">Код</button>
+                      <button class="btn btn-block btn-info" data-toggle="modal" data-target="#codeModal{{sc._id}}">
+                        Код
+                      </button> 
+                      <button class="btn btn-block btn-default" data-toggle="modal" data-target="#resultModal{{sc._id}}">
+                        Распределить баланс
+                      </button> 
+                      <button class="btn btn-block btn-default" data-toggle="modal" data-target="#balanceModal{{sc._id}}">
+                        Пополнить
+                      </button> 
                     </div>
                   </div>
+                  {% for field in sc.fields %}
                   <div class="row">
                     <div class="col-12">
                       <div class="form-group form-row">
-                        <div class="col-9 col-sm-10 col-md-9 col-lg-10">
-                          <input type="text" class="form-control" placeholder="???" />
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
+                          <span>{{field.name}}</span>
                         </div>
-                        <div class="col-3 col-sm-2 col-md-3 col-lg-2">
-                          <button class="btn btn-success btn-block">&#10004;</button>
-                        </div>
+                        {% if field.value %}
+                          <p><b>{{field.value}}</b> [<i>Заполнил: {{field.author}}</i>]</p>
+                        {% else %}
+                          <form action="/sk/field" method="POST">
+                            <div class="col-7 col-sm-8 col-md-7 col-lg-8">
+                              {% if field.type=="$слово" or field.type=="$буква" or field.type=="$число" %}
+                                <input name="data" type="text" class="form-control" placeholder="{{field.type}}" />
+                              {% endif %}
+                              <input name="fieldId" type="hidden" value="{{field._id}}" />
+                              <input name="skId" type="hidden" value="{{sc._id}}" />
+                            </div>
+                            <div class="col-3 col-sm-2 col-md-3 col-lg-2">
+                              <button class="btn btn-success btn-block">&#10004;</button>
+                            </div>
+                          </form>
+                        {% endif %}
                       </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                  <hr>
+                  <div class="row">
+                    <div class="col-12">
+                      {% for res in sc.results %}
+                        {{res.author}}: {{res.value}}<br>
+                      {% endfor %}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="card">
-              <div class="card-header">
-                <button class="btn btn-block dropdown-toggle" type="button" data-toggle="collapse"
-                  data-target="#collapse2">
-                  id: 1
-                </button>
-              </div>
-
-              <div id="collapse2" class="collapse show" data-parent="#contractsList">
-                <div class="card-body">
-                  <div class="row mb-2">
-                    <div class="col">
-                      <button class="btn btn-block btn-info" data-toggle="modal" data-target="#codeModal">Код</button>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="form-group form-row">
-                        <div class="col-9 col-sm-10 col-md-9 col-lg-10">
-                          <input type="text" class="form-control" placeholder="???" />
-                        </div>
-                        <div class="col-3 col-sm-2 col-md-3 col-lg-2">
-                          <button class="btn btn-success btn-block">&#10004;</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
           </div>
+          {% endfor %}
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal" id="codeModal" tabindex="-1" role="dialog">
+  {% for sc in scs %}
+  <div class="modal" id="codeModal{{sc._id}}" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="codeModalLabel">Код контракта №?</h5>
+          <h5 class="modal-title" id="codeModalLabel">Код контракта №{{sc._id}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <textarea class="form-control" id="source-code" rows="5" disabled></textarea>
+          <textarea class="form-control" id="source-code" rows="5" disabled>
+              {{sc.text | indent}}
+          </textarea>
         </div>
       </div>
     </div>
   </div>
+  {% endfor %}
 
   {% endblock %}
   {% block commonJS %}
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
-  <script src="/js/contractPageConf.js"></script>
-  <script src="/js/createContract.js"></script>
+  <!--script src="/js/contractPageConf.js"></script>
+  <script src="/js/createContract.js"></script-->
 
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
