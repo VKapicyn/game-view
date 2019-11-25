@@ -58,7 +58,7 @@
             <br>
             <input id="text" name="text" class="form-control" type="text" placeholder="Предмет оплаты">
             <br>
-            <button type="input" class="btn btn-success">Перевести</button>
+            <button type="input" class="btn btn-primary">Перевести</button>
         </form>
         {% else %}
             <p style="color:brown">Без лицензии Вам недоступны переводы.</p>
@@ -79,7 +79,7 @@
             </select>
             <br>
             <br>
-            <button type="input" class="btn btn-success">Взыскать</button>
+            <button type="input" class="btn btn-primary">Взыскать</button>
         </form>
         <br>
         {% endif %}
@@ -136,9 +136,9 @@
                 
                 <span><i>Доступный лимит на этот гейм: {{creditLimit}}</i></span><br><br>
                 {% if stop == false %}
-                    <button type="input" class="btn btn-success">Получить кредит</button>
+                    <button type="input" class="btn btn-primary">Получить кредит</button>
                 {% else %}
-                    <button type="input" class="btn btn-success" disabled>Получить кредит</button>
+                    <button type="input" class="btn btn-primary" disabled>Получить кредит</button>
                 {% endif %}
             </form>
         </p>
@@ -152,9 +152,9 @@
                 
                 <span><i>Доступный лимит на этот гейм: {{subsidyLimit}}</i></span><br><br>
                 {% if stop == false %}
-                    <button type="input" class="btn btn-success">Получить субсидию</button>
+                    <button type="input" class="btn btn-primary">Получить субсидию</button>
                 {% else %}
-                    <button type="input" class="btn btn-success" disabled>Получить субсидию</button>
+                    <button type="input" class="btn btn-primary" disabled>Получить субсидию</button>
                 {% endif %}
             </form>
         </p>
