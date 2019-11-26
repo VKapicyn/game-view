@@ -15,7 +15,7 @@ class User {
         this.lastname = lastname || '';
         this.licenses = licenses || [];
         this.email = email || '';
-        this.permission = permission || null;
+        this.permission = permission || {};
     }
 
     set Ops(item) {
@@ -83,6 +83,32 @@ class User {
         });
         this.licenses.push({name: name, round: Round.getRound(), status: true})
         await this.updateDB();
+    }
+
+    static async isReged(email) {
+        return new Promise((resolve, reject) => {
+            userDB.find(email, (err, uD) => {
+                if (uD.length>0) {
+                    resolve(true);
+                }
+                else 
+                    resolve(false);
+            });
+        })
+    }
+
+    static async findByEmail(email){
+        return new Promise((res, rej) => {
+            userDB.find({email: email}, (err, uD) => {
+                if (uD.length>0) {
+                    uD = uD[0];
+                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission);
+                    res(user);
+                }
+                else 
+                    res(null);
+            });
+        }) 
     }
 
     static async find(login){

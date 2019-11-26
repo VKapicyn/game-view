@@ -2,22 +2,57 @@ const Round = require('../models/round');
 const Ops = require('../models/ops').Operations; 
 const Credit = require('../models/credit').Credit;
 const Advert = require('../models/advert').Advert;
+const { parse } = require('json2csv');
 
 exports.txs = async (req, res) => {
-    res.json(await Ops.findAll())
+    if (req.params.type === 'json')
+        res.json(await Ops.findAll());
+    else{
+        let array = parse(await Ops.findAll({dateFromat: true}))
+        while(array.indexOf('\n')!==-1 || array.indexOf('"')!==-1) {
+            array = array.replace('\n','<br>');
+            array = array.replace('"','');
+        }
+        res.send(array)
+    }
 }
 
 exports.status = async (req, res) => {
     let round = await Round.getRound(),
         status = Round.Round.status;
 
-    res.json({status, round});
+    if (req.params.type === 'json')
+        res.json({status, round});
+    else 
+        res.send(`status,round<br>${status},${round}`)
 }
 
 exports.credits = async (req, res) => {
-    res.json(await Credit.findAll());
+    if (req.params.type === 'json')
+        res.json(await Credit.findAll());
+    else{
+        let array = parse(await Credit.findAll())
+        while(array.indexOf('\n')!==-1 || array.indexOf('"')!==-1) {
+            array = array.replace('\n','<br>');
+            array = array.replace('"','');
+        }
+        res.send(array)
+    }
 }
 
 exports.adverts = async (req, res) => {
-    res.json(await Advert.findAll());
+    if (req.params.type === 'json')
+        res.json(await Advert.findAll());
+    else{
+        let array = parse(await Advert.findAll())
+        while(array.indexOf('\n')!==-1 || array.indexOf('"')!==-1) {
+            array = array.replace('\n','<br>');
+            array = array.replace('"','');
+        }
+        res.send(array)
+    }
+}
+
+exports.getPage = async (req, res) => {
+    res.render('api.html');
 }

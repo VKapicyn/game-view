@@ -1,10 +1,26 @@
 const config = require('./config');
 const Round = require('./models/round');
 const User = require('./models/user').User;
+//const tokensDB = require('./server').tokensDB;
+
+exports.isAPI = (req, res, next) => {
+    //Round.getRound().toString()
+    const tokens = {}
+    tokens[1] = "VHsqXz"
+    tokens[2] = "bOt1sM"
+    tokens[3] = "tRoYJg"
+    tokens[4] = "vfmuQp"
+    tokens[5] = "BxcIoT"
+
+    if (req.params.token == tokens[Number(Round.getRound())])
+        next();
+    else
+        res.render('err.html', {err: 'Некорректный token доступа к данным.', url: '/api'});
+}
 
 exports.isReged = (req, res, next) => {
     if (req.session.user == undefined) {
-        res.send('<h1>Авторизуйтесь!</h1>');
+        res.render('err.html', {err: 'Авторизуйтесь!', url: '/'});
     } else if (req.sessionID == req.session.user.session) {
         next()
     }
@@ -30,6 +46,7 @@ exports.isAdmin = (req, res, next) => {
 
 exports.isPremium = async (req, res, next) => {
     if (req.session.user == undefined) {
+        res.render('err.html', {err: 'Авторизуйтесь!', url: '/'});
         return;
     } else if (req.sessionID == req.session.user.session) {
         let flag1 = false;

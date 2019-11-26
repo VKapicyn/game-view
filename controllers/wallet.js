@@ -36,7 +36,7 @@ exports.permission = async (req, res) => {
         senderUser = await User.find(sender),
         responserUser = await User.find(responser);
 
-        //console.log(senderUser)
+        console.log(senderUser)
     if (amount > 0 && !senderUser.permission[round]) {
         operation = await operation.save();
         let obj = {};

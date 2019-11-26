@@ -14,3 +14,5 @@
 {"num":9,"author":"Bank","offerType":"sel","predmet":"Якорь","predmetType":"Продукт","price":"20","round":12,"status":true,"contrAgent":2,"count":1,"_id":"qOwXBjqb05s6lzrP"}
 {"num":2,"author":"X01","offerType":"sel","predmet":"Дом","price":"20","round":5,"status":true,"contrAgent":"X02","_id":"qyxyOrteliIFJIau"}
 {"num":4,"author":"Bank","offerType":"buy","predmet":"1","price":"1","round":7,"status":false,"contrAgent":"","_id":"u1LosrAAuhsvmMU5"}
+{"num":17,"author":"Bank","offerType":"sel","predmet":"1","predmetType":"Продукт","price":"1","round":2,"status":true,"contrAgent":"","count":1,"_id":"r2qXFG3R1kvTqSCM"}
+{"num":10,"author":"Bank","offerType":"sel","predmet":"тттт","price":"4","round":2,"status":true,"contrAgent":"X06","count":4,"_id":"pnmyc1Yarsa47qZi"}

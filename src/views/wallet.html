@@ -83,9 +83,53 @@
         </form>
         <br>
         {% endif %}
+    </div>
     {% else %}
     <h3>Гейм завершён. Чтобы совершить перевод, дождитесь следующего гейма.</h3>
+    </div>
     {% endif %}
+    <div class="col-lg-5 col-md-5 col-12">
+        <h3 style="color:rgb(0, 46, 121);">Правила использованиия счёта</h3>
+        <p>
+            <ul>
+                <li>В переводе необходимо указать предмет сделки, например: "букет", "а,б,в,я", "Ax3", "Зарплата аналитика".</li>
+                <li>В поле "Кол-во единиц" необходимо указать количество единиц покупаемого товара (слова, букв, услуги и пр.), например при покупке 3'ех слов, в данное поле необходимо указать "3". При оплате услуг указывайте "1".</li>
+            </ul>
+        </p>
+        <p>За несоблюдение игровых правил, банк в праве <b>взыскать штраф</b> в размере от 1x до 3x кратного размера неправомерной транзакции - на усмотрение организаторов игры.</p>
+        <br>
+        {% if actualLic.subsidy != "true" %}
+        <p><b><span style="font-size: 15pt; color:rgb(0, 46, 121);">В банке можно взять кредит</span></b> на один гейм под {{bankProcent}}% за гейм.<br>Деньги списываются <b>автоматически</b> по итогу гейма. <b>Вернуть займ досрочно нельзя.</b><br>
+            <form action="/getcredit" method="POST">
+                <input id="credit" name="credit" class="form-control" type="text" placeholder="Сумма кредита">
+                
+                <span><i>Доступный лимит на этот гейм: {{creditLimit}}</i></span><br><br>
+                {% if stop == false %}
+                    <button type="input" class="btn btn-primary">Получить кредит</button>
+                {% else %}
+                    <button type="input" class="btn btn-primary" disabled>Получить кредит</button>
+                {% endif %}
+            </form>
+        </p>
+        {% else %}
+        <p>
+            <b><span style="font-size: 15pt; color:rgb(0, 46, 121);">Вам доступна субсидия</span></b>
+            <br>Размер субсидии до 3000 на один гейм.<br>Непотраченная часть субсидии списывается по итогу гейма.<br>
+            На расходуемую часть субсидии налагается {{subsidyProcent}}%, списывается по итогу гейма вместе с нерасходуемой частью.<br>
+            <form action="/getsubsidy" method="POST">
+                <input id="subsidy" name="subsidy" class="form-control" type="text" placeholder="Сумма субсидии">
+                
+                <span><i>Доступный лимит на этот гейм: {{subsidyLimit}}</i></span><br><br>
+                {% if stop == false %}
+                    <button type="input" class="btn btn-primary">Получить субсидию</button>
+                {% else %}
+                    <button type="input" class="btn btn-primary" disabled>Получить субсидию</button>
+                {% endif %}
+            </form>
+        </p>
+        {% endif %}
+    </div>
+    <div class="col-lg-12 col-md-12 col-12">
         <hr>
         <h3>Мои операции:</h3>
         <table class="table">
@@ -116,49 +160,6 @@
             </tbody>
         </table>
 
-    </div>
-    <div class="col-lg-5 col-md-5 col-12">
-        <h3 style="color:brown">Правила использованиия счёта</h3>
-        <p>
-            <ul>
-                <li>К каждому переводу необходимо указывать комментарий, описывающий предмет сделки.</li>
-                <li>Запрещено совершать операции не соответствующие вашей лицензии.</li>
-            </ul>
-        </p>
-        <p>За несоблюдение выше перечисленных предписаний, банк в праве <b>взыскать штраф</b> в размере от 1x до 3x кратного размера транзакции.</p>
-        <br>
-        <p>Банк в праве запросить разъяснение по операциям типа "другое", а также запросить доказательства реальности сделки. <b> В случае отказа от разъяснений или выявления фиктивности сделки - блокировка счёта.</b></p>
-        <br>
-        {% if actualLic.subsidy != "true" %}
-        <p><b><span style="font-size: 15pt; color:rgb(0, 46, 121);">В банке можно взять кредит</span></b> на один гейм под {{bankProcent}}% за гейм.<br>Деньги списываются автоматически по итогу гейма.<br>
-            <form action="/getcredit" method="POST">
-                <input id="credit" name="credit" class="form-control" type="text" placeholder="Сумма кредита">
-                
-                <span><i>Доступный лимит на этот гейм: {{creditLimit}}</i></span><br><br>
-                {% if stop == false %}
-                    <button type="input" class="btn btn-primary">Получить кредит</button>
-                {% else %}
-                    <button type="input" class="btn btn-primary" disabled>Получить кредит</button>
-                {% endif %}
-            </form>
-        </p>
-        {% else %}
-        <p>
-            <b><span style="font-size: 15pt; color:rgb(0, 46, 121);">Вам доступна субсидия</span></b>
-            <br>Размер субсидии до 3000 на один гейм.<br>Непотраченная часть субсидии списывается по итогу гейма.<br>
-            На расходуемую часть субсидии налагается {{subsidyProcent}}%, списывается по итогу гейма вместе с нерасходуемой частью.<br>
-            <form action="/getsubsidy" method="POST">
-                <input id="subsidy" name="subsidy" class="form-control" type="text" placeholder="Сумма субсидии">
-                
-                <span><i>Доступный лимит на этот гейм: {{subsidyLimit}}</i></span><br><br>
-                {% if stop == false %}
-                    <button type="input" class="btn btn-primary">Получить субсидию</button>
-                {% else %}
-                    <button type="input" class="btn btn-primary" disabled>Получить субсидию</button>
-                {% endif %}
-            </form>
-        </p>
-        {% endif %}
     </div>
 </div>
 

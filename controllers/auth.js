@@ -10,34 +10,39 @@ exports.logout = (req, res) => {
 }
 
 exports.login = async (req, res) => {
-    let user = await User.find(req.body.login);
+    let user = null;
+    if (req.body.usertype == 'prjct')
+        user = await User.find(req.body.login);
+    else
+        user = await User.findByEmail(req.body.login);
 
     if (user == null) {
-        res.redirect('/main/logerrlogin')
+        res.render('err.html', {err: 'Некорректный логин', url: '/'})
         return;
     }
 
-    if (user.verify(req.body.pass)) {
+    if (user.verify(req.body.pass) && req.body.login.length>=2) {
         req.session.user = {id: user._id, login: user.login, session: req.sessionID}
         req.session.save();
         res.redirect('/wallet');
     } else {
-        res.redirect('/main/logerrpass');
+        res.render('err.html', {err: 'Некорректный логин или пароль', url: '/'})
     } 
 }
 
 exports.setUser = async (req, res) => {
-    let isReged = await User.find(req.body.login);
-    let err = null;
-    
-    err = (req.body.pass !== '' && req.body.pass === req.body.pass1 && req.body.pass.length>5) ? err : 'Некорреытнй пароль или пароли не совпадают';
+    let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    let logins = await User.getAccessableLogins(),
+        err = null,
+        isReged = await User.isReged({email: req.body.email});
+    err = (req.body.pass !== '' && req.body.pass === req.body.pass1 && req.body.pass.length>5) ? err : 'Некорректный пароль или пароли не совпадают';
     err = req.body.name ? err : 'Некорректное имя';
     err = req.body.lastname ? err : 'Некорректная фамилия';
-    err = req.body.email ? err : 'Некорректный email';
-    err = isReged ? 'Такой пользователь уже зарегистрирован' : err;
+    err = req.body.email.match(emailPattern) ? err : 'Некорректный email';
+    err = isReged ? 'Пользователь с таким email уже зарегистрирован' : err;
     
-    if (isReged == null && err == null && req.body.login !== '') {
-        let user = new User(req.body.login, req.body.pass);
+    if (!isReged && err == null && req.body.login !== '') {
+        let user = new User(logins[0], req.body.pass);
             user.name = req.body.name;
             user.lastname = req.body.lastname;
             user.email = req.body.email;
@@ -72,8 +77,7 @@ exports.setPrjct = async (req, res) => {
 }
 
 exports.getRegPage = async (req, res) => {
-    let logins = await User.getAccessableLogins();
-    res.render('reg.html', {logins});
+    res.render('reg.html');
 }
 
 exports.getRegPrjctPage = async (req, res) => {

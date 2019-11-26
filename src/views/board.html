@@ -63,7 +63,7 @@
                     <input type="radio" name="predmet" value="{{pr}}" {% if loop.index == 1 %} checked {% endif %}>&nbsp;<labeL>{{pr}}</labeL><br>
                 {% endfor %}
                 {% if canSell.length == 0 %}
-                    <p>Ваша лицензия не предусматривает продажу изделий</p>
+                    <p style="color:brown">Ваша лицензия не предусматривает продажу изделий</p>
                 {% endif %}
                 </div>
 
@@ -174,7 +174,7 @@
 
         if (event.value == 'buy') {
             if (toBuy == '' || toBuy.length == 0)
-                div.innerHTML += `<p>Ваша лицензия не предусматривает покупку изделий</p>`;
+                div.innerHTML += `<p style="color:brown">Ваша лицензия не предусматривает покупку изделий</p>`;
             else
                 for(let i=0; i<toBuy.length; i++) {
                     if (i==0)
@@ -184,7 +184,7 @@
                 }
         } else {
             if (toSell.length == 0 || toSell == '')
-                div.innerHTML += `<p>Ваша лицензия не предусматривает продажу изделий</p>`;
+                div.innerHTML += `<p style="color:brown">Ваша лицензия не предусматривает продажу изделий</p>`;
             else
                 for(let i=0; i<toSell.length; i++) {
                     if (i==0)

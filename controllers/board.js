@@ -157,7 +157,7 @@ async function oplataAd(sender, responser, ad) {
         responserUser = await User.find(responser),
         senderUser = await User.find(sender);
 
-    if (ad.contrAgent === '' && ad.price > 0 && senderUser.balance >= ad.price && isCanBuy(type, sender) && isCanSell(type, responser)) {
+    if (ad.contrAgent === '' && ad.price > 0 && senderUser.balance >= ad.price /*&& isCanBuy(type, sender) && isCanSell(type, responser)*/) {
         operation = await operation.save();
         senderUser.Ops = operation;
         await senderUser.updateDB();
