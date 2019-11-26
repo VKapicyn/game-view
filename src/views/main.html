@@ -13,7 +13,7 @@
             <input type="radio" name="usertype" value="user" checked> Пользователь<br>
             <input type="radio" name="usertype" value="prjct"> Проектная группа
             <br>
-            <button type="input" class="btn btn-success">Войти</button>
+            <button type="input" class="btn btn-primary">Войти</button>
         </form>
         <br>
         <br>
@@ -36,7 +36,7 @@
             <h4>Фамилия: {{user.lastname}}</h4>
             {% endif %}
             {% if (user.name == "") or (user.lastname == "") %}
-            <button type="input" class="btn btn-success">Сохранить</button>
+            <button type="input" class="btn btn-primary">Сохранить</button>
             {% endif%}
         </form>
         <br>
@@ -44,7 +44,7 @@
         <h4>Предложение от банка: </h4>
         {% if (offLic.length != 0) and (actualLic == null) %}
         <span>Лицензия <b><span id="licoffer">{{offLic[0].name}}</b></span> за {{offLic[0].price}} у.е. </span>
-        <input type="button" onclick="oplata()" class="btn btn-xs btn-success" value="оплатить"><br>
+        <input type="button" onclick="oplata()" class="btn btn-xs btn-primary" value="оплатить"><br>
         {% else %}
         <span> - </span>
         {% endif %}<br>
@@ -61,7 +61,7 @@
         {% for lic in historyLic %}
             {% if (lic.status == true) and ((round-1)==lic.round) and (actualLic == null) %}
             <p>гейм {{lic.round}} : <span id="extend">{{lic.name}}</span> 
-                | <input type="button" onclick="prodlit()" class="btn btn-success btn-xs" value="продлить"> за {{defPrice}} у.е.
+                | <input type="button" onclick="prodlit()" class="btn btn-primary btn-xs" value="продлить"> за {{defPrice}} у.е.
             </p>
             {% else %}
             <p>гейм {{lic.round}} : {{lic.name}}</p>
