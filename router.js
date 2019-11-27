@@ -47,6 +47,7 @@ router.get('/api/v1/:type/txs', controller.api.txs);
 router.get('/api/v1/:type/credits', controller.api.credits);
 router.get('/api/v1/:type/adverts', controller.api.adverts);
 router.get('/api', controller.api.getPage);
+router.get('/api/mylogin', controller.api.getMyLogin)
 
 router.post('/analitic', controller.analitic.getPage)
 router.post('/reg', controller.auth.setUser)

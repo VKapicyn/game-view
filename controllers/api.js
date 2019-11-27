@@ -56,3 +56,11 @@ exports.adverts = async (req, res) => {
 exports.getPage = async (req, res) => {
     res.render('api.html');
 }
+
+exports.getMyLogin = async (req, res) => {
+    let usr;
+    try{
+        usr = req.session.user.login
+    } catch (e) {usr = null}
+    res.json({usr})
+}
