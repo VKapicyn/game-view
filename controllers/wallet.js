@@ -102,7 +102,7 @@ exports.getWalletPage = async (req, res) => {
         licList = require('../config').lic,
         specBalance = await user.Balance();
 
-    
+    userList.sort();
     let _licTypes = await User.getActualLic(user.login),
         __licTypes = await License.find(_licTypes);
 
