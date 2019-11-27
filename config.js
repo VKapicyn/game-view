@@ -5,7 +5,7 @@ exports.adminLogins = ['Bank'];
 exports.userDB = 'game_users';
 exports.opsDB = 'game_ops';
 exports.projectGoups = ['01','02','03','04','05','06', '07', '08', '09'];
-exports.tables = ['X', 'Y', 'Z', 'A', 'B', 'C', 'D', 'E', 'F', 'H'];
+exports.tables = ['A', 'B', 'C', 'D', 'E', 'F', 'H', 'K', 'L', 'М'];
 exports.newProjects = [
     'Project_1', 'Project_2', 'Project_3', 
     'Project_4', 'Project_5', 'Project_6', 

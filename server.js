@@ -67,3 +67,4 @@ module.exports.express = express;
 app.use('/', require('./router').router);
 app.listen(require('./config.js').port);
 console.log(`Running at Port ${config.port}`);
+module.exports.app = app;

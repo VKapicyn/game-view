@@ -42,10 +42,10 @@ router.get('/board/err/:type', middleware.isPremium, controller.board.err)
 router.get('/an/data', controller.analitic.getJsonData)
 
 //API
-router.get('/api/v1/:token/:type/status', middleware.isAPI, controller.api.status);
-router.get('/api/v1/:token/:type/txs',  middleware.isAPI, controller.api.txs);
-router.get('/api/v1/:token/:type/credits', middleware.isAPI, controller.api.credits);
-router.get('/api/v1/:token/:type/adverts', middleware.isAPI, controller.api.adverts);
+router.get('/api/v1/:type/status', controller.api.status);
+router.get('/api/v1/:type/txs', controller.api.txs);
+router.get('/api/v1/:type/credits', controller.api.credits);
+router.get('/api/v1/:type/adverts', controller.api.adverts);
 router.get('/api', controller.api.getPage);
 
 router.post('/analitic', controller.analitic.getPage)

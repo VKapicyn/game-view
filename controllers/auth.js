@@ -16,6 +16,7 @@ exports.login = async (req, res) => {
     else
         user = await User.findByEmail(req.body.login);
 
+    console.log(req.body.login, user)
     if (user == null) {
         res.render('err.html', {err: 'Некорректный логин', url: '/'})
         return;
@@ -34,13 +35,17 @@ exports.setUser = async (req, res) => {
     let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     let logins = await User.getAccessableLogins(),
         err = null,
-        isReged = await User.isReged({email: req.body.email});
+        isReged = await User.isReged({email: req.body.email}),
+        isRegedLogin = await User.find(logins[0]);
+
     err = (req.body.pass !== '' && req.body.pass === req.body.pass1 && req.body.pass.length>5) ? err : 'Некорректный пароль или пароли не совпадают';
     err = req.body.name ? err : 'Некорректное имя';
     err = req.body.lastname ? err : 'Некорректная фамилия';
     err = req.body.email.match(emailPattern) ? err : 'Некорректный email';
     err = isReged ? 'Пользователь с таким email уже зарегистрирован' : err;
-    
+    err = !logins[0] ? 'Регистрация недоступна, превыше лимит игроков' : err;
+    err = isRegedLogin ? 'Превыше лимит запросов на регистрацию, попробуйте еще раз через 1 минуту. При потворении ошибки - обратитесь к организаторам игры.' : err;
+
     if (!isReged && err == null && req.body.login !== '') {
         let user = new User(logins[0], req.body.pass);
             user.name = req.body.name;
