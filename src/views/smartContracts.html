@@ -21,7 +21,11 @@
     <!-- Block 1: Write code + Show Blocks -->
     <div class="first-block col-12 col-sm-12 col-md-8 col-lg-8">
       <!-- SubBlock 1: Write code -->
-      
+      {% if error %}
+      <div class="alert alert-danger" role="alert">
+        {{error}}
+      </div>
+      {% endif %}
       <div class="col-block row mb-4 h-50">
         <div class="col">
           <div class="card text-center h-100">
@@ -33,9 +37,9 @@
               <textarea name="scText" class="form-control h-90" id="smart-contract-code"
                 placeholder="Введите код контракта здесь"></textarea>
               <div id="code-error" class="invalid-feedback">
-                {% if err %}
+                {% if error %}
                 Обнаружена ошибка в контракте:
-                {{err}}
+                {{error}}
                 {% endif %}
               </div>
             </div>
@@ -62,53 +66,20 @@
                       <th>#</th>
                       <th>Время</th>
                       <th>Автор</th>
-                      <th>???</th>
+                      <th>Контракт</th>
+                      <th>Действие</th>
                     </tr>
                   </thead>
-
                   <tbody>
+                    {% for log in logs %}
                     <tr>
-                      <th scope="row">1</th>
-                      <td>123</td>
-                      <td>fwgw</td>
-                      <td>???</td>
+                      <th scope="row">{{loop.index}}</th>
+                      <td>{{log.time}}</td>
+                      <td>{{log.author}}</td>
+                      <td>{{log.action}}<td>
+                      <td>{{log.data}}</td>
                     </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>123</td>
-                      <td>fwgw</td>
-                      <td>???</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>123</td>
-                      <td>fwgw</td>
-                      <td>???</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>123</td>
-                      <td>fwgw</td>
-                      <td>???</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>123</td>
-                      <td>fwgw</td>
-                      <td>???</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>123</td>
-                      <td>fwgw</td>
-                      <td>???</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>123</td>
-                      <td>fwgw</td>
-                      <td>???</td>
-                    </tr>
+                    {% endfor %}
                   </tbody>
                 </table>
               </div>
@@ -126,62 +97,80 @@
         </div>
         <div class="card-body h-100">
             {% for sc in scs %}
+            {% if sc.round == round %}
           <div class="accordion h-100 overflow-auto" id="contractsList">
 
             <div class="card">
               <div class="card-header">
                 <button class="btn btn-block dropdown-toggle" type="button" data-toggle="collapse"
-                  data-target="#collapse1">
-                  id: {{sc._id}} (Баланс: 0)
+                  data-target="#collapse{{loop.index}}">
+                  id: {{sc._id}} <br>
+                  (Баланс: {{sc.resBalance}})<br>
+                  Создал-контракт: {{sc.author}}<br>
+                  Подробнее:
                 </button>
               </div>
-              <div id="collapse1" class="collapse show" data-parent="#contractsList">
+              <div id="collapse{{loop.index}}" class="collapse show" data-parent="#contractsList">
                 <div class="card-body">
                   <div class="row mb-2">
                     <div class="col">
                       <button class="btn btn-block btn-info" data-toggle="modal" data-target="#codeModal{{sc._id}}">
                         Код
                       </button> 
-                      <button class="btn btn-block btn-default" data-toggle="modal" data-target="#resultModal{{sc._id}}">
+                      <a class="btn btn-block btn-default" href="/sc/distribute/{{sc._id}}">
                         Распределить баланс
-                      </button> 
-                      <button class="btn btn-block btn-default" data-toggle="modal" data-target="#balanceModal{{sc._id}}">
+                      </a> 
+                      <a class="btn btn-block btn-default" href="/wallet/{{sc._id}}" target="_blank">
                         Пополнить
-                      </button> 
+                      </a> 
                     </div>
                   </div>
                   {% for field in sc.fields %}
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="form-group form-row">
-                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                          <span>{{field.name}}</span>
+                    
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="form-group form-row">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2">
+                              <span>{{field.name}}</span>
+                            </div>
+                            {% if field.author %}
+                              <p><b>{{field.value}}</b> [<i>Заполнил: {{field.author}}</i>]</p>
+                            {% else %}
+                              <form action="/sc/field" method="POST">
+                                  {% if field.type=="$слово" or field.type=="$буква" or field.type=="$число" %}
+                                  <div class="col-7 col-sm-7 col-md-7 col-lg-7">
+                                    <input name="data" type="text" class="form-control" placeholder="{{field.type}}" /></input>
+                                  </div> 
+                                  {% endif %}
+                                {% if field.type=="$время" %}
+                                  <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                {% else %}
+                                  <div class="col-5 col-sm-5 col-md-5 col-lg-5">
+                                {% endif %}
+                                  <input name="fieldId" type="hidden" value="{{field._id}}" />
+                                  <input name="skId" type="hidden" value="{{sc._id}}" />
+                                  <button class="btn btn-success btn-block">&#10004;</button>
+                                </div>
+                              </form>
+                              <div class="col-12">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<i>доступен ввод для {{field.sec}}</i>
+                              </div>
+                            {% endif %}
+                          </div>
                         </div>
-                        {% if field.value %}
-                          <p><b>{{field.value}}</b> [<i>Заполнил: {{field.author}}</i>]</p>
-                        {% else %}
-                          <form action="/sk/field" method="POST">
-                            <div class="col-7 col-sm-8 col-md-7 col-lg-8">
-                              {% if field.type=="$слово" or field.type=="$буква" or field.type=="$число" %}
-                                <input name="data" type="text" class="form-control" placeholder="{{field.type}}" />
-                              {% endif %}
-                              <input name="fieldId" type="hidden" value="{{field._id}}" />
-                              <input name="skId" type="hidden" value="{{sc._id}}" />
-                            </div>
-                            <div class="col-3 col-sm-2 col-md-3 col-lg-2">
-                              <button class="btn btn-success btn-block">&#10004;</button>
-                            </div>
-                          </form>
-                        {% endif %}
                       </div>
-                    </div>
-                  </div>
+                    
                   {% endfor %}
                   <hr>
                   <div class="row">
                     <div class="col-12">
+                      Результаты контракта:<br>
                       {% for res in sc.results %}
-                        {{res.author}}: {{res.value}}<br>
+                        {% if res.user %}
+                        <b>{{res.user}}</b> = {{res.balance}} y.e.<br>
+                        {% else %}
+                          <i><span>Недостаточно данных...</span><br></i>
+                        {% endif %}
                       {% endfor %}
                     </div>
                   </div>
@@ -190,6 +179,7 @@
             </div>
             
           </div>
+          {% endif %}
           {% endfor %}
         </div>
       </div>
@@ -223,8 +213,19 @@
     crossorigin="anonymous"></script>
   <!--script src="/js/contractPageConf.js"></script>
   <script src="/js/createContract.js"></script-->
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
+    <script>
+      (async () => {
+          let usr = await $.get('/api/v1/mylogin');
+          let time = await $.get('/api/v2/time/now');
+          let span = document.getElementById('mylogin');
+          console.log(usr)
+          span.innerHTML = usr.usr ? `Ваш логин (${usr.usr})` : '';
+          span.innerHTML += time ? ` | до конца раунда: ${600-time} секунд` : '';
+      }
+      )();
+  </script>
   {% endblock %}

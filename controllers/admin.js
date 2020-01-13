@@ -10,7 +10,7 @@ exports.getPage = async (req, res) => {
     let round = await Round.getRound(),
         status = Round.Round.status;
 
-    res.render('admin.html', {round, status})
+    res.render('admin.html', {round, status, timer: Round.Round.time})
 }
 
 exports.isAdmin = (login) => {

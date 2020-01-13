@@ -19,6 +19,7 @@ class User {
     }
 
     set Ops(item) {
+        console.log(item)
         if (item.sender == this.login) {
             this.balance = +this.balance - Number(item.amount);
         }
@@ -26,6 +27,7 @@ class User {
             this.balance = +this.balance + Number(item.amount);
 
         this.ops.push(item._id);
+        console.log(this.ops)
     }
 
     async Balance() {

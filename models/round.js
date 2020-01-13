@@ -1,17 +1,35 @@
 const rounDB = require('../server').roundDB;
+const config = require('../config');
 let Round = {};
 
 Round.status = 1;
-Round.round = 1;
+Round.round = 0;
+Round.time = 0;
 
 exports.getRound = () => {
     return Round.round;
 }
 
+exports.startTimer = () => {
+    setTimeout( function  run() {
+        if (Round.time < config.roundTime && Round.status == 1) {
+            ++Round.time;
+            setTimeout(run, 1000);
+        }
+    }, 1);
+}
+
 exports.nextRound = async () => {
     await exports.update(Round.round, (1+Round.round))
     ++Round.round;
+    Round.time = 0;
+    let i = 1;
+    exports.startTimer();
     return Round.round;
+}
+
+exports.getTimeNow = () => {
+    return Round.time;
 }
 
 exports.prevRound = async () => {

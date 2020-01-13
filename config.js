@@ -22,4 +22,6 @@ exports.subsidyLimit = 3000;
 exports.priceOfExtension = 10;
 exports.bankProcent = 5;
 exports.subsidyProcent = 2;
-exports.objects = [{value:'Продукт', status: 0}, {value:'Вторсырье', status: 0}, {value:'Буква', status: 0}, {value:'Слово', status: 0}, {value:'Инвестиции', status: 1}];
+exports.roundTime = 600;
+exports.skPass = 'Ctkuub'
+exports.objects = [{value:'Продукт', status: 0}, {value: 'Смарт-контракт', status:1}, {value:'Вторсырье', status: 0}, {value:'Буква', status: 0}, {value:'Слово', status: 0}, {value:'Инвестиции', status: 1}];

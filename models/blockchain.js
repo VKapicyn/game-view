@@ -12,6 +12,9 @@ class BlockChain{
     static async getAll() {
         return new Promise((res, rej) => {
             blockchainDB.find({}, (err, bch) => {
+                bch.sort((a, b)=>{
+                    return b.time - a.time; // reverse chronological order
+                });
                 res(bch);
             })
         })

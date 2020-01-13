@@ -56,6 +56,7 @@
                 </li>
                 <li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
                 <li>
+                    <b><span class="font-size:15pt" id="mylogin"></span></b>&nbsp;
                     <a href="/logout">
                         Выйти 
                     </a>
@@ -98,6 +99,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+    <script>
+        (async () => {
+            let usr = await $.get('/api/v1/mylogin');
+            let time = await $.get('/api/v2/time/now');
+            let span = document.getElementById('mylogin');
+            console.log(usr)
+            span.innerHTML = usr.usr ? `Ваш логин (${usr.usr})` : '';
+            span.innerHTML += time ? ` | до конца раунда: ${600-time} секунд` : '';
+        }
+        )();
+    </script>
     {% endblock %}
 </body>
 </html>

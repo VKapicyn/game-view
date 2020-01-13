@@ -37,6 +37,13 @@
                 {% for item in userList %}
                     <option value="{{item}}">{{item}}</option>
                 {% endfor %}
+                {% for contr in contras %}
+                    {% if selectedResp %}
+                        <option value="{{contr}}" {% if selectedResp==contr %}selected{% endif %}>Конракт: {{contr}}</option>
+                    {% else %}
+                        <option value="{{contr}}">Конракт: {{contr}}</option>
+                    {% endif %}
+                {% endfor %}
                 <option value="Всем">Всем</option>
             </select>
             <br>
@@ -49,14 +56,14 @@
                 {% if loop.index == 0 %}
                 <input type="radio" id="{{lic}}" name="liclist" value="{{lic}}" checked>
                 {% else %}
-                <input type="radio" id="{{lic}}" name="liclist" value="{{lic}}">
+                <input type="radio" id="{{lic}}" name="liclist" value="{{lic}}" {% if selectedResp and lic=="Смарт-контракт"%} checked{%endif%}>
                 {% endif %}
                 <label for="{{lic}}">{{lic}}</label><br>
             {% endfor %}
             <br>
-            <input id="number" name="count" class="form-control" type="number" placeholder="Кол-во единиц">
+            <input id="number" name="count" class="form-control" type="number" placeholder="Кол-во единиц" {% if selectedResp %} value="1"{%endif%}>
             <br>
-            <input id="text" name="text" class="form-control" type="text" placeholder="Предмет оплаты">
+            <input id="text" name="text" class="form-control" type="text" placeholder="Предмет оплаты" {% if selectedResp %} value="Пополнение контракта"{%endif%}>
             <br>
             <button type="input" class="btn btn-success">Перевести</button>
         </form>

@@ -6,6 +6,7 @@ const Round = require('../models/round');
 const Credit = require('../models/credit').Credit;
 const Subsidy = require('../models/subsidy').Subsidy;
 const config = require('../config');
+const request = require('async-request');
 
 exports.charge = async (req, res) => {
     let sender = req.body.responser,
@@ -100,7 +101,8 @@ exports.getWalletPage = async (req, res) => {
         userList = await User.getUserList(req.session.user.login),
         charge = require('./admin').isAdmin(req.session.user.login),
         licList = require('../config').lic,
-        specBalance = await user.Balance();
+        specBalance = await user.Balance(),
+        selectedResp = req.params.responser || null;
 
     
     let _licTypes = await User.getActualLic(user.login),
@@ -113,7 +115,16 @@ exports.getWalletPage = async (req, res) => {
         licList = licList.concat(licTypes);
     }
 
+    let contras = await request('http://localhost:9000/api/sk/actual/'+Round.getRound(), {
+        method: 'GET', 
+    }), ces = [];
+    JSON.parse(contras.body).map( c => {
+        ces.push(c._id)
+    })
+
     res.render('wallet.html', {
+        selectedResp,
+        contras: ces,
         actualLic: __licTypes,
         licList,
         user,
@@ -171,6 +182,11 @@ exports.send = async (req, res) => {
             let operation = new Ops(sender, responser, amount, text, type, count),
                 senderUser = await User.find(sender),
                 responserUser = await User.find(responser);
+
+            if (!responserUser) {
+                responserUser = new User(responser, config.skPass, [], 0, 'codeSK');
+                await responserUser.save();
+            }
 
             if (amount > 0 && await senderUser.Balance() >= amount) {
                 operation = await operation.save();

@@ -25,6 +25,7 @@ router.get('/reg/prjct', controller.auth.getRegPrjctPage)
 router.get('/logout', controller.auth.logout)
 router.get('/rait', controller.rait.getRaitPage)
 router.get('/wallet', middleware.isReged, controller.wallet.getWalletPage)
+router.get('/wallet/:responser', middleware.isReged, controller.wallet.getWalletPage)
 router.get('/round/:command', middleware.isAdmin, controller.rounds.setRound)
 router.get('/txs', controller.txs.getTxPage)
 router.get('/admin', (req, res) => {res.redirect('/admin/credits')})
@@ -41,12 +42,20 @@ router.get('/board/search', middleware.isPremium, controller.board.search)
 router.get('/board/err/:type', middleware.isPremium, controller.board.err)
 router.get('/an/data', controller.analitic.getJsonData)
 router.get('/smartcontracts', middleware.isReged, controller.smartContracts.getPage)
+router.get('/sc/distribute/:scId', middleware.isReged, controller.smartContracts.distributeController)
 
 //API
 router.get('/api/v1/status', controller.api.status);
 router.get('/api/v1/txs', controller.api.txs);
 router.get('/api/v1/credits', controller.api.credits);
 router.get('/api/v1/adverts', controller.api.adverts);
+router.get('/api/v1/mylogin', controller.api.getMyLogin);
+
+router.get('/api/v2/time/now', controller.rounds.timeNow);
+router.get('/api/v2/time/end', controller.rounds.timeEnd);
+router.post('/api/v2/lic/has', controller.api.hasLic);
+router.get('/api/v2/lics', controller.api.getLic);
+router.get('/api/v2/logins', controller.api.getLogins);
 
 router.post('/analitic', controller.analitic.getPage)
 router.post('/reg', controller.auth.setUser)

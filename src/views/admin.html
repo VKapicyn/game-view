@@ -7,7 +7,7 @@
         {% block content %}
         <div class="row">
                 <div class="col-lg-4 col-md-12">
-                        <h3>Текущий раунд: {{round}}</h3><br>
+                        <h3>Текущий раунд: {{round}} ({{timer}})</h3><br>
                         <button type="input" onclick="prev()" class="btn btn-danger">Назад</button>&nbsp;&nbsp;<button type="input" onclick="next()" class="btn btn-success">Следующий</button>
                         <hr>
                         {% if status == 1 %}
