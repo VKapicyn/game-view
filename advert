@@ -1,11 +1,13 @@
 {"num":14,"author":"X01","offerType":"sel","predmet":"123","price":"1","round":12,"status":false,"contrAgent":"","count":123,"_id":"0ka79kF2JcaH2cD8"}
 {"num":7,"author":"X05","offerType":"buy","predmet":"1","price":"12","round":8,"status":true,"contrAgent":"X01","_id":"5Aw4KN1cgPr4qD1n"}
+{"num":17,"author":"Bank","offerType":"sel","predmet":"<script>alert('passive XSS')</script>","predmetType":"Смарт-контракт","price":"1","round":2,"status":true,"contrAgent":"","count":1,"_id":"5KmVvS9sTWVQLdZl"}
 {"num":3,"author":"X01","offerType":"buy","predmet":"1","price":"1","round":7,"status":true,"contrAgent":"X05","_id":"HBgaWNGNAPgyYTzE"}
 {"num":8,"author":"Bank","offerType":"buy","predmet":"qwe","price":"123","round":12,"status":false,"contrAgent":"","count":1,"_id":"NRmSaLOvUFqjxuBu"}
 {"num":13,"author":"X03","offerType":"sel","predmet":"123","price":"123","round":12,"status":false,"contrAgent":"","count":123,"_id":"NWK4rhJkNKJp8x8T"}
 {"num":15,"author":"X03","offerType":"sel","predmet":"123","price":"123","round":12,"status":false,"contrAgent":"","count":123,"_id":"Vi52TAlXp7eW1jn1"}
 {"num":12,"author":"X03","offerType":"buy","predmet":"fffff","price":"22","round":12,"status":false,"contrAgent":"","count":12,"_id":"Z54JE31fXMShtn64"}
 {"num":6,"author":"Bank","offerType":"sel","predmet":"1","price":"1","round":7,"status":true,"contrAgent":"X05","_id":"ZbLrUpH7xQpQst9k"}
+{"num":18,"author":"Bank","offerType":"sel","predmet":" )\"</p><script>alert('passive XSS')</script><p>\"","predmetType":"Смарт-контракт","price":"2","round":2,"status":true,"contrAgent":"","count":2,"_id":"aDzFE84vlDDWthHl"}
 {"num":16,"author":"X03","offerType":"buy","predmet":"12","price":"112","round":12,"status":false,"contrAgent":"","count":12,"_id":"ggzzSIv5xMssmFaL"}
 {"num":11,"author":"Bank","offerType":"sel","predmet":"123123","predmetType":"Вторсырье","price":"2","round":12,"status":true,"contrAgent":"","count":2,"_id":"kfd5AlBK5Nxmw7VD"}
 {"num":1,"author":"X01","offerType":"sel","predmet":"топор","price":"40","round":5,"status":true,"contrAgent":"X02","_id":"kzcYlHFSukeo9Yqf"}

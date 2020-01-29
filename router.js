@@ -43,6 +43,7 @@ router.get('/board/err/:type', middleware.isPremium, controller.board.err)
 router.get('/an/data', controller.analitic.getJsonData)
 router.get('/smartcontracts', middleware.isReged, controller.smartContracts.getPage)
 router.get('/sc/distribute/:scId', middleware.isReged, controller.smartContracts.distributeController)
+router.get('/sc/:scId', middleware.isReged, controller.smartContracts.getScPage)
 
 //API
 router.get('/api/v1/status', controller.api.status);
@@ -56,6 +57,7 @@ router.get('/api/v2/time/end', controller.rounds.timeEnd);
 router.post('/api/v2/lic/has', controller.api.hasLic);
 router.get('/api/v2/lics', controller.api.getLic);
 router.get('/api/v2/logins', controller.api.getLogins);
+router.get('/api/v2/logs', controller.api.getLogs)
 
 router.post('/analitic', controller.analitic.getPage)
 router.post('/reg', controller.auth.setUser)

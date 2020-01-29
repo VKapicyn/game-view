@@ -25,6 +25,31 @@ exports.getPage = async (req, res) => {
 }
 
 exports.createSC = async (req, res) => {
+  try{
+    tryCreate = await request('http://localhost:9000/api/sk/create', {
+      method: 'POST', 
+      data: {
+        text: req.body.scText,
+        user: req.session.user.login,
+        round: Round.getRound()
+      }
+    });
+    if (JSON.parse(tryCreate.body).err) {
+      res.send({error: JSON.parse(tryCreate.body).err})
+    } else  {
+      let log = new BlockChain(new Date(), req.session.user.login, tryCreate.body.replace("\"",'').replace("\"",''), 'создал контракт',Round.getRound())
+      await log.save();
+      console.log(JSON.parse(tryCreate.body));
+      res.send({'id':JSON.parse(tryCreate.body), error: 0})
+    }
+  } catch(e) {
+    console.log(e)
+    res.send({error: 'Блокчейн сервер недоступен'})
+  }
+}
+
+/*
+exports.createSC = async (req, res) => {
   let tryCreate;
   try {
     tryCreate = await request('http://localhost:9000/api/sk/create', {
@@ -59,6 +84,7 @@ exports.createSC = async (req, res) => {
   }
   res.redirect('/smartcontracts');
 }
+*/
 
 exports.callField = async (req, res) => {
   console.log('call Field')
@@ -73,7 +99,7 @@ exports.callField = async (req, res) => {
       }
     })
 
-    if (JSON.parse(scs.body).err == {}) {
+    if (JSON.parse(scs.body).err) {
       let _scs = await request('http://localhost:9000/api/sk/actual/'+Round.getRound(), {
         method: 'GET', 
       })
@@ -81,15 +107,13 @@ exports.callField = async (req, res) => {
         logs: await BlockChain.getAll(),
         round: Round.getRound(),
         scs: JSON.parse(_scs.body),
-        error: JSON.parse(scs.body).err
+        error: JSON.parse(scs.body).err,
+        skParam: req.body.skId
       };
 
-      console.log(returnObj.error)
-      let log = new BlockChain(new Date(), req.session.user.login, req.body.skId, 'Ошибка: '+err)
-      await log.save();
       return res.render('smartContracts.html', returnObj);
     } else {
-      let log = new BlockChain(new Date(), req.session.user.login, req.body.skId, req.body.fieldId+': '+req.body.data)
+      let log = new BlockChain(new Date(), req.session.user.login, req.body.skId, req.body.fieldName+': '+req.body.data,Round.getRound())
       await log.save();
       return res.redirect('back');
     }
@@ -97,7 +121,8 @@ exports.callField = async (req, res) => {
   }
 }
 
-exports.distributeBalance = async (contract) => {
+//FIXME: распределить баласн один раз за раунд? только создатель?
+exports.distributeBalance = async (_login, contract) => {
   let _scs, results;
   if (contract == 'all') {
     _scs = await request('http://localhost:9000/api/sk/results/'+contract, {
@@ -120,6 +145,9 @@ exports.distributeBalance = async (contract) => {
 
   let _bal = await User.find(contract);
   let contBal = _bal ? _bal.balance : 0;
+
+  let log = new BlockChain(new Date(), _login, contract, `распределил баланс: ${contBal}; (требовалось: ${sumBalance})`,Round.getRound())
+  await log.save();
 
   if (contBal >= sumBalance && contBal>0) {
     for (let i=0; i<results.length; i++) { 
@@ -155,20 +183,35 @@ exports.distributeBalance = async (contract) => {
 }
 
 exports.distributeController = async (req, res) => {
-  let log = new BlockChain(new Date(), req.session.user.login, req.body.skId, 'распределил баланс')
-  await log.save();
   if (req.params.scId != 'all') {
-    await exports.distributeBalance(req.params.scId)
+    await exports.distributeBalance(req.session.user.login, req.params.scId)
   }
 
-  res.redirect('/smartcontracts');
+  res.redirect('back');
 }
 
 //TODO:потом
 exports.distributeControllerAdmin = async (req, res) => {
-  let log = new BlockChain(new Date(), 'Система', req.body.skId, 'распределил баланс')
+  let log = new BlockChain(new Date(), 'Система', req.body.skId, 'распределил баланс',Round.getRound())
   await log.save();
   if (req.session.admin)
-    await exports.distributeBalance('all')
+    await exports.distributeBalance(req.session.admin,'all')
   res.redirect('/admin/round');
+}
+
+exports.getScPage = async (req, res) => {
+  try{
+    let logs = await BlockChain.getOne(req.params.scId);
+    logs.map(l => {
+      let t = new Date(l.time)
+      l.time = `${t.getHours()}:${t.getMinutes()}:${t.getSeconds()}`
+    })
+    let sc = (await request('http://localhost:9000/api/sk/'+req.params.scId, {method: 'GET'})).body
+    res.render('sc.html', {
+      sc: JSON.parse(sc),
+      logs
+    })
+  } catch(e) {
+    res.render('err.html',{err:e, url: '/smartcontracts'})
+  }
 }

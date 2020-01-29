@@ -11,79 +11,58 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
   <link rel="stylesheet" href="/css/smartContracts.css" />
   {% endblock %}
+  <style>
+    .rotate {
+      transition: transform 2s ease;
+      transform: rotate(360deg);
+    }
+  </style>
   <title>Смарт-контракты</title>
 </head>
 
-<body>
+<div>
   {% endblock %}
   {% block content %}
+  <div class="row">
+    <div class="first-block col-12 col-sm-12 col-md-12 col-lg-12" id="CreateResponse">
+
+    </div>
+  </div>
   <div class="row vh-75">
     <!-- Block 1: Write code + Show Blocks -->
     <div class="first-block col-12 col-sm-12 col-md-8 col-lg-8">
       <!-- SubBlock 1: Write code -->
-      {% if error %}
-      <div class="alert alert-danger" role="alert">
-        {{error}}
-      </div>
-      {% endif %}
-      <div class="col-block row mb-4 h-50">
-        <div class="col">
-          <div class="card text-center h-100">
-            <div class="card-header font-weight-bold">
-              Новый смарт-контракт
-            </div>
-            <form action="/sc/create" method="post">
-            <div class="card-body">
-              <textarea name="scText" class="form-control h-90" id="smart-contract-code"
-                placeholder="Введите код контракта здесь"></textarea>
-              <div id="code-error" class="invalid-feedback">
-                {% if error %}
-                Обнаружена ошибка в контракте:
-                {{error}}
-                {% endif %}
-              </div>
-            </div>
-            <div class="card-footer">
-              <button id="send-code" class="btn btn-block btn-primary">Отправить</button>
-            </div>
-          </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- SubBlock 2: Show Blocks -->
-      <div class="col-block row h-50">
+      <div class="col-block row mb-4 h-100">
         <div class="col h-100">
           <div class="card text-center h-100">
-            <div class="card-header font-weight-bold">
-              Обозреватель блоков
+            <div class="card-header font-weight-bold" >
+              <table width="100%">
+                <tr>
+                    <td width="33%"></td>
+                    <td width="33%"><span align="center">Новый смарт-контракт</span></td>
+                    <td width="33%" style="text-align:right">
+                      <span style="cursor: pointer;font-size:9pt;font-style:italic;" data-toggle="modal" data-target="#spravkaModal">
+                        <img width="16px" src="/img/spr.png">&nbsp;&nbsp;Справка
+                      </span></td>
+                </tr>
+              </table>
+              
             </div>
-            <div class="card-body overflow-auto">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Время</th>
-                      <th>Автор</th>
-                      <th>Контракт</th>
-                      <th>Действие</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for log in logs %}
-                    <tr>
-                      <th scope="row">{{loop.index}}</th>
-                      <td>{{log.time}}</td>
-                      <td>{{log.author}}</td>
-                      <td>{{log.action}}<td>
-                      <td>{{log.data}}</td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
+            
+            <div class="card-body h-100" id="podsvetka">
+              <div style="background-color:mistyrose;width:100%">
+                <span id="debId" style="font-size:11pt;font-style:italic;"></span>
+              </div> 
+              <!--form action="/sc/create" method="post" -->
+              <textarea id="scText" name="scText" class="form-control" id="smart-contract-code" oninput="_debugger()"
+                placeholder="Введите код контракта здесь" style="height:500px"></textarea>
+              <div id="code-error" class="invalid-feedback">
+
               </div>
+              <button onclick="createSc()" id="send-code" class="btn btn-block btn-primary" style="margin-top:10px;">Отправить</button>
+            <!--/form-->
             </div>
+          
           </div>
         </div>
       </div>
@@ -94,117 +73,139 @@
       <div class="card h-100">
         <div class="card-header text-center font-weight-bold">
           Смарт-контракты (<span id="round">{{round}}</span> раунд)
+          <span onclick="updContract()" style="cursor: pointer">&nbsp;&nbsp;<img id="updImg" src="/img/upd.png" width="16px"></span>
         </div>
-        <div class="card-body h-100">
-            {% for sc in scs %}
-            {% if sc.round == round %}
-          <div class="accordion h-100 overflow-auto" id="contractsList">
+        <div class="card-body h-100 overflow-auto" id="scs-div">
 
-            <div class="card">
-              <div class="card-header">
-                <button class="btn btn-block dropdown-toggle" type="button" data-toggle="collapse"
-                  data-target="#collapse{{loop.index}}">
-                  id: {{sc._id}} <br>
-                  (Баланс: {{sc.resBalance}})<br>
-                  Создал-контракт: {{sc.author}}<br>
-                  Подробнее:
-                </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-sc">
+
+  </div>
+    <div class="modal" tabindex="-1" role="dialog" id="spravkaModal" >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" >Справка</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body overflow-auto">
+              <p>
+                <b>1. Принципы работы смарт-контрактов</b><br>
+                <p>Контракт представляет из себя программный код с заданными его разработчиками правилами контрактации.</p>
+                <p>Код и данные в контракте невозможно удалить, изменить, подделать.</p>
+                <p>Код и данные используемых контрактов является открытым(публичным) для всех игроков.</p>
+                <p>Можно создать неограниченное количество смарт-контрактов с одинаковым кодом.</p>
+                <p>В конракте есть поля, которые игроки заполняют в процессе игровой контрактации, на основе этих данных, по формулам контракта рассчитывается прибыль участников данного контракта.</p><br>
+                <p>Баланс контракта можно пополнить в банке.</p><br>
+                <p>Баланс контракта можно распределить в соотвествии с его результатами, в любой момент.</p><br>
+                <b>2. Правила языка смарт-контрактов "T2CH Lang"</b><br>
+                <p>Смарт-Контракт(далее СК) состоит из двух обязательных блоков:<br>
+                  КОНТРАКТ#<br>
+                  <i>Список заполняемых полей...;</i><br>
+                  РЕЗУЛЬТАТ#<br>
+                  <i>Список получателей прибыли, с формулами их рассчета...;</i><br>
+                  <br>
+                  <p>
+                    Поле может быть заполнено только единожды.<br>
+                    Поля имеют следующий формат:<br>
+                    _названиеПеременной: $типДанных {УровеньДоступа};<br><br>
+                    Переменные начинаются с символа "_", состоят из кириллицы, длиной не более 40 символов.<br>
+                    Тип данных начинается с символа "$", существуют следующие типы данных: $слово, $буква, $время, $число.<br>
+                    Уровень доступа определяет, кто может заполнить поле. Существует следющие уровени доступа: конкретный логин (например {Y02}), лицензия (например {ПР}), любой игрок {ВСЕ}.<br>
+                    Поля завершаются символом ";"<br>
+                  </p>
+                  <p>
+                    Список получателей прибыли имеет следующий формат:<br>
+                    ЛогинПолучателя: Формула;<br>
+                    Формулы завершаются символом ";"<br>
+                  </p>
+                  <p>
+                    Для формул доступны встроенные методы:<br>
+                    Математические: +,-,*,/,<br>
+                    Логические: ==,!=,>,<,<=,>=,||,&&,<br>
+                    @@ - проверяет заполнено ли поле (например: @@_названиеПоля)<br>
+                    <br>
+                    Специальные методы:<br>
+                    ^ДЛИНА(_названиеПоля) - число символов в поле типа $слово<br>
+                    ^ВЕС(_названиеПоля) - себестоимость типа $слово в игровых деньгах<br>
+                    ^АВТОР(_названиеПоля) - логин заполневшего "_названиеПоля"<br>
+                    ^УСЛ( логическоеВыражение ? исход_если_да | исход_если_нет)<br>
+                  </p>
+                  <p>
+                    ВАЖНО!!!<br>
+                    Все матемтические выражение необходимо писать попарно, заключая в круглые скобки:<br>
+                    (2+3)<br>
+                    ((2*3)+4)<br>
+                    ((1/1)+(3/4))<br>
+                    Примеры НЕверной записи:<br>
+                    2+3<br>
+                    (2+3+4)<br>
+                    ((1+3)+(3+4)+(3+5))<br>
+                  </p>
+                  <p>
+                    Логические выражение записываются так же, попарно.<br>
+                  </p>
+                </p>
+                <b>3. Пример кода контракта</b><br>
+                <p>КОНТРАКТ#<br>
+                  _цена: $число {Y02};<br>
+                  _стартовоеСлово: $слово {Y02};<br>
+                  РЕЗУЛЬТАТ#<br>
+                  Bank: 0;<br>
+                  Y02: ^УСЛ(@@_цена ? (^ДЛИНА(_стартовоеСлово) + _цена) | 0);</p><br>
+                <b>4. Среда разработки</b><br>
+                &nbsp;&nbsp;&nbsp;Для более удобной разработки смарт-контрактов можно использовать IDE: <a href="https://code.visualstudio.com/">Visual Studio Code</a>
+                для данной VS Code разработан плагин по работы с языком контрактов "T2CH Lang".<br>
+                &nbsp;&nbsp;&nbsp;Установите плагин и создайте файл с расширением .t2ch для его использования:<br>
+                <img src="/img/scrin.png" style="height:200px"><br><br>
+                &nbsp;&nbsp;&nbsp;После разработки, вставьте текст контракта в соотвествующее поле
+                <span onclick="area()" data-dismiss="modal" aria-label="Close" aria-hidden="true" style="cursor:pointer;">
+                  <u>тут</u>.
+                </span>
+              </p>
+            </div>
+          </div>
+      </div>
+    </div>
+
+        <!-- SubBlock 2: Show Blocks -->
+      <div class="row vh-75" style="margin-top:20px;">
+        <div class="col-block h-100 col-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="col h-100">
+            <div class="card text-center h-100">
+              <div class="card-header font-weight-bold">
+                Обозреватель блоков
+                <span onclick="updLog()" style="cursor: pointer">&nbsp;&nbsp;<img id="updLogImg" src="/img/upd.png" width="16px"></span>
               </div>
-              <div id="collapse{{loop.index}}" class="collapse show" data-parent="#contractsList">
-                <div class="card-body">
-                  <div class="row mb-2">
-                    <div class="col">
-                      <button class="btn btn-block btn-info" data-toggle="modal" data-target="#codeModal{{sc._id}}">
-                        Код
-                      </button> 
-                      <a class="btn btn-block btn-default" href="/sc/distribute/{{sc._id}}">
-                        Распределить баланс
-                      </a> 
-                      <a class="btn btn-block btn-default" href="/wallet/{{sc._id}}" target="_blank">
-                        Пополнить
-                      </a> 
-                    </div>
-                  </div>
-                  {% for field in sc.fields %}
-                    
-                      <div class="row">
-                        <div class="col-12">
-                          <div class="form-group form-row">
-                            <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                              <span>{{field.name}}</span>
-                            </div>
-                            {% if field.author %}
-                              <p><b>{{field.value}}</b> [<i>Заполнил: {{field.author}}</i>]</p>
-                            {% else %}
-                              <form action="/sc/field" method="POST">
-                                  {% if field.type=="$слово" or field.type=="$буква" or field.type=="$число" %}
-                                  <div class="col-7 col-sm-7 col-md-7 col-lg-7">
-                                    <input name="data" type="text" class="form-control" placeholder="{{field.type}}" /></input>
-                                  </div> 
-                                  {% endif %}
-                                {% if field.type=="$время" %}
-                                  <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                {% else %}
-                                  <div class="col-5 col-sm-5 col-md-5 col-lg-5">
-                                {% endif %}
-                                  <input name="fieldId" type="hidden" value="{{field._id}}" />
-                                  <input name="skId" type="hidden" value="{{sc._id}}" />
-                                  <button class="btn btn-success btn-block">&#10004;</button>
-                                </div>
-                              </form>
-                              <div class="col-12">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<i>доступен ввод для {{field.sec}}</i>
-                              </div>
-                            {% endif %}
-                          </div>
-                        </div>
-                      </div>
-                    
-                  {% endfor %}
-                  <hr>
-                  <div class="row">
-                    <div class="col-12">
-                      Результаты контракта:<br>
-                      {% for res in sc.results %}
-                        {% if res.user %}
-                        <b>{{res.user}}</b> = {{res.balance}} y.e.<br>
-                        {% else %}
-                          <i><span>Недостаточно данных...</span><br></i>
-                        {% endif %}
-                      {% endfor %}
-                    </div>
-                  </div>
+              <div class="card-body overflow-auto">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead style="text-align: center;">
+                      <tr>
+                        <th >#</th>
+                        <th>Время</th>
+                        <th>Раунд</th>
+                        <th>Актор</th>
+                        <th>Контракт</th>
+                        <th>Действие</th>
+                      </tr>
+                    </thead>
+                    <tbody id="logs-div">
+
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
-            
           </div>
-          {% endif %}
-          {% endfor %}
         </div>
       </div>
-    </div>
-  </div>
-
-  {% for sc in scs %}
-  <div class="modal" id="codeModal{{sc._id}}" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="codeModalLabel">Код контракта №{{sc._id}}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <textarea class="form-control" id="source-code" rows="5" disabled>
-              {{sc.text | indent}}
-          </textarea>
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
 
   {% endblock %}
   {% block commonJS %}
@@ -217,15 +218,36 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
+    <script src="/js/deb.js"></script>
+    <script src="/js/sc.js"></script>
     <script>
-      (async () => {
-          let usr = await $.get('/api/v1/mylogin');
-          let time = await $.get('/api/v2/time/now');
-          let span = document.getElementById('mylogin');
-          console.log(usr)
-          span.innerHTML = usr.usr ? `Ваш логин (${usr.usr})` : '';
-          span.innerHTML += time ? ` | до конца раунда: ${600-time} секунд` : '';
+      function area(){
+        let ar = document.getElementById('podsvetka');
+        let i = 0;
+
+        function grey(i) {
+          if (i<6) {
+            setTimeout(()=>{
+              ar.style = 'background-color:#fff;';
+              console.log('grey')
+              ++i;
+              pink(i)
+            }, 300)
+          }
+        }
+
+        function pink(i) {
+          if (i<6) {
+            setTimeout(()=>{
+              ar.style = 'background-color:pink;';
+              console.log('pink')
+              ++i;
+              grey(i)
+            },300)
+          }
+        }
+
+        pink(0);
       }
-      )();
-  </script>
+    </script>
   {% endblock %}

@@ -23,7 +23,6 @@ exports.nextRound = async () => {
     await exports.update(Round.round, (1+Round.round))
     ++Round.round;
     Round.time = 0;
-    let i = 1;
     exports.startTimer();
     return Round.round;
 }

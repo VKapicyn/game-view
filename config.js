@@ -1,4 +1,4 @@
-exports.port = 8888;
+exports.port = 8885;
 exports.token = 'super_sicret_parol';
 exports.dbName = 'sessions';
 exports.adminLogins = ['Bank'];

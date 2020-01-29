@@ -168,5 +168,37 @@
         {% endif %}
     </div>
 </div>
+<script>
+    let ar = document.getElementById('amount');
+    let i = 0;
+    function grey(i) {
+        if (i<6) {
+            setTimeout(()=>{
+              ar.style = 'background-color:#fff;';
+              console.log('grey')
+              ++i;
+              pink(i)
+            }, 300)
+        }
+    }
+    function pink(i) {
+        if (i<6) {
+            setTimeout(()=>{
+              ar.style = 'background-color:pink;';
+              console.log('pink')
+              ++i;
+              grey(i)
+            },300)
+        }
+    }
+(
+    ()=>{
+        let resp = '{{selectedResp}}';
+        if (resp) {
+            pink(0);
+        }
+    }
+)();
+</script>
 
 {% endblock %}

@@ -4,6 +4,7 @@ const Credit = require('../models/credit').Credit;
 const Advert = require('../models/advert').Advert;
 const License = require('../models/license').License;
 const User = require('../models/user').User;
+const BlockChain = require('../models/blockChain').BlockChain;
 
 exports.txs = async (req, res) => {
     res.json(await Ops.findAll())
@@ -56,4 +57,8 @@ exports.getMyLogin = async (req, res) => {
         usr = req.session.user.login
     } catch (e) {usr = null}
     res.json({usr})
+}
+
+exports.getLogs = async (req, res) => {
+    res.json(await BlockChain.getAll())
 }

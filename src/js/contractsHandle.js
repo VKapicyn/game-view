@@ -19,7 +19,7 @@ function contractToHTML(contract) {
 
   const contractView =
     `
-    <div class="card">
+    <div class="card" id="contractsList">
       <div class="card-header">
         <button class="btn btn-block dropdown-toggle" type="button" data-toggle="collapse"
           data-target="#collapse${contract.id}">
