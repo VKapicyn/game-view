@@ -31,7 +31,9 @@ exports.hasLic = async (req, res) => {
     lics.map(lic => {
         if ((lic.name[0]+lic.name[1]).toUpperCase() == req.body.lic) {
             lic.sentence.map(sent => {
-                if (sent.login == req.body.login && sent.status && sent.round == Round.getRound()) {
+                console.log('АХТУНГ');
+                console.log((lic.name[0]+lic.name[1]).toUpperCase() , req.body.lic, sent.login, req.body.login, sent.status, sent.round,  Round.getRound())
+                if (sent.login == req.body.login && sent.status) {
                     flag = true
                 }
             })
