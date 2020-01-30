@@ -11,6 +11,7 @@ async function getRound() {
     let usr = await $.get('/api/v1/mylogin');
     let time = await $.get('/api/v2/time/now');
     let span = document.getElementById('mylogin');
+    console.log(usr)
     span.innerHTML = usr.usr ? `Ваш логин (${usr.usr})` : '';
     span.innerHTML += time ? ` | до конца раунда: ${600-time} секунд` : '';
 }
@@ -78,6 +79,8 @@ async function pushContr(target) {
     modalsDiv.innerHTML = '';
 
     for (let i=scs.length-1; i>=0; --i) {
+        let _bal = await $.get('/api/v2/balance/'+scs[i]._id);
+        scs[i].resBalance = _bal ? _bal : 0;
         let scModalDiv = document.createElement('div');
             scModalDiv.classList.add('modal');
             scModalDiv.id = `codeModal${scs[i]._id}`;

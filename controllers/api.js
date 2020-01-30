@@ -62,3 +62,10 @@ exports.getMyLogin = async (req, res) => {
 exports.getLogs = async (req, res) => {
     res.json(await BlockChain.getAll())
 }
+
+exports.getBalance = async (req, res) => {
+    let usr = await User.find(req.params.id)
+    res.json(
+        usr ? usr.balance :0
+        )
+}

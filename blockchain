@@ -1,6 +1,8 @@
+{"time":{"$$date":1580369768341},"author":"Bank","action":"5e3287689089fd6cc1f02a70","data":"создал контракт","round":2,"_id":"1C5bCHrdmKKAFUhn"}
 {"time":{"$$date":1580312048391},"author":"Bank","action":"5e318ce4c5dd4246644f0613","data":"распределил баланс: 0; (требовалось: 4)","round":2,"_id":"7P76Zcf7aoZ39zYl"}
 {"time":{"$$date":1580309282399},"author":"Y02","action":"","data":"распределил баланс","round":2,"_id":"IIS2A06chzcnfUTn"}
 {"time":{"$$date":1580310903231},"author":"Y02","action":"5e318ce4c5dd4246644f0613","data":"_слово1: тест","round":2,"_id":"IXBKeLeYdCI9xAwE"}
+{"time":{"$$date":1580369863452},"author":"Bank","action":"5e3287689089fd6cc1f02a70","data":"распределил баланс: 1; (требовалось: 4)","round":2,"_id":"NyyBTR0MeRFAooB2"}
 {"time":{"$$date":1580311924386},"author":"Bank","action":"5e318ce4c5dd4246644f0613","data":"распределил баланс: null; (требовалось: 4)","round":2,"_id":"PrIcjfpirTu2wc6G"}
 {"time":{"$$date":1580309393724},"author":"Y02","action":"","data":"распределил баланс","round":2,"_id":"XjRasfiCPkpRXCdC"}
 {"time":{"$$date":1580311936349},"author":"Bank","action":"5e318ce4c5dd4246644f0613","data":"распределил баланс: 0; (требовалось: 4)","round":2,"_id":"YhHTZMgkYjZAJMxE"}
@@ -9,4 +11,5 @@
 {"time":{"$$date":1580310897975},"author":"Y02","action":"5e318ce4c5dd4246644f0613","data":"_число: 12","round":2,"_id":"k3DwfwYms2XjqJhe"}
 {"time":{"$$date":1580311615751},"author":"Bank","action":"5e318ce4c5dd4246644f0613","data":"распределил баланс","round":2,"_id":"knQdjq97S976uFRS"}
 {"time":{"$$date":1580311911432},"author":"Bank","action":"5e318ce4c5dd4246644f0613","data":"распределил баланс: _bal; (требовалось: 4)","round":2,"_id":"lM4CmRSfswqzXbGV"}
+{"time":{"$$date":1580369847549},"author":"Bank","action":"5e3287689089fd6cc1f02a70","data":"распределил баланс: 5; (требовалось: 4)","round":2,"_id":"mfQpScinczVMHtkJ"}
 {"time":{"$$date":1580311841393},"author":"Bank","action":"5e318ce4c5dd4246644f0613","data":"распределил баланс(4)","round":2,"_id":"zLv7UwNPEw8yaMIT"}

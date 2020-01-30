@@ -62,13 +62,14 @@ function _debugger() {
       //Проверяем типы, переменные, доступы
     }
     //Есть текст #РЕЗУЛЬТАТ
-    //FIXME: подсчет ;
     let rez = text.indexOf('РЕЗУЛЬТАТ#');
     err += rez !== -1 ? '' : `Не найден раздел "РЕЗУЛЬТАТ#"<br>`
     if (rez > -1) {
       let start = rez+10;
       let end = text.length;
       let ysl = calc(text.slice(start, end), '^УСЛ');
+      let rezUsers = calc(text.slice(start, end), ':');
+      let endUsers = calc(text.slice(start, end), ';');
   
       //TODO: внутренняя проверка скобок?
       if (ysl > 0) {
@@ -78,6 +79,10 @@ function _debugger() {
             err+= 'При использовании условного оператора "^УСЛ()", необходимо указать результаты обоих исходов через "|"<br>'
           else
             err+= 'Избыточное применениие символа "|"<br>'
+      }
+
+      if (rezUsers > endUsers) {
+        err+= 'В конце формул не хватает ";"<br>'
       }
       
       //TODO: Проверяем скобки у математики

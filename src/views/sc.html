@@ -4,6 +4,9 @@
 <div class="row">
     <div class="col-lg-12 col-sm-12">
         <h3>Контракт #{{sc._id}}</h3>
+        <input id="copyObj" type="text" value="http://hrhonor.ru:8888/sc/{{sc._id}}" style="">
+        <h5 style="cursor: pointer;" onclick="copyLink()"><u>Скопировать ссылку на контракт</u>  <img src="/img/copy.png" width="20px"></h5>
+
         <p>Баланс: {{sc.resBalance}}</p>
         <p>Автор: {{sc.author}}</p>
         <p>Результаты:<br>
@@ -111,5 +114,13 @@
             </table>
           </div>
     </div>
-</div>        
+</div> 
+<script>
+    function copyLink() {
+        let cop = document.getElementById('copyObj')
+        cop.select();
+        document.execCommand('copy')
+        console.log('coppied')
+    }
+</script>       
 {% endblock %}

@@ -58,6 +58,7 @@ router.post('/api/v2/lic/has', controller.api.hasLic);
 router.get('/api/v2/lics', controller.api.getLic);
 router.get('/api/v2/logins', controller.api.getLogins);
 router.get('/api/v2/logs', controller.api.getLogs)
+router.get('/api/v2/balance/:id', controller.api.getBalance)
 
 router.post('/analitic', controller.analitic.getPage)
 router.post('/reg', controller.auth.setUser)

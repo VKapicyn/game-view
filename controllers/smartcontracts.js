@@ -206,9 +206,13 @@ exports.getScPage = async (req, res) => {
       let t = new Date(l.time)
       l.time = `${t.getHours()}:${t.getMinutes()}:${t.getSeconds()}`
     })
-    let sc = (await request('http://localhost:9000/api/sk/'+req.params.scId, {method: 'GET'})).body
+    let sc = JSON.parse((await request('http://localhost:9000/api/sk/'+req.params.scId, {method: 'GET'})).body)
+
+    let _bal = await User.find(sc._id);
+    sc.resBalance = _bal ? _bal.balance : 0;
+
     res.render('sc.html', {
-      sc: JSON.parse(sc),
+      sc: sc,
       logs
     })
   } catch(e) {
