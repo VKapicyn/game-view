@@ -6,7 +6,7 @@ async function getRound() {
 })();
 (async ()=> {
     await pushLog();
-})
+})();
 (async () => {
     let usr = await $.get('/api/v1/mylogin');
     let time = await $.get('/api/v2/time/now');
@@ -73,7 +73,7 @@ async function pushContr(target) {
     let round = await getRound();
     let modalsDiv = document.getElementById('modal-sc')
     let scsDiv = document.getElementById('scs-div')
-    let scs = await $.get('http://hrhonor.ru:9000/api/sk/actual/'+round);
+    let scs = await $.get('http://localhost:9000/api/sk/actual/'+round);
 
     scsDiv.innerHTML = '';
     modalsDiv.innerHTML = '';

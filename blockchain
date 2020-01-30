@@ -1,5 +1,7 @@
 {"time":{"$$date":1580369768341},"author":"Bank","action":"5e3287689089fd6cc1f02a70","data":"создал контракт","round":2,"_id":"1C5bCHrdmKKAFUhn"}
 {"time":{"$$date":1580312048391},"author":"Bank","action":"5e318ce4c5dd4246644f0613","data":"распределил баланс: 0; (требовалось: 4)","round":2,"_id":"7P76Zcf7aoZ39zYl"}
+{"time":{"$$date":1580375988847},"author":"Bank","action":"5e329fb475e55e72a20c4e57","data":"создал контракт","round":2,"_id":"Fo7hGjCx1BHOFbO2"}
+{"time":{"$$date":1580376042938},"author":"Bank","action":"5e329fea75e55e72a20c4e5d","data":"создал контракт","round":2,"_id":"G0kdyo9Eat6Joq1M"}
 {"time":{"$$date":1580309282399},"author":"Y02","action":"","data":"распределил баланс","round":2,"_id":"IIS2A06chzcnfUTn"}
 {"time":{"$$date":1580310903231},"author":"Y02","action":"5e318ce4c5dd4246644f0613","data":"_слово1: тест","round":2,"_id":"IXBKeLeYdCI9xAwE"}
 {"time":{"$$date":1580369863452},"author":"Bank","action":"5e3287689089fd6cc1f02a70","data":"распределил баланс: 1; (требовалось: 4)","round":2,"_id":"NyyBTR0MeRFAooB2"}
