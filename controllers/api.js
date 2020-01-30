@@ -4,7 +4,7 @@ const Credit = require('../models/credit').Credit;
 const Advert = require('../models/advert').Advert;
 const License = require('../models/license').License;
 const User = require('../models/user').User;
-const BlockChain = require('../models/blockChain').BlockChain;
+const BlockChain = require('../models/blockchain').BlockChain;
 
 exports.txs = async (req, res) => {
     res.json(await Ops.findAll())
