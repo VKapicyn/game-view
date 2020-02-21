@@ -44,6 +44,7 @@ router.get('/an/data', controller.analitic.getJsonData)
 router.get('/smartcontracts', middleware.isReged, controller.smartContracts.getPage)
 router.get('/sc/distribute/:scId', middleware.isReged, controller.smartContracts.distributeController)
 router.get('/sc/:scId', middleware.isReged, controller.smartContracts.getScPage)
+router.get('/fields/:scId/:fieldId', middleware.isReged, controller.smartContracts.getFieldPage)
 
 //API
 router.get('/api/v1/status', controller.api.status);

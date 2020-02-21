@@ -13,7 +13,7 @@ async function getRound() {
     let span = document.getElementById('mylogin');
     console.log(usr)
     span.innerHTML = usr.usr ? `Ваш логин (${usr.usr})` : '';
-    span.innerHTML += time ? ` | до конца раунда: ${600-time} секунд` : '';
+    span.innerHTML += time ? ` | до конца раунда: ${900-time} секунд` : '';
 }
 )();
 async function updLog(arg) {

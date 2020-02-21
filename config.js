@@ -1,4 +1,4 @@
-exports.port = 8885;
+exports.port = 8888;
 exports.token = 'super_sicret_parol';
 exports.dbName = 'sessions';
 exports.adminLogins = ['Bank'];
@@ -22,6 +22,6 @@ exports.subsidyLimit = 3000;
 exports.priceOfExtension = 10;
 exports.bankProcent = 5;
 exports.subsidyProcent = 2;
-exports.roundTime = 600;
+exports.roundTime = 900;
 exports.skPass = 'Ctkuub'
 exports.objects = [{value:'Продукт', status: 0}, {value: 'Смарт-контракт', status:1}, {value:'Вторсырье', status: 0}, {value:'Буква', status: 0}, {value:'Слово', status: 0}, {value:'Инвестиции', status: 1}];

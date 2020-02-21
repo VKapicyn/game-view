@@ -151,7 +151,9 @@ exports.distributeBalance = async (_login, contract) => {
 
   if (contBal >= sumBalance && contBal>0) {
     for (let i=0; i<results.length; i++) { 
-      if (results[i].balance != null)
+      if (results[i].user == null)
+        continue;
+      if (results[i].balance != null && results[i].balance != 0)
         {
             let sender = contract,
                 responser = results[i].user,
@@ -214,6 +216,23 @@ exports.getScPage = async (req, res) => {
     res.render('sc.html', {
       sc: sc,
       logs
+    })
+  } catch(e) {
+    res.render('err.html',{err:e, url: '/smartcontracts'})
+  }
+}
+
+exports.getFieldPage = async (req, res) => {
+  try{
+    let fields = JSON.parse((await request('http://localhost:9000/api/fields/'+req.params.scId, {method: 'GET'})).body)
+    let field = {};
+    fields.map( f => {
+      if (req.params.fieldId == f._id)
+        field = f;
+    })
+    res.render('scField.html', {
+      field, 
+      sc: req.params.scId
     })
   } catch(e) {
     res.render('err.html',{err:e, url: '/smartcontracts'})
