@@ -38,6 +38,7 @@ exports.setUser = async (req, res) => {
         isReged = await User.isReged({email: req.body.email}),
         isRegedLogin = await User.find(logins[0]);
 
+    req.body.email.replace(' ','');
     err = (req.body.pass !== '' && req.body.pass === req.body.pass1 && req.body.pass.length>5) ? err : 'Некорректный пароль или пароли не совпадают';
     err = req.body.name ? err : 'Некорректное имя';
     err = req.body.lastname ? err : 'Некорректная фамилия';
@@ -51,6 +52,7 @@ exports.setUser = async (req, res) => {
             user.name = req.body.name;
             user.lastname = req.body.lastname;
             user.email = req.body.email;
+            user.balance = 1000;
             
         await user.save();
         

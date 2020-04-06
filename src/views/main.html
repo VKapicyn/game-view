@@ -7,7 +7,7 @@
         {% if user == null %}
         <form action="/log" method="POST">
             <h3>Вход в "Счет"</h3>
-            <input id="login" name="login" class="form-control" type="text" placeholder="Логин">
+            <input id="login" name="login" class="form-control" type="text" placeholder="Логин(email)">
             <br>
             <input id="pass" name="pass" class="form-control" type="password" placeholder="Пароль">
             <!--input type="radio" name="usertype" value="user" checked> Пользователь<br>
@@ -23,7 +23,7 @@
         <a href="/reg/prjct">Страница регистрации <b>"Проектной группы"</b></a-->
         {% else %}
         <br>
-        <h4>Персональные данные:</h4>
+        <h4>Вы авторизованы как {{user.email}}</h4>
         <form action="/setfio" method="POST">
             {% if user.name == "" %}
                 <input id="text" name="Imya" class="form-control" type="text" placeholder="Имя">
@@ -40,36 +40,7 @@
             {% endif%}
         </form>
         <br>
-        <h3>Управление лицензиями:</h3><br>
-        <h4>Предложение от банка: </h4>
-        {% if (offLic.length != 0) and (actualLic == null) %}
-        <span>Лицензия <b><span id="licoffer">{{offLic[0].name}}</b></span> за {{offLic[0].price}} у.е. </span>
-        <input type="button" onclick="oplata()" class="btn btn-xs btn-primary" value="оплатить"><br>
-        {% else %}
-        <span> - </span>
-        {% endif %}<br>
-        
-        <h4>Текущая лицензия: </h4>
-        {% if actualLic != null %}
-        <span style="color:green"> <b><span id="licdecline">{{actualLic}}</span>  </b></span>&nbsp;<input type="button" onclick="otkaz()" class="btn btn-xs btn-default" value="отказаться"><br>
-        {% else %}
-        <span> - </span>
-        {% endif %}
         <br>
-
-        <h4>История лицензий:</h4>
-        {% for lic in historyLic %}
-            {% if (lic.status == true) and ((round-1)==lic.round) and (actualLic == null) %}
-            <p>гейм {{lic.round}} : <span id="extend">{{lic.name}}</span> 
-                | <input type="button" onclick="prodlit()" class="btn btn-primary btn-xs" value="продлить"> за {{defPrice}} у.е.
-            </p>
-            {% else %}
-            <p>гейм {{lic.round}} : {{lic.name}}</p>
-            {% endif %}
-        {% endfor %}
-        <br>
-        <br>
-        <h3>Вы авторизованы как {{user.login}}</h3>
         <a href="/logout">Выйти</a>
         {% endif%}
     </div>

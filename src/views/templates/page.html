@@ -7,7 +7,7 @@
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
     {% endblock %}
-    <title></title>
+    <title>Кошелек</title>
 </head>
 <body>
 {% endblock %}
@@ -19,16 +19,11 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
-        <a class="navbar-brand" href="/rait">
+        <a class="navbar-brand" href="/">
             <img src="/img/логотип1.png" width="60" height="45" class="d-inline-block align-top" alt="">
         </a>
         <div class="collapse navbar-collapse" id="navbar-main">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a href="/">
-                        Лицензии
-                    </a>&nbsp;&nbsp;
-                </li>
                 <li>
                     <a href="/wallet">
                         Счет 
@@ -40,24 +35,14 @@
                     </a>&nbsp;&nbsp;
                 </li>
                 <li>
-                    <a href="/board" class="text-muted">
-                        Объявления 
-                    </a>&nbsp;&nbsp;
-                </li>
-                <li>
-                    <a href="/analitic" class="text-muted">
-                        Аналитика 
-                    </a>&nbsp;&nbsp;
-                </li>
-                <li>
-                    <a href="/api" class="text-muted">
-                        API 
+                    <a href="/txs">
+                        Транзакции
                     </a>&nbsp;&nbsp;
                 </li>
                 <li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
                 <li>
                     <b><span class="font-size:15pt" id="mylogin"></span></b>&nbsp;
-                    <a href="/logout">
+                    <a href="/logout" id="logout">
                         Выйти
                     </a>
                 </li>
@@ -90,8 +75,8 @@
         <div class="foot">
             <table width="100%"><tr>
                 <td width="33%"></td>
-                <td width="33%"><p align="center">2019 System-2 ©</p></td>
-                <td width="33%"><p align="right" style="padding-right: 10%;"><a href="http://t2ch.ru">Created by Time2Chain</a</p></td>
+                <td width="33%"><p align="center">2020 <a href="https://t2ch.io">Time2Chain LLC</a> ©</p></td>
+                <td width="33%"><p align="right" style="padding-right: 10%;"></p></td>
             </table></tr>
         </div>
     </footer>  
@@ -104,7 +89,9 @@
             let usr = await $.get('/api/mylogin');
             let span = document.getElementById('mylogin');
             console.log(usr)
-            span.innerHTML = usr.usr ? `Ваш логин (${usr.usr})` : '';
+            span.innerHTML = usr.usr ? `Номер вашего счета: (${usr.usr})` : '';
+            if (!usr.usr)
+                document.getElementById('logout').remove();
         }
         )();
     </script>

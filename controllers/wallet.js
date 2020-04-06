@@ -130,7 +130,7 @@ exports.getWalletPage = async (req, res) => {
 }
 
 exports.send = async (req, res) => {
-    if (req.body.amount && req.body.text && req.body.liclist && req.body.count) {
+    if (req.body.amount) {
         if (req.body.text == '')
             req.body.text = 'Без комментария'
 
@@ -183,6 +183,6 @@ exports.send = async (req, res) => {
             res.redirect('/wallet');
         }
     } else {
-        res.render('err.html', {err: 'Необходимо заполнить все поля!', url: '/wallet'});
+        res.render('err.html', {err: 'Неудалось выполнить транзакцию!', url: '/wallet'});
     }
 }

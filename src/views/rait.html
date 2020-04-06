@@ -2,72 +2,18 @@
         <!-- Для шапки и футера однозначно нужен темплейт -->
 {% block content %}
 <div class="row">
-    <h3 style="margin-left:10px;">Текущий гейм: {{rounds[rounds.length-1]}}</h3>
-</div>
-<div class="row">
-   
-  <div class="col-lg-4 col-md-12" style="border: 2px solid #3071a9; margin:10px; border-radius: 5px 5px 5px 5px;">
-      <br>
-      <form action="/rait" method="POST">
-        <div class="input-group">
-          <label>Лицензии: &nbsp;</label>
-          <select name="lic">
-            <option value="all">Все</option>
-            {% for lic in lices %}
-              {% if selected.length>0 %}
-                {% if selected[0] == lic %}
-                  <option value="{{lic}}" selected>{{lic}}</option>
-                {% else %}
-                  <option value="{{lic}}">{{lic}}</option>
-                {% endif %}
-              {% else %}
-                <option value="{{lic}}">{{lic}}</option>
-              {% endif %}
-            {% endfor %}
-          </select><br>
-          <label>Геймы: &nbsp;</label>
-          <select name="round">
-            <option value="all">Все</option>
-            {% for _round in rounds %}
-               {% if selected.length>0 %}
-                {% if selected[1] == _round %}
-                  <option value="{{_round}}" selected>{{_round}}</option>
-                {% else %}
-                  <option value="{{_round}}">{{_round}}</option>
-                {% endif %}
-              {% else %}
-                <option value="{{_round}}">{{_round}}</option>
-              {% endif %}
-            {% endfor %}
-          </select><br>
-          <label>Компании: &nbsp;</label>
-          <select name="companytype">
-            <option value="all" {% if selected[2] == "all" %}selected{% endif %}>Все</option>
-            <option value="prj" {% if selected[2] == "prj" %}selected{% endif %}>Проектные</option>
-            <option value="ind" {% if selected[2] == "ind" %}selected{% endif %}>Технологические</option>
-          </select><br>
-          &nbsp;<button type="input" class="btn btn-primary btn-xs">Фильтровать</button><br>
-          &nbsp;<a class="btn btn-default btn-xs" href="/rait">Сбросить</a>
-        </div>  
-      </form>
-      <br>
-  </div>
-</div>
-<div class="row">
     <div class="col-lg-10 col-md-12">
-        <h3>Список игроков:</h3>
+        <h3>Список счетов:</h3>
         <table class="table">
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Логин</th>
-                {% if admin == true %}
-                  <th scope="col">ФИО</th>
+                <th scope="col">Номер счета</th>
+                <th scope="col">ФИО</th>
+                  {% if admin == true %}
                   <th scope="col">Email</th>
                 {% endif %}
                 <th scope="col">Баланс</th>
-                <th scope="col">Изделия</th>
-                <th scope="col">Лицензия</th>
               </tr>
             </thead>
             <tbody>
@@ -76,52 +22,22 @@
                 <tr>
                     <th scope="row">{{loop.index}}</th>
                     <td>{{item.login}}</td>
-                      {% if admin == true %}
+                      
                       <td>{{item.name}} {{item.lastname}}</td>
+                      {% if admin == true %}
                       <td>{{item.email}}</td>
                       {% endif %}
                     <td>{{item.balance}}</td>
-                    <td>
-                      {% for ob in objectTypes %}
-                        {% if item.objects[ob] != 0%}
-                        {{ob}}: {{item.objects[ob]}}
-                        {% endif %}
-                      {% endfor %}
-                    </td>
-                    <td>
-                      {% set flag = false %}
-                      {% for lic in item.licenses %}
-                        {% if search != true %}
-                          {% if (lic.round == round) and (lic.status == true) %}
-                            {{lic.name}}
-                            {% set flag = true%}
-                          {% endif %}
-                        {% else %}
-                          {% if (lic.round == round) and (lic.status == true) %}
-                            <span style="color:green"> {{lic.name}} </span> 
-                            {% set flag = true%}
-                          {% endif %}
-                          {% if (lic.round == round) and (lic.status == false) %}
-                            <span> {{lic.name}} </span>
-                            {% set flag = true%}
-                          {% endif %}
-                        {% endif %}
-                      {% endfor %}
-                      {% if flag == false%}
-                      <span> <b>-</b> </span>
-                      {% endif %}
-                    </td>
                 </tr>
             {% set balance = balance + item.balance%}
             {% endfor %}
             <tr>
-                <th scope="row">#</th>
+                <th scope="row">Итого</th>
+                <td > </td>
                 <td > </td>
                 <td ><b>{{balance}}</b></td>
                 <td > </td>
-                <td > </td>
                 {% if admin == true %}
-                <td></td>
                 <td></td>
                 {% endif %}
             </tr>

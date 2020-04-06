@@ -12,8 +12,6 @@
                     <th scope="col"></th>
                     <th scope="col">Кому</th>
                     <th scope="col">Сумма</th>
-                    <th scope="col">Назначение</th>
-                    <th scope="col">Кол-во</th>
                     <th scope="col">Комментарий</th>
                     <th scope="col">Время</th>
                   </tr>
@@ -26,10 +24,8 @@
                     <td>---></td>
                     <td>{{op.responser}}</td>
                     <td>{{op.amount}}</td>
-                    <td>{{op.type}}</td>
-                    <td>{{op.count}}</td>
                     <td>{{op.text}}</td>
-                    <td>(гейм: {{op.round}}) {{op.date}}</td>
+                    <td>{{op.date}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
