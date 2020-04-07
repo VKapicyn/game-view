@@ -15,7 +15,7 @@
         {% if stop == false %}
         <hr>
         <h3>Переводы:</h3>
-        <form action="/send" method="POST">
+        <form action="/send" method="POST" onsubmit="return confirm('Подтвердите перевод');">
             <input id="amount" name="amount" class="form-control" type="text" placeholder="Сумма перевода">
             <br>
             <p>Получатель</p>
@@ -33,7 +33,7 @@
             <br>
             <input id="text" name="text" class="form-control" type="text" placeholder="Комментарий">
             <br>
-            <button type="input" class="btn btn-primary">Перевести</button>
+            <button type="input" class="btn btn-primary" >Перевести</button>
         </form>
         <br>
 
@@ -96,5 +96,4 @@
 
     </div>
 </div>
-
 {% endblock %}

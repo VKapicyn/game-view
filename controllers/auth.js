@@ -84,7 +84,17 @@ exports.setPrjct = async (req, res) => {
 }
 
 exports.getRegPage = async (req, res) => {
-    res.render('reg.html');
+    try{
+        if (!req.session.user.login)
+            throw new Error('Нет такого логина')  
+        let user = await User.find(req.session.user.login);
+        if (!user)
+            throw new Error('Нет такого юзера')
+        res.redirect('/')
+    } catch(e) {
+        res.render('reg.html')
+    }
+
 }
 
 exports.getRegPrjctPage = async (req, res) => {
@@ -95,16 +105,14 @@ exports.getRegPrjctPage = async (req, res) => {
 exports.getMainPage = async (req, res) => {
     let login = req.session.user.login;
 
-    let user = await User.find(login),
-        offLic = await License.getAllOffersForUser(login),
-        actualLic = await User.getActualLic(login),
-        historyLic = await User.getLicHistory(login),
-        balance = await user.Balance(),
-        round = Round.getRound();
-        startLic = await License.getAllOffersForUser(login);
-        acceptPrice = startLic.length>0 ? startLic[0].price: null;
+    let user = await User.find(login);
+
+    if (user) {
+        balance = await user.Balance()
     
-    res.render('main.html', {user, offLic, actualLic, historyLic, defPrice: config.priceOfExtension, acceptPrice, round, balance});
+        res.render('main.html', {user, balance});
+    } else
+        res.redirect('reg')
 }
 
 exports.baseRoute = async (req, res) => {

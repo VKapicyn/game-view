@@ -98,35 +98,39 @@ exports.getWalletPage = async (req, res) => {
     let user = await User.find(req.session.user.login),
         ops = await Ops.getOpsByUser(req.session.user.login),
         userList = await User.getUserList(req.session.user.login),
-        charge = require('./admin').isAdmin(req.session.user.login),
-        licList = require('../config').lic,
-        specBalance = await user.Balance();
+        charge = require('./admin').isAdmin(req.session.user.login);
 
-    userList.sort();
-    let _licTypes = await User.getActualLic(user.login),
-        __licTypes = await License.find(_licTypes);
+    if (user) {
+        let    specBalance = await user.Balance();
 
-    if (__licTypes != null) {
-        licTypes = __licTypes.opsTypes;
-        licTypes = licTypes.concat(config.licExp);
-        licTypes = licTypes.concat(__licTypes.objectsCanBuy);
-        licList = licList.concat(licTypes);
+        userList.sort();
+        /*let _licTypes = await User.getActualLic(user.login),
+            __licTypes = await License.find(_licTypes);
+    
+        if (__licTypes != null) {
+            licTypes = __licTypes.opsTypes;
+            licTypes = licTypes.concat(config.licExp);
+            licTypes = licTypes.concat(__licTypes.objectsCanBuy);
+            licList = licList.concat(licTypes);
+        }*/
+    
+        res.render('wallet.html', {
+            //actualLic: __licTypes,
+            //licList,
+            user,
+            ops,
+            userList,
+            stop: (charge || await User.isProject(req.session.user.login)) ? false: (roundModel.status == 1 ? false : true),
+            charge,
+            specBalance,
+            bankProcent: config.bankProcent,
+            subsidyProcent: config.subsidyProcent,
+            subsidyLimit: await Subsidy.getSubsidyLimit(req.session.user.login),
+            creditLimit: await Credit.getCreditLimit(req.session.user.login)
+        });
+    } else {
+        res.redirect('/reg')
     }
-
-    res.render('wallet.html', {
-        actualLic: __licTypes,
-        licList,
-        user,
-        ops,
-        userList,
-        stop: (charge || await User.isProject(req.session.user.login)) ? false: (roundModel.status == 1 ? false : true),
-        charge,
-        specBalance,
-        bankProcent: config.bankProcent,
-        subsidyProcent: config.subsidyProcent,
-        subsidyLimit: await Subsidy.getSubsidyLimit(req.session.user.login),
-        creditLimit: await Credit.getCreditLimit(req.session.user.login)
-    });
 }
 
 exports.send = async (req, res) => {

@@ -6,7 +6,8 @@
         
         {% if user == null %}
         <form action="/log" method="POST">
-            <h3>Вход в "Счет"</h3>
+            <h3>Уже зарегистрированы?</h3>
+            <h4>Вход в "Счет":</h4>
             <input id="login" name="login" class="form-control" type="text" placeholder="Логин(email)">
             <br>
             <input id="pass" name="pass" class="form-control" type="password" placeholder="Пароль">
@@ -17,7 +18,8 @@
         </form>
         <br>
         <br>
-        <a href="/reg">Страница регистрации <b>Игрока</b></a>
+        <h3>Еще не зарегистрированы?</h3>
+        <a href="/reg">Страница <b>РЕГИСТРАЦИИ</b> Игрока</a>
         <br>
         <!--br>
         <a href="/reg/prjct">Страница регистрации <b>"Проектной группы"</b></a-->
