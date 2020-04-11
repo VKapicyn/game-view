@@ -41,7 +41,7 @@ exports.setUser = async (req, res) => {
     req.body.email.replace(' ','');
     err = (req.body.pass !== '' && req.body.pass === req.body.pass1 && req.body.pass.length>5) ? err : 'Некорректный пароль или пароли не совпадают';
     err = req.body.name ? err : 'Некорректное имя';
-    err = req.body.lastname ? err : 'Некорректная фамилия';
+    err = req.body.lastname ? err : 'Некорректное второе имя';
     err = req.body.email.match(emailPattern) ? err : 'Некорректный email';
     err = isReged ? 'Пользователь с таким email уже зарегистрирован' : err;
     err = !logins[0] ? 'Регистрация недоступна, превыше лимит игроков' : err;

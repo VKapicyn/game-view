@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-7 col-md-7 col-12">
-        <h2>На Вашем балансе: 
+        <h2>У Вас: 
             {% if (user.balance == specBalance) %}
                 {{user.balance}}
             {% else %}
@@ -14,11 +14,11 @@
 
         {% if stop == false %}
         <hr>
-        <h3>Переводы:</h3>
+        <h3>Поделиться:</h3>
         <form action="/send" method="POST" onsubmit="return confirm('Подтвердите перевод');">
-            <input id="amount" name="amount" class="form-control" type="text" placeholder="Сумма перевода">
+            <input id="amount" name="amount" class="form-control" type="text" placeholder="На сколько">
             <br>
-            <p>Получатель</p>
+            <p>С кем</p>
             <select name="responser" class="selectpicker" data-show-subtext="true" data-live-search="true">
                 {% for item in userList %}
                     <option value="{{item}}">{{item}}</option>
@@ -33,7 +33,7 @@
             <br>
             <input id="text" name="text" class="form-control" type="text" placeholder="Комментарий">
             <br>
-            <button type="input" class="btn btn-primary" >Перевести</button>
+            <button type="input" class="btn btn-primary" >Поделиться</button>
         </form>
         <br>
 
@@ -65,13 +65,14 @@
     </div>
     <div class="col-lg-12 col-md-12 col-12">
         <hr>
-        <h3>Мои операции:</h3>
+        <h3>Shared:</h3>
         <table class="table">
             <thead>
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Счет</th>
-                    <th scope="col">Сумма</th>
+                    <th scope="col">Сколько</th>
+                    <th scope="col">Кто</th>
                     <th scope="col">Комментарий</th>
                   </tr>
                 </thead>
@@ -82,11 +83,24 @@
                     <th scope="row">{{(ops.length - loop.index) + 1}}</th>
                     <td>{{op.responser}}</td>
                     <td>-{{op.amount}}</td>
+                    {% set who = "-" %}
+                    {% for us in userName %}
+                        {% if us.login == op.responser %}
+                            {% set who = us.name+" "+us.lastname %}
+                        {% endif %}
+                    {% endfor %}
+                    <td>{{who}}</td>
                     <td>{{op.text}}</td>
                     {% else %}
                     <th scope="row">{{(ops.length - loop.index) + 1}}</th>
                     <td>{{op.sender}}</td>
                     <td>+{{op.amount}}</td>
+                    {% for us in userName %}
+                        {% if us.login == op.sender %}
+                            {% set who = us.name+" "+us.lastname %}
+                        {% endif %}
+                    {% endfor %}
+                    <td>{{who}}</td>
                     <td>{{op.text}}</td>
                     {% endif %}
                 </tr>

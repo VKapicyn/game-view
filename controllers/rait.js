@@ -18,7 +18,7 @@ exports.getRaitPage = async (req, res) => {
     else 
         admin = false;
 
-    userDB.find({}).sort({balance: -1}).exec( async (err, items) => {
+    userDB.find({}).sort({balance: 1}).exec( async (err, items) => {
         let objectTypes = [];
         config.objects.map(ob => {
             if (ob.status == 0) {

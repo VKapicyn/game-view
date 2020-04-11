@@ -99,6 +99,7 @@ exports.getWalletPage = async (req, res) => {
         ops = await Ops.getOpsByUser(req.session.user.login),
         userList = await User.getUserList(req.session.user.login),
         charge = require('./admin').isAdmin(req.session.user.login);
+        userName = await User.findAll();
 
     if (user) {
         let    specBalance = await user.Balance();
@@ -114,12 +115,14 @@ exports.getWalletPage = async (req, res) => {
             licList = licList.concat(licTypes);
         }*/
     
+        console.log(userName[0].login)
         res.render('wallet.html', {
             //actualLic: __licTypes,
             //licList,
             user,
             ops,
             userList,
+            userName,
             stop: (charge || await User.isProject(req.session.user.login)) ? false: (roundModel.status == 1 ? false : true),
             charge,
             specBalance,
@@ -140,7 +143,7 @@ exports.send = async (req, res) => {
 
         if (req.body.responser == 'Всем') {
             let sender = req.session.user.login,
-                amount = req.body.amount;
+                amount = Math.floor(req.body.amount);
                 text = req.body.text;
                 type = req.body.liclist;
                 count = req.body.count;
@@ -167,7 +170,7 @@ exports.send = async (req, res) => {
         } else {
             let sender = req.session.user.login,
                 responser = req.body.responser,
-                amount = req.body.amount,
+                amount = Math.floor(req.body.amount),
                 text = req.body.text;
                 type = req.body.liclist;
                 count = req.body.count;
