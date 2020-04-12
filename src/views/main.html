@@ -35,7 +35,7 @@
             {% if user.lastname == "" %}
                 <input id="text" name="Familia" class="form-control" type="text" placeholder="Второе имя">
             {% else %}
-            <h4>Фамилия: {{user.lastname}}</h4>
+            <h4>Второе имя: {{user.lastname}}</h4>
             {% endif %}
             {% if (user.name == "") or (user.lastname == "") %}
             <button type="input" class="btn btn-primary">Сохранить</button>

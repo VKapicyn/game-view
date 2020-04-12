@@ -53,6 +53,16 @@ exports.setUser = async (req, res) => {
             user.lastname = req.body.lastname;
             user.email = req.body.email;
             user.balance = 1000;
+
+            let regDate = Date.now();
+            if (new Date(regDate).getHours() < 5) {
+                regDate = new Date((Number(new Date(regDate).getTime())-86400000));
+            }
+            regDate = new Date(regDate).setHours(5);
+            regDate = new Date(regDate).setMinutes(0);
+            regDate = new Date(regDate).setSeconds(0);
+
+            user.regdate = new Date(regDate).getTime();
             
         await user.save();
         

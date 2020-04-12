@@ -31,11 +31,11 @@
     <div class="col-lg-12 col-md-12">
         <h3>Текущий баланс: 
         {% if (user.balance == specBalance) %}
-            {{user.balance}}
+            {{user.balance}}</h3>
         {% else %}
-            {% set dolg = user.balance-specBalance %}
-            {{specBalance}} (залог: {{dolg}})
-        {% endif %}</h3>
+            {% set dolg = user.balance-specBalance %}</h3>
+            <span>{{specBalance}} (начислено системой {{-dolg}}, за {{-dolg/50}} дней)</span>
+        {% endif %}
     </div>
 </div>
 <div class="row">

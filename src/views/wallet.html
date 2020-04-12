@@ -5,12 +5,11 @@
     <div class="col-lg-7 col-md-7 col-12">
         <h2>У Вас: 
             {% if (user.balance == specBalance) %}
-                {{user.balance}}
+                {{user.balance}}</h2>
             {% else %}
-                {% set dolg = user.balance-specBalance %}
-                {{specBalance}} (залог: {{dolg}})
+                {% set dolg = user.balance-specBalance %}{{specBalance}} </h2>
+                <span>(Начисленно системой: +{{dolg*(-1)}}, за {{(dolg/50)*(-1)}} дней)</span>
             {% endif %}
-        </h2>
 
         {% if stop == false %}
         <hr>

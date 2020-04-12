@@ -42,6 +42,11 @@ exports.getRaitPage = async (req, res) => {
                 }
             })
         })
+
+        for (let i=0; i<items.length; i++) {
+            items[i] = new User(items[i].login, items[i].pass, items[i].ops, items[i].balance, items[i].name, items[i].lastname, items[i].licenses, items[i].email, items[i].permission, items[i].regdate);
+            items[i].balance = await items[i].Balance();
+        }
         res.render('rait.html', {items, admin, lices: await License.getAllTypes(), rounds, round, objectTypes});
     });
 }

@@ -6,7 +6,7 @@ const Advert = require('../models/advert').Advert;
 const advertDB = require('../server').advertDB;
 
 class User {
-    constructor(login, pass, ops, balance, name, lastname, licenses, email, permission) {
+    constructor(login, pass, ops, balance, name, lastname, licenses, email, permission, regdate) {
         this.login = login;
         this.pass = pass;
         this.ops = ops || []
@@ -16,6 +16,7 @@ class User {
         this.licenses = licenses || [];
         this.email = email || '';
         this.permission = permission || {};
+        this.regdate = regdate || 0;
     }
 
     set Ops(item) {
@@ -29,13 +30,30 @@ class User {
     }
 
     async Balance() {
+        let timestamp = Date.now();
+        if (!this.regdate) {
+            let regDate = Date.now();
+            if (new Date(regDate).getHours() < 5) {
+                regDate = new Date((Number(new Date(regDate).getTime())-86400000));
+            }
+            regDate = new Date(regDate).setHours(5);
+            regDate = new Date(regDate).setMinutes(0);
+            regDate = new Date(regDate).setSeconds(0);
+
+            this.regdate = new Date(regDate).getTime();
+            await this.updateDB(this.login);
+        } 
+        console.log(this.regdate)
+        let dailyBalance = Math.floor((( timestamp - this.regdate )/86400000)) * 50;
+        dailyBalance = dailyBalance > 0 ? dailyBalance : 0;
+        console.log(dailyBalance);
         return new Promise((res, rej) => {
             advertDB.find({author: this.login, offerType: 'buy', contrAgent: '', status: true}, (err, items) => {
                 let minus = 0;
                 items.map(item => {
                     minus = Number(minus)+Number(item.price)
                 })
-                res(this.balance-minus)
+                res(Number(this.balance - minus) + Number(dailyBalance))
             })
         })
     }
@@ -53,7 +71,8 @@ class User {
                 lastname: this.lastname,
                 licenses: this.licenses,
                 email: this.email,
-                permission: this.permission
+                permission: this.permission,
+                regdate: this.regdate
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -102,7 +121,7 @@ class User {
             userDB.find({email: email}, (err, uD) => {
                 if (uD.length>0) {
                     uD = uD[0];
-                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission);
+                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission, uD.regdate);
                     res(user);
                 }
                 else 
@@ -116,7 +135,7 @@ class User {
             userDB.find({login: login}, (err, uD) => {
                 if (uD.length>0) {
                     uD = uD[0];
-                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission);
+                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission, uD.regdate);
                     res(user);
                 }
                 else 
@@ -129,7 +148,7 @@ class User {
             userDB.find({}, (err, uDs) => {
                 let users = [];
                 for (let i=0; i<uDs.length; i++) {
-                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, uDs[i].licenses, uDs[i].email, uDs[i].permission))
+                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, uDs[i].licenses, uDs[i].email, uDs[i].permission, uDs[i].regdate))
                 }
 
                 res(users)
@@ -278,7 +297,8 @@ class User {
             lastname: this.lastname,
             licenses: this.licenses, 
             email: this.email, 
-            permission: this.permission
+            permission: this.permission,
+            regdate: this.regdate
         }, (err, item) => {})   
     }
 
