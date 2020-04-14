@@ -12,26 +12,11 @@ let userDB = new Datastore({filename: 'users'});
 userDB.loadDatabase();
 let opsDB = new Datastore({filename: 'operations'});
 opsDB.loadDatabase();
-let licenseDB = new Datastore({filename: 'license'});
-licenseDB.loadDatabase();
-let roundDB = new Datastore({filename: 'round'});
-roundDB.loadDatabase();
-let advertDB = new Datastore({filename: 'advert'});
-advertDB.loadDatabase();
-let creditDB = new Datastore({filename: 'credit'});
-creditDB.loadDatabase();
-let subsidyDB = new Datastore({filename: 'subsidy'});
-subsidyDB.loadDatabase();
 let tokensDB = new Datastore({filename: 'tokens'});
 tokensDB.loadDatabase();
 
 module.exports.userDB = userDB;
 module.exports.opsDB = opsDB;
-module.exports.licenseDB = licenseDB;
-module.exports.roundDB = roundDB;
-module.exports.advertDB = advertDB;
-module.exports.creditDB = creditDB;
-module.exports.subsidyDB = subsidyDB;
 module.exports.tokensDB = tokensDB;
 
 nunjucks.configure(__dirname + '/src/views', {
