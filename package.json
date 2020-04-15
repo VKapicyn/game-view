@@ -14,6 +14,7 @@
     "fs": "0.0.1-security",
     "json2csv": "^4.5.4",
     "md5": "^2.2.1",
+    "mongoose": "^5.9.9",
     "nedb": "^1.8.0",
     "nedb-session-store": "^1.1.2",
     "nodemon": "^1.18.5",

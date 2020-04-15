@@ -98,20 +98,20 @@ class License{
     }
 
     static async findAll() {
-        return new Promise((res, rej) => {
+        /*return new Promise((res, rej) => {
             licenseDB.find({}, (err, lics) => {
                 res(lics)
             })
-        })
+        })*/
     }
 
     static async getAllTypes() {
         let allLics = await License.findAll(), 
             result = [];
 
-        allLics.map(x => {
+        /*allLics.map(x => {
             result.push(x.name);
-        });
+        });*/
         return result;
     }
 

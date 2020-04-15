@@ -20,12 +20,12 @@ exports.getRaitPage = async (req, res) => {
     userDB.find({}).sort({balance: 1}).exec( async (err, items) => {
         let objectTypes = [];
         console.log(config);
-        config.objects.map(ob => {
+        /*config.objects.map(ob => {
             if (ob.status == 0) {
                 objectTypes.push(ob.value);
             }
-        })
-        items.map(x => {
+        })*/
+        /*items.map(x => {
             config.objects.map(ob => {
                 if (!x.objects)
                     x.objects = {};
@@ -41,7 +41,7 @@ exports.getRaitPage = async (req, res) => {
                         x.objects[o.type] += +o.count;
                 }
             })
-        })
+        })*/
 
         for (let i=0; i<items.length; i++) {
             items[i] = new User(items[i].login, items[i].pass, items[i].ops, items[i].balance, items[i].name, items[i].lastname, items[i].licenses, items[i].email, items[i].permission, items[i].regdate);

@@ -3,6 +3,7 @@ const License = require('../models/license').License;
 const Ops = require('../models/ops').Operations;
 const config = require('../config');
 const Round = require('../models/round');
+const userDB = require('../server').userDB;
 
 exports.logout = (req, res) => {
     delete req.session.user;
@@ -33,10 +34,20 @@ exports.login = async (req, res) => {
 
 exports.setUser = async (req, res) => {
     let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    let logins = await User.getAccessableLogins(),
-        err = null,
+    const login = await User.getAccessableLogins();
+
+    let regedUsers = await User.getUserList(null);
+    console.log(regedUsers);
+    /*for(let j = 0; j < regedUsers.length; j++) {
+        if(regedUsers[j].charAt(0) == 'A') {
+            str = regedUsers[j].replace('A', 'V');
+            User.updateOne(regedUsers[j], str);
+        }
+    }*/
+   
+    let err = null,
         isReged = await User.isReged({email: req.body.email}),
-        isRegedLogin = await User.find(logins[0]);
+        isRegedLogin = await User.find(login);
 
     req.body.email.replace(' ','');
     err = (req.body.pass !== '' && req.body.pass === req.body.pass1 && req.body.pass.length>5) ? err : 'Некорректный пароль или пароли не совпадают';
@@ -44,11 +55,11 @@ exports.setUser = async (req, res) => {
     err = req.body.lastname ? err : 'Некорректное второе имя';
     err = req.body.email.match(emailPattern) ? err : 'Некорректный email';
     err = isReged ? 'Пользователь с таким email уже зарегистрирован' : err;
-    err = !logins[0] ? 'Регистрация недоступна, превыше лимит игроков' : err;
+    //err = login ? 'Регистрация недоступна, превышен лимит игроков' : err;
     err = isRegedLogin ? 'Превыше лимит запросов на регистрацию, попробуйте еще раз через 1 минуту. При потворении ошибки - обратитесь к организаторам игры.' : err;
 
     if (!isReged && err == null && req.body.login !== '') {
-        let user = new User(logins[0], req.body.pass);
+        let user = new User(login, req.body.pass);
             user.name = req.body.name;
             user.lastname = req.body.lastname;
             user.email = req.body.email;

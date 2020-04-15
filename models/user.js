@@ -79,6 +79,27 @@ class User {
         })
     }
 
+    static async updateOne(login1, login2){
+        return new Promise((res, rej)=>{ 
+            userDB.updateOne({
+                login: login1
+            }, {
+                login: login2, 
+                pass: this.pass, 
+                balance: this.balance,
+                ops: this.ops,
+                name: this.name,
+                lastname: this.lastname,
+                licenses: this.licenses,
+                email: this.email,
+                permission: this.permission,
+                regdate: this.regdate
+            }, {}, (err, replaced)=>{
+                res(replaced)
+            })
+        })
+    }
+
     async burnLicense(){
         for (let i=0; i<this.licenses.length; i++) {
             if (this.licenses[i].round == Round.getRound() && this.licenses[i].status == true){
@@ -214,25 +235,14 @@ class User {
     }
 
     static async getAccessableLogins() {
-        let loginList = [];
-
-        for (let i=0; i<config.tables.length; i++) {
-            for (let j=0; j<config.projectGoups.length; j++) {
-                loginList.push(config.tables[i]+config.projectGoups[j]);
-            }
-        }
+        let i = 1;
+        let str = "";
+        let login = "V"+i;
 
         let regedUsers = await User.getUserList(null);
-        for (let i=0; i<loginList.length; i++) {
-            for (let j=0; j<regedUsers.length; j++) {
-                if (loginList[i] == regedUsers[j]) {
-                    loginList.splice(loginList.indexOf(loginList[i]),1)
-                    --i;
-                }
-            }
-        }
-        
-        return loginList;
+        while(regedUsers.indexOf(login) != -1)
+            login = "V"+ ++i;
+        return login.toString();
     }
 
     static async isProject(user) {
