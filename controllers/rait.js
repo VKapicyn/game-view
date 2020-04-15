@@ -7,7 +7,6 @@ const License = require('../models/license').License;
 
 exports.getRaitPage = async (req, res) => {
     let admin,
-
         rounds = Round.getRoundList(),
         round = Round.getRound();
 
@@ -20,6 +19,7 @@ exports.getRaitPage = async (req, res) => {
 
     userDB.find({}).sort({balance: 1}).exec( async (err, items) => {
         let objectTypes = [];
+        console.log(config);
         config.objects.map(ob => {
             if (ob.status == 0) {
                 objectTypes.push(ob.value);

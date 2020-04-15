@@ -85,7 +85,7 @@
     <div class="col-lg-2 col-md-6 col-6">
         <h4>Ваши объявления:</h4> 
         {% for item in myActiveAds %}
-        <span style="cursor: pointer" onclick="myads({{item.num}},'{{item.offerType}}','{{item.predmet}}',{{item.price}})">Объявление #{{item.num}}</span> <a href="/cancel/ad/{{item.num}}" class="btn btn-default btn-xs">Отменить</a></br>
+        <span style="cursor: pointer" onclick="myads('{{item.num}}','{{item.offerType}}','{{item.predmet}}','{{item.price}}')">Объявление #{{item.num}}</span> <a href="/cancel/ad/{{item.num}}" class="btn btn-default btn-xs">Отменить</a></br>
         {% endfor %}
 
     </div>  

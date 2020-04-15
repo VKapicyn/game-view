@@ -2,7 +2,7 @@ const Round = require('./round');
 const SubsidyDB = require('../server').subsidyDB;
 const config = require('../config');
 
-class Subsidy{
+class Subsidy {
     constructor(login, round, amount, status){
         this.login = login || '';
         this.round = round || 1;

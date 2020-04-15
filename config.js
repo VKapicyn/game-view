@@ -1,4 +1,4 @@
-exports.port = 8888;
+exports.port = 8080;
 exports.token = 'super_sicret_parol_VIRO';
 exports.dbName = 'sessions';
 exports.adminLogins = ['Bank'];

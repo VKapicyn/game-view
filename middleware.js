@@ -27,3 +27,7 @@ exports.isAdmin = (req, res, next) => {
         return;
     }
 }
+
+exports.isPremium = (req, res, next) => {
+
+}

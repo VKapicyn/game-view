@@ -69,4 +69,4 @@ router.post('/license/sell', middleware.isReged, controller.auth.sellLic)
 router.post('/license/extend', middleware.isReged, controller.auth.extend)
 router.post('/advert/create', middleware.isReged, controller.board.createAdv)
 
-module.exports.router = router
+module.exports.router = router;

@@ -100,6 +100,7 @@ exports.getWalletPage = async (req, res) => {
         userList = await User.getUserList(req.session.user.login),
         charge = require('./admin').isAdmin(req.session.user.login);
         userName = await User.findAll();
+        who = ""; // кто поделился со мной или с кем поделился я - класть имя и второе имя (вопрос 8)
 
     if (user) {
         let    specBalance = await user.Balance();
@@ -128,8 +129,8 @@ exports.getWalletPage = async (req, res) => {
             specBalance,
             bankProcent: config.bankProcent,
             subsidyProcent: config.subsidyProcent,
-            subsidyLimit: await Subsidy.getSubsidyLimit(req.session.user.login),
-            creditLimit: await Credit.getCreditLimit(req.session.user.login)
+            //subsidyLimit: await Subsidy.getSubsidyLimit(req.session.user.login),
+            //creditLimit: await Credit.getCreditLimit(req.session.user.login)
         });
     } else {
         res.redirect('/reg')

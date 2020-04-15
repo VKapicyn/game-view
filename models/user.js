@@ -237,13 +237,15 @@ class User {
 
     static async isProject(user) {
         let result = false;
+        console.log(config);
 
-        for (let i=0; i<config.newProjects.length; i++) {
-            if (user.login == config.newProjects[i] || user == config.newProjects[i]) {
-                result = true;
-                break;
+        if(config.newProjects)
+            for (let i=0; i<config.newProjects.length; i++) {
+                if (user.login == config.newProjects[i] || user == config.newProjects[i]) {
+                    result = true;
+                    break;
+                }
             }
-        }
         
         return result;
     }

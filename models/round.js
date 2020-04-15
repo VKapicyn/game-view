@@ -33,12 +33,14 @@ exports.getRoundList = () => {
 }
 
 exports.onLoad = async () => {
-    return new Promise((res, rej) => {
+    
+    
+    /*return new Promise((res, rej) => {
         rounDB.find({}, (err, item) => {
             Round.round = item[0].round;
             res(Round.round)
         });
-    })
+    })*/
 }
 
 exports.update = async (last, _new) => {

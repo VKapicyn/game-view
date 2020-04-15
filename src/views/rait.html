@@ -3,17 +3,17 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-10 col-md-12">
-        <h3>Список счетов:</h3>
+        <h3>Рейтинг</h3>
         <table class="table">
             <thead>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">Номер счета</th>
+                <th scope="col">Место</th>
+                <th scope="col">ID</th>
                 <th scope="col">Кто</th>
                   {% if admin == true %}
                   <th scope="col">Email</th>
                 {% endif %}
-                <th scope="col">Баланс</th>
+                <th scope="col">Итог</th>
               </tr>
             </thead>
             <tbody>
@@ -32,7 +32,7 @@
             {% set balance = balance + item.balance%}
             {% endfor %}
             <tr>
-                <th scope="row">Итого</th>
+                <th scope="row">Всего</th>
                 <td > </td>
                 <td > </td>
                 <td ><b>{{balance}}</b></td>

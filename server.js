@@ -15,9 +15,20 @@ opsDB.loadDatabase();
 let tokensDB = new Datastore({filename: 'tokens'});
 tokensDB.loadDatabase();
 
+let rounDB = new Datastore({filename: 'rounds'}); // new db
+rounDB.loadDatabase();
+let advertDB = new Datastore({filename: 'adverts'}); // new db
+advertDB.loadDatabase();
+let SubsidyDB = new Datastore({filename: 'subsidy'}); // new db
+SubsidyDB.loadDatabase();
+
 module.exports.userDB = userDB;
 module.exports.opsDB = opsDB;
 module.exports.tokensDB = tokensDB;
+
+module.exports.rounDB = rounDB; // new db connection
+module.exports.advertDB = advertDB; // new db connection
+module.exports.SubsidyDB = SubsidyDB; // new db connection
 
 nunjucks.configure(__dirname + '/src/views', {
     autoescape: true,
@@ -51,5 +62,5 @@ require('./models/round').onLoad();
 module.exports.express = express;
 app.use('/', require('./router').router);
 app.listen(require('./config.js').port);
-console.log(`Running at Port ${config.port}`);
+console.log(`Server started on ${require('./config.js').port}`);
 module.exports.app = app;
