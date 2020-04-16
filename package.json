@@ -17,6 +17,7 @@
     "mongoose": "^5.9.9",
     "nedb": "^1.8.0",
     "nedb-session-store": "^1.1.2",
+    "nodemailer": "^6.4.6",
     "nodemon": "^1.18.5",
     "nunjucks": "^3.2.1",
     "recaptcha": "^1.2.1"
