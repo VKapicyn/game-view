@@ -38,7 +38,7 @@ exports.setUser = async (req, res) => {
 
     let regedUsers = await User.getUserList(null);
     console.log(regedUsers);
-    /*for(let j = 0; j < regedUsers.length; j++) {
+    /*for(let j = 0; j < regedUsers.length; j++) {      функция для замены всех "A.." в базе на "V.."
         if(regedUsers[j].charAt(0) == 'A') {
             str = regedUsers[j].replace('A', 'V');
             User.updateOne(regedUsers[j], str);
