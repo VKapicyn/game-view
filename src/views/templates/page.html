@@ -20,7 +20,8 @@
             </button>
         </div>
         <a class="navbar-brand" href="/">
-            <img src="/img/логотип2.png" width="32px" height="32px" style="margin-bottom: 10px;" class="d-inline-block align-top" alt="">
+            <img src="/img/логотип2.png" width="32px" height="32px" style="margin-top: -8px;" class="d-inline-block align-top" alt="">
+            <b><span class="font-size:15pt" id="mylogin2"></span></b>&nbsp;
         </a>
         <div class="collapse navbar-collapse" id="navbar-main">
             <ul class="navbar-nav">
@@ -88,8 +89,10 @@
         (async () => {
             let usr = await $.get('/api/mylogin');
             let span = document.getElementById('mylogin');
+            let span2 = document.getElementById('mylogin2');
             console.log(usr)
             span.innerHTML = usr.usr ? `Номер вашего счета: (${usr.usr})` : '';
+            span2.innerHTML = usr.usr ? `ID: (${usr.usr})` : '';
             if (!usr.usr)
                 document.getElementById('logout').remove();
         }

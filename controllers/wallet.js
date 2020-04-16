@@ -115,8 +115,7 @@ exports.getWalletPage = async (req, res) => {
             if(items[i].login == req.session.user.login) place = i+1;
         }
     if (user) {
-        let    specBalance = await user.Balance();
-
+        let specBalance = await user.Balance();
         userList.sort();
         /*let _licTypes = await User.getActualLic(user.login),
             __licTypes = await License.find(_licTypes);
