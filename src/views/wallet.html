@@ -7,7 +7,7 @@
             {% if (user.balance == specBalance) %}
                 {{user.balance}}&nbsp;&nbsp;&nbsp; Ваше место в рейтинге: {{place}}</h2>
             {% else %}
-                {% set dolg = user.balance-specBalance %}{{specBalance}} </h2>
+                {% set dolg = user.balance-specBalance %}{{specBalance}} &nbsp;&nbsp;&nbsp; Ваше место в рейтинге: {{place}}</h2>
                 <span>(Начисленно системой: +{{dolg*(-1)}}, за {{(dolg/50)*(-1)}} дней)</span>
             {% endif %}
 

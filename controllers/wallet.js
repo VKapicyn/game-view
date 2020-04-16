@@ -127,7 +127,8 @@ exports.getWalletPage = async (req, res) => {
             licList = licList.concat(licTypes);
         }*/
     
-        console.log(userName[0].login)
+        console.log(user.balance);
+        console.log(specBalance);
         res.render('wallet.html', {
             //actualLic: __licTypes,
             //licList,
