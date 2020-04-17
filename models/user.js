@@ -33,7 +33,7 @@ class User {
     async Balance() {
         let timestamp = Date.now();
 
-        const items = await User.findAll();
+        const items = await userDB.find({});
         for (let i=0; i<items.length; i++) {
             items[i] = new User(items[i].login, items[i].pass, items[i].ops, items[i].balance, items[i].name, items[i].lastname, items[i].licenses, items[i].email, items[i].permission, items[i].regdate);
             items[i].balance = await items[i].Balance();
@@ -52,7 +52,7 @@ class User {
         });
         let place = null;
         for(let i = 0; i < items.length; i++) {
-            if(items[i].login == user.login) {
+            if(items[i].login == User.login) {
                 place = i+1;
             }
         }
@@ -74,15 +74,15 @@ class User {
         dailyBalance = dailyBalance > 0 ? dailyBalance : 0;
         console.log(dailyBalance);
         return new Promise((res, rej) => {
-            if(user.email) {
-                /*transporter.sendMail({
+            if(User.email) {
+                transporter.sendMail({
                     from: config.sentEmail,
-                    to: user.email,
+                    to: User.email,
                     subject: "С Вами поделились VIRом!",
-                    html: user.name+", здравствуйте!<br><br>Системалась с Вами на 50.<br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
+                    html: User.name+", здравствуйте!<br><br>Системалась с Вами на 50.<br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
                     "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
                     "<img src='../src/img/логотип2.png' width='32px' height='32px'>"
-                });*/
+                });
             }
             advertDB.find({author: this.login, offerType: 'buy', contrAgent: '', status: true}, (err, items) => {
                 let minus = 0;
