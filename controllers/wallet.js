@@ -162,9 +162,20 @@ exports.send = async (req, res) => {
             items[i].balance = await items[i].Balance();
         }
         items.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0)); 
-        for (let i=0; i<items.length; i++) {
-            if(items[i].login == req.body.responser) place = i+1;
-        }
+        
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+              user: config.sentEmail,
+              pass: config.sentPass
+            }
+        });
+
+        let place = null;
+
         if (req.body.responser == 'Всем') {
             let sender = req.session.user.login,
                 amount = Math.floor(req.body.amount);
@@ -186,6 +197,23 @@ exports.send = async (req, res) => {
                         await senderUser.updateDB();
                         responsersUser[i].Ops = operation;
                         await responsersUser[i].updateDB();
+
+                        for(let j = 0; j < items.length; j++) {
+                            if(items[j].login == responsersUser[i].login) {
+                                place = j+1;
+                            }
+                        }
+                        if(responsersUser[i].email) {
+                            await transporter.sendMail({
+                                from: config.sentEmail,
+                                to: responsersUser[i].email,
+                                subject: "С Вами поделились VIRом!",
+                                html: responsersUser[i].name+", здравствуйте!<br><br>"+senderUser.name+" "+senderUser.lastname+
+                                " поделился(лась) с Вами на "+amount+".<br>Со словами: "+text+"<br><br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
+                                "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
+                                "<img src='../src/img/логотип2.png' width='32px' height='32px'>"
+                            });
+                        }
                     }
                 }          
             }
@@ -203,33 +231,30 @@ exports.send = async (req, res) => {
                 senderUser = await User.find(sender),
                 responserUser = await User.find(responser);
 
+            for(let j = 0; j < items.length; j++) {
+                if(items[j].login == responserUser.login) {
+                    place = j+1;
+                }
+            }
+
             if (amount > 0 && await senderUser.Balance() >= amount) {
                 operation = await operation.save();
                 senderUser.Ops = operation;
                 senderUser.updateDB();
                 responserUser.Ops = operation;
                 responserUser.updateDB();
-                let transporter = nodemailer.createTransport({
-                    host: 'smtp.gmail.com',
-                    port: 587,
-                    secure: false,
-                    requireTLS: true,
-                    auth: {
-                      user: "ivnprotsenko@gmail.com", // generated ethereal user
-                      pass: "Abc581321" // generated ethereal password
-                    }
-                });
-                console.log(responserUser.email);
-                let message = await transporter.sendMail({
-                    from: 'Ivan <ivnprotsenko@gmail.com>', // sender address
-                    to: responserUser.email, // list of receivers
-                    subject: "С Вами поделились VIRом!", // Subject line
-                    //text: , // plain text body
-                    html: responserUser.name+", здравствуйте!<br><br>"+senderUser.name+" "+senderUser.lastname+
-                    " поделился(лась) с Вами на "+amount+".<br>Со словами: "+text+"<br><br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
-                    "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
-                    "<img src='../src/img/логотип2.png' width='32px' height='32px'>"
-                });
+
+                if(responserUser.email) {
+                    await transporter.sendMail({
+                        from: 'Ivan <ivnprotsenko@gmail.com>',
+                        to: responserUser.email,
+                        subject: "С Вами поделились VIRом!",
+                        html: responserUser.name+", здравствуйте!<br><br>"+senderUser.name+" "+senderUser.lastname+
+                        " поделился(лась) с Вами на "+amount+".<br>Со словами: "+text+"<br><br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
+                        "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
+                        "<img src='../src/img/логотип2.png' width='32px' height='32px'>"
+                    });
+                }
             }
 
             res.redirect('/wallet');
