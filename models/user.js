@@ -7,7 +7,7 @@ const advertDB = require('../server').advertDB;
 const nodemailer = require("nodemailer");
 
 class User {
-    constructor(login, pass, ops, balance, name, lastname, licenses, email, permission, regdate) {
+    constructor(login, pass, ops, balance, name, lastname, licenses, email, permission, regdate, status, statusVerification) {
         this.login = login;
         this.pass = pass;
         this.ops = ops || []
@@ -18,6 +18,8 @@ class User {
         this.email = email || '';
         this.permission = permission || {};
         this.regdate = regdate || 0;
+        this.status = status || 0;
+        this.statusVerification = statusVerification || 0;
     }
 
     set Ops(item) {
@@ -95,7 +97,7 @@ class User {
     }
 
     async updateDB(){
-        return new Promise((res, rej)=>{ 
+        return new Promise((res, rej)=>{
             userDB.update({
                 login: this.login
             }, {
@@ -108,10 +110,13 @@ class User {
                 licenses: this.licenses,
                 email: this.email,
                 permission: this.permission,
-                regdate: this.regdate
+                regdate: this.regdate,
+                status: this.status,
+                statusVerification: this.statusVerification
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
+            
         })
     }
 
@@ -129,7 +134,9 @@ class User {
                 licenses: this.licenses,
                 email: this.email,
                 permission: this.permission,
-                regdate: this.regdate
+                regdate: this.regdate,
+                status: this.status,
+                statusVerification: this.statusVerification
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -178,7 +185,7 @@ class User {
             userDB.find({email: email}, (err, uD) => {
                 if (uD.length>0) {
                     uD = uD[0];
-                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission, uD.regdate);
+                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission, uD.regdate, uD.status, uD.statusVerification);
                     res(user);
                 }
                 else 
@@ -192,7 +199,7 @@ class User {
             userDB.find({login: login}, (err, uD) => {
                 if (uD.length>0) {
                     uD = uD[0];
-                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission, uD.regdate);
+                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission, uD.regdate, uD.status, uD.statusVerification);
                     res(user);
                 }
                 else 
@@ -205,7 +212,7 @@ class User {
             userDB.find({}, (err, uDs) => {
                 let users = [];
                 for (let i=0; i<uDs.length; i++) {
-                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, uDs[i].licenses, uDs[i].email, uDs[i].permission, uDs[i].regdate))
+                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, uDs[i].licenses, uDs[i].email, uDs[i].permission, uDs[i].regdate, uDs[i].status, uDs[i].statusVerification))
                 }
 
                 res(users)
@@ -283,7 +290,6 @@ class User {
 
     static async isProject(user) {
         let result = false;
-        console.log(config);
 
         if(config.newProjects)
             for (let i=0; i<config.newProjects.length; i++) {
@@ -337,7 +343,7 @@ class User {
 
     async save(){
         await userDB.insert({
-            login: this.login, 
+            login: this.login,
             pass: this.pass, 
             balance: this.balance,
             ops: this.ops,
@@ -346,7 +352,9 @@ class User {
             licenses: this.licenses, 
             email: this.email, 
             permission: this.permission,
-            regdate: this.regdate
+            regdate: this.regdate,
+            status: this.status,
+            statusVerification: this.statusVerification
         }, (err, item) => {})   
     }
 

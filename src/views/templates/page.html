@@ -46,6 +46,9 @@
                         Выйти
                     </a>
                 </li>
+                <li>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><span class="font-size:15pt" id="mystatus"></span></b>
+                </li>
     </div>
   </nav>
   <hr>
@@ -87,6 +90,13 @@
     <script>
         (async () => {
             let usr = await $.get('/api/mylogin');
+            let status = await $.get('/api/mystatus');
+            if(status.status == 0) {
+                let spanStatus =  document.getElementById('mystatus');
+                spanStatus.innerHTML = "Вы не подтвердили свой email, проверьте свою почту";
+            }
+            else
+                document.getElementById('mystatus').remove();
             let span = document.getElementById('mylogin2');
             span.innerHTML = usr.usr ? ` ${usr.usr}` : '';
             if (!usr.usr)

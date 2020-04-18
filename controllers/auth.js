@@ -4,6 +4,7 @@ const Ops = require('../models/ops').Operations;
 const config = require('../config');
 const Round = require('../models/round');
 const userDB = require('../server').userDB;
+const nodemailer = require("nodemailer");
 
 exports.logout = (req, res) => {
     delete req.session.user;
@@ -59,6 +60,7 @@ exports.setUser = async (req, res) => {
     err = isRegedLogin ? 'Превыше лимит запросов на регистрацию, попробуйте еще раз через 1 минуту. При потворении ошибки - обратитесь к организаторам игры.' : err;
 
     if (!isReged && err == null && req.body.login !== '') {
+        
         let user = new User(login, req.body.pass);
             user.name = req.body.name;
             user.lastname = req.body.lastname;
@@ -74,10 +76,43 @@ exports.setUser = async (req, res) => {
             regDate = new Date(regDate).setSeconds(0);
 
             user.regdate = new Date(regDate).getTime();
-            
+
+            hashCode = function(s) {
+                var h = 0, l = s.length, i = 0;
+                if ( l > 0 )
+                    while (i < l)
+                        h = (h << 5) - h + s.charCodeAt(i++) | 0;
+                return Math.abs(h);
+            };
+            user.statusVerification = await hashCode((req.body.name+Date.now()).toString());
+
+            let transporter = nodemailer.createTransport({
+                host: 'smtp.gmail.com',
+                port: 587,
+                secure: false,
+                requireTLS: true,
+                auth: {
+                  user: config.sentEmail,
+                  pass: config.sentPass
+                }
+            });
+            await transporter.sendMail({
+                from: config.sentEmail,
+                to: user.email,
+                subject: "Подтверждение почты на сайте",
+                html: user.name+", здравствуйте!<br><br>Перейдите по ссылке ниже, чтобы получить доступ ко всем функциям нашего сайта"+
+                "<br><br><a class='btn btn-primary'"+
+                "href='http://localhost:8080/verification/"+user.statusVerification+"'>Нажмите сюда, чтобы подтвердить почту</a>"
+            });
+
         await user.save();
+
+        console.log(user);
         
-    user.updateDB()
+        user.updateDB();
+
+        user2 = await User.find(user.login);
+        console.log(user2);
 
         req.session.user = {id: user._id, login: user.login, session: req.sessionID}
         req.session.save();
@@ -209,5 +244,18 @@ async function oplataLic(senderUser, licName, amount) {
         return true;
     } else {
         return false;
+    }
+}
+
+exports.emailVerification = async (req, res) => {
+    const user = await User.find(req.session.user.login);
+    const verification = req.params.code;
+    if(user.statusVerification == verification) {
+        user.status = 1;
+        user.save();
+        await user.updateDB;
+        res.redirect('/wallet');
+    } else {
+        res.redirect('/reg');
     }
 }

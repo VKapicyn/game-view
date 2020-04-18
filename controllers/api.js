@@ -2,6 +2,7 @@ const Round = require('../models/round');
 const Ops = require('../models/ops').Operations; 
 const Credit = require('../models/credit').Credit;
 const Advert = require('../models/advert').Advert;
+const User = require('../models/user').User;
 const { parse } = require('json2csv');
 
 exports.txs = async (req, res) => {
@@ -61,6 +62,17 @@ exports.getMyLogin = async (req, res) => {
     let usr;
     try{
         usr = req.session.user.login
-    } catch (e) {usr = null}
+    } catch (e) {usr = null};
+    
     res.json({usr})
+}
+
+exports.getMyStatus = async (req, res) => {
+    let usr;
+    try{
+        usr = req.session.user.login
+    } catch (e) {usr = null};
+    const user = await User.find(usr);
+    let status = user.status;
+    res.json({status});
 }
