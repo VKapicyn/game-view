@@ -28,7 +28,8 @@ async function loginsChange() {
             await user.updateDB();
         }
     }
+    console.log("exiting");
+    process.exit();
 }
 
 loginsChange();
-//process.exit();
