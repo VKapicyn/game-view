@@ -14,7 +14,6 @@ async function loginsChange() {
         if(regedUsers[j].charAt(0) != 'V') {
             const login = await User.getAccessableLogins();
             let user = await User.find(regedUsers[j]);
-            user.login = login;
             for(let i = 0; i < ops.length; i++) {
                 let op = await Operations.findById(ops[i]._id);
                 if(op.sender == regedUsers[i]) {
@@ -24,10 +23,12 @@ async function loginsChange() {
                 }
                 await op.updateOpsDB();
             }
+            user.login = login;
+            user.status = 1;
             await user.updateDB();
         }
     }
 }
 
 loginsChange();
-process.exit();
+//process.exit();
