@@ -242,9 +242,9 @@ exports.emailVerification = async (req, res) => {
     const user = await User.find(req.session.user.login);
     const verification = req.params.code;
     if(user.statusVerification == verification) {
+        console.log("VERIFIED!");
         user.status = 1;
-        user.save();
-        await user.updateDB;
+        await user.updateDB();
         res.redirect('/wallet');
     } else {
         res.redirect('/reg');

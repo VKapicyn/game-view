@@ -2,7 +2,8 @@ const opsDB = require('../server').opsDB;
 const roundModel = require('../models/round');
 
 class Operations {
-    constructor(sender, responser, amount, text, type, count){
+    constructor(_id, sender, responser, amount, text, count, type){
+        this._id = _id || ObjectId();
         this.sender = sender;
         this.responser = responser;
         this.amount = amount;
@@ -10,12 +11,13 @@ class Operations {
         this.count = count || 1;
         this.date = new Date();
         this.type = type || 'Другое';
-        this.round = roundModel.getRound()
+        this.round = roundModel.getRound();
     }
 
     async save() {
         return new Promise((res, rej) => {
             opsDB.insert({
+                _id: this._id,
                 sender: this.sender,
                 responser: this.responser,
                 amount: this.amount,
@@ -28,10 +30,10 @@ class Operations {
         });
     }
 
-    async updateDB(){
+    async updateOpsDB(){
         return new Promise((res, rej)=>{
-            userDB.update({
-                sender: this.sender
+            opsDB.update({
+                _id: this._id,
             }, {
                 sender: this.sender,
                 responser: this.responser,
@@ -88,6 +90,20 @@ class Operations {
     static async find() {
         //opsDB.find({}).
         return null;
+    }
+
+    static async findById(id){
+        return new Promise((res, rej) => {
+            opsDB.find({_id: id}, (err, uD) => {
+                if (uD.length>0) {
+                    uD = uD[0];
+                    let op = new Operations(uD._id, uD.sender, uD.responser, uD.amount, uD.text, uD.count, uD.date, uD.round, uD.type);
+                    res(op);
+                }
+                else 
+                    res(null);
+            });
+        }) 
     }
 
     static async findAll(date) {

@@ -26,7 +26,7 @@
         <div class="collapse navbar-collapse" id="navbar-main">
             <ul class="navbar-nav">
                 <li>
-                    <a href="/wallet">ID:</a>
+                    <a href="/wallet" id="wallet"></a>
                     <b><span class="font-size:15pt" id="mylogin2"></span></b>&nbsp;&nbsp;&nbsp;
                 </li>
                 <li>
@@ -41,10 +41,7 @@
                 </li>
                 <li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
                 <li>
-                    <b><span class="font-size:15pt" id="mylogin"></span></b>&nbsp;
-                    <a href="/logout" id="logout">
-                        Выйти
-                    </a>
+                    <b><a href="/logout" id="logout"><span class="font-size:15pt" id="mylogin"></span></a></b>&nbsp;
                 </li>
                 <li>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><span class="font-size:15pt" id="mystatus"></span></b>
@@ -97,8 +94,12 @@
             }
             else
                 document.getElementById('mystatus').remove();
-            let span = document.getElementById('mylogin2');
-            span.innerHTML = usr.usr ? ` ${usr.usr}` : '';
+            let span = document.getElementById('mylogin');
+            let span2 = document.getElementById('mylogin2');
+            let wallet = document.getElementById('wallet');
+            span.innerHTML = usr.usr ? `Выйти ` : '';
+            span2.innerHTML = usr.usr ? `${usr.usr} ` : '';
+            wallet.innerHTML = usr.usr ? `ID: ` : '';
             if (!usr.usr)
                 document.getElementById('logout').remove();
         }
