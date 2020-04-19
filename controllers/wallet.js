@@ -6,6 +6,7 @@ const Round = require('../models/round');
 const Credit = require('../models/credit').Credit;
 const Subsidy = require('../models/subsidy').Subsidy;
 const config = require('../config');
+const path = require('path')
 const nodemailer = require("nodemailer");
 
 exports.charge = async (req, res) => {
@@ -211,7 +212,12 @@ exports.send = async (req, res) => {
                                 html: responsersUser[i].name+", здравствуйте!<br><br>"+senderUser.name+" "+senderUser.lastname+
                                 " поделился(лась) с Вами на "+amount+".<br>Со словами: "+text+"<br><br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
                                 "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
-                                "<img src='../src/img/логотип2.png' width='32px' height='32px'>"
+                                "<img src='cid:uniq-логотип2.png' alt='логотип2' width='32px' height='32px'>",
+                                attachments: [{
+                                    filename: 'логотип2.png',
+                                    path: __dirname + '/../src/img/логотип2.png',
+                                    cid: 'uniq-логотип2.png'
+                                }]
                             });
                         }
                     }
@@ -252,7 +258,12 @@ exports.send = async (req, res) => {
                         html: responserUser.name+", здравствуйте!<br><br>"+senderUser.name+" "+senderUser.lastname+
                         " поделился(лась) с Вами на "+amount+".<br>Со словами: "+text+"<br><br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
                         "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
-                        "<img src='../src/img/логотип2.png' width='32px' height='32px'>"
+                        "<img src='cid:uniq-логотип2.png' alt='логотип2' width='32px' height='32px'>",
+                        attachments: [{
+                            filename: 'логотип2.png',
+                            path: __dirname + '/../src/img/логотип2.png',
+                            cid: 'uniq-логотип2.png'
+                        }]
                     });
                 }
             }

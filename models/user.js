@@ -83,7 +83,12 @@ class User {
                     subject: "С Вами поделились VIRом!",
                     html: User.name+", здравствуйте!<br><br>Системалась с Вами на 50.<br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
                     "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
-                    "<img src='../src/img/логотип2.png' width='32px' height='32px'>"
+                    "<img src='cid:uniq-логотип2.png' alt='логотип2' width='32px' height='32px'>",
+                    attachments: [{
+                        filename: 'логотип2.png',
+                        path: __dirname + '/../src/img/логотип2.png',
+                        cid: 'uniq-логотип2.png'
+                    }]
                 });
             }
             advertDB.find({author: this.login, offerType: 'buy', contrAgent: '', status: true}, (err, items) => {
