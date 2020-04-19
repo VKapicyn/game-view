@@ -52,7 +52,7 @@ class User {
         });
         let place = null;
         for(let i = 0; i < items.length; i++) {
-            if(items[i].login == User.login) {
+            if(items[i].login == this.login) {
                 place = i+1;
             }
         }
@@ -73,11 +73,8 @@ class User {
         let dailyBalance = Math.floor((( timestamp - this.regdate )/86400000)) * 50;
         dailyBalance = dailyBalance > 0 ? dailyBalance : 0;
         console.log(dailyBalance);
-        console.log('тут 1?')
         return new Promise((res, rej) => {
-            console.log('тут 2? '+this.email)
             if(this.email) {
-                console.log('тут 3?')
                 transporter.sendMail({
                     from: config.sentEmail,
                     to: this.email,
@@ -92,6 +89,7 @@ class User {
                     }]
                 });
             }
+            res();
         })
     }
 

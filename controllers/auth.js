@@ -6,6 +6,17 @@ const Round = require('../models/round');
 const userDB = require('../models/user').userDB;
 const nodemailer = require("nodemailer");
 
+let transporter = nodemailer.createTransport({
+    host: config.host,
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: {
+      user: config.sentEmail,
+      pass: config.sentPass
+    }
+});
+
 exports.logout = (req, res) => {
     delete req.session.user;
     res.redirect('/');
@@ -80,17 +91,7 @@ exports.setUser = async (req, res) => {
             };
             user.statusVerification = await hashCode((req.body.name+Date.now()).toString());
 
-            let transporter = nodemailer.createTransport({
-                host: config.host,
-                port: 587,
-                secure: false,
-                requireTLS: true,
-                auth: {
-                  user: config.sentEmail,
-                  pass: config.sentPass
-                }
-            });
-            await transporter.sendMail({
+            transporter.sendMail({
                 from: config.sentEmail,
                 to: user.email,
                 subject: "Подтверждение почты на сайте",

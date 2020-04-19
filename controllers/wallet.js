@@ -9,6 +9,17 @@ const config = require('../config');
 const path = require('path')
 const nodemailer = require("nodemailer");
 
+let transporter = nodemailer.createTransport({
+    host: config.host,
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: {
+      user: config.sentEmail,
+      pass: config.sentPass
+    }
+});
+
 exports.charge = async (req, res) => {
     let sender = req.body.responser,
         responser = req.session.user.login,
@@ -164,17 +175,6 @@ exports.send = async (req, res) => {
         }
         items.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0)); 
         
-        let transporter = nodemailer.createTransport({
-            host: config.host,
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-              user: config.sentEmail,
-              pass: config.sentPass
-            }
-        });
-
         let place = null;
 
         if (req.body.responser == 'Всем') {
@@ -205,7 +205,7 @@ exports.send = async (req, res) => {
                             }
                         }
                         if(responsersUser[i].email) {
-                            await transporter.sendMail({
+                            transporter.sendMail({
                                 from: config.sentEmail,
                                 to: responsersUser[i].email,
                                 subject: "С Вами поделились VIRом!",
@@ -251,7 +251,7 @@ exports.send = async (req, res) => {
                 responserUser.updateDB();
 
                 if(responserUser.email) {
-                    await transporter.sendMail({
+                    ransporter.sendMail({
                         from: config.sentEmail,
                         to: responserUser.email,
                         subject: "С Вами поделились VIRом!",
