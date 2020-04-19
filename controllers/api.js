@@ -76,3 +76,8 @@ exports.getMyStatus = async (req, res) => {
     let status = user.status;
     res.json({status});
 }
+
+exports.isProduction = async (req, res) => {
+    const prod = config.isProduction;
+    res.json({prod});
+}

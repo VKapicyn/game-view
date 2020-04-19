@@ -49,6 +49,8 @@ router.get('/api/v1/:type/adverts', controller.api.adverts);
 router.get('/api', controller.api.getPage);
 router.get('/api/mylogin', controller.api.getMyLogin)
 router.get('/api/mystatus', controller.api.getMyStatus);
+router.get('/api/isProd', controller.api.isProduction);
+
 
 router.get('/verification/:code', controller.auth.emailVerification);
 

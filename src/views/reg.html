@@ -33,13 +33,15 @@
 </div>
 
 <script>
-    window.onload = function() {
-        var $recaptcha = document.querySelector('#g-recaptcha-response');
-
-        if($recaptcha) {
-            $recaptcha.setAttribute("required", "required");
-        }
-    };
+    let prod = await $.get('/api/isProd');
+    if(prod.prod) { // отключение обязательного поля
+        window.onload = function() {
+            var $recaptcha = document.querySelector('#g-recaptcha-response');
+            if($recaptcha) {
+                $recaptcha.setAttribute("required", "required");
+            }
+        };
+    }
 </script>
 
 {% endblock %}

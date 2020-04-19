@@ -164,7 +164,7 @@ exports.send = async (req, res) => {
         items.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0)); 
         
         let transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
+            host: 'mail.hosting.reg.ru',
             port: 587,
             secure: false,
             requireTLS: true,
@@ -246,7 +246,7 @@ exports.send = async (req, res) => {
 
                 if(responserUser.email) {
                     await transporter.sendMail({
-                        from: 'Ivan <ivnprotsenko@gmail.com>',
+                        from: config.sentEmail,
                         to: responserUser.email,
                         subject: "С Вами поделились VIRом!",
                         html: responserUser.name+", здравствуйте!<br><br>"+senderUser.name+" "+senderUser.lastname+
