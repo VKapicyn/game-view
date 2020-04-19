@@ -4,6 +4,17 @@ userDB.loadDatabase();
 const config = require('../config');
 const nodemailer = require("nodemailer");
 
+let transporter = nodemailer.createTransport({
+    host: config.host,
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: {
+      user: config.sentEmail,
+      pass: config.sentPass
+    }
+});
+
 class User {
     constructor(login, pass, ops, balance, name, lastname, licenses, email, permission, regdate, status, statusVerification) {
         this.login = login;
@@ -40,16 +51,6 @@ class User {
         }
         items.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0)); 
         
-        let transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-              user: config.sentEmail,
-              pass: config.sentPass
-            }
-        });
         let place = null;
         for(let i = 0; i < items.length; i++) {
             if(items[i].login == this.login) {
