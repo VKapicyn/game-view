@@ -3,7 +3,7 @@ const License = require('../models/license').License;
 const Ops = require('../models/ops').Operations;
 const config = require('../config');
 const Round = require('../models/round');
-const userDB = require('../server').userDB;
+const userDB = require('../models/user').userDB;
 const nodemailer = require("nodemailer");
 
 exports.logout = (req, res) => {

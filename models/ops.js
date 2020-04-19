@@ -1,5 +1,7 @@
-const opsDB = require('../server').opsDB;
-const roundModel = require('../models/round');
+const Datastore = require('nedb');
+let opsDB = new Datastore({filename: 'operations'});
+opsDB.loadDatabase();
+//const roundModel = require('../models/round');
 
 class Operations {
     constructor(_id, sender, responser, amount, text, count, type){
@@ -11,7 +13,7 @@ class Operations {
         this.count = count || 1;
         this.date = new Date();
         this.type = type || 'Другое';
-        this.round = roundModel.getRound();
+        this.round = 1;
     }
 
     async save() {

@@ -8,10 +8,6 @@ const nedbStore = require('nedb-session-store')( session );
 const app = express();
 let config = require('./config.js');
 
-let userDB = new Datastore({filename: 'users'});
-userDB.loadDatabase();
-let opsDB = new Datastore({filename: 'operations'});
-opsDB.loadDatabase();
 let tokensDB = new Datastore({filename: 'tokens'});
 tokensDB.loadDatabase();
 
@@ -22,8 +18,6 @@ advertDB.loadDatabase();
 let SubsidyDB = new Datastore({filename: 'subsidy'}); // new db
 SubsidyDB.loadDatabase();
 
-module.exports.userDB = userDB;
-module.exports.opsDB = opsDB;
 module.exports.tokensDB = tokensDB;
 
 module.exports.rounDB = rounDB; // new db connection

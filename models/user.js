@@ -1,9 +1,7 @@
-const userDB = require('../server').userDB;
+const Datastore = require('nedb');
+let userDB = new Datastore({filename: 'users'});
+userDB.loadDatabase();
 const config = require('../config');
-const Round = require('../models/round');
-const License = require('../models/license').License;
-const Advert = require('../models/advert').Advert;
-const advertDB = require('../server').advertDB;
 const nodemailer = require("nodemailer");
 
 class User {
@@ -75,13 +73,16 @@ class User {
         let dailyBalance = Math.floor((( timestamp - this.regdate )/86400000)) * 50;
         dailyBalance = dailyBalance > 0 ? dailyBalance : 0;
         console.log(dailyBalance);
+        console.log('тут 1?')
         return new Promise((res, rej) => {
-            if(User.email) {
+            console.log('тут 2? '+this.email)
+            if(this.email) {
+                console.log('тут 3?')
                 transporter.sendMail({
                     from: config.sentEmail,
-                    to: User.email,
+                    to: this.email,
                     subject: "С Вами поделились VIRом!",
-                    html: User.name+", здравствуйте!<br><br>Системалась с Вами на 50.<br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
+                    html: this.name+", здравствуйте!<br><br>Системалась с Вами на 50.<br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
                     "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
                     "<img src='cid:uniq-логотип2.png' alt='логотип2' width='32px' height='32px'>",
                     attachments: [{
@@ -91,13 +92,6 @@ class User {
                     }]
                 });
             }
-            advertDB.find({author: this.login, offerType: 'buy', contrAgent: '', status: true}, (err, items) => {
-                let minus = 0;
-                items.map(item => {
-                    minus = Number(minus)+Number(item.price)
-                })
-                res(Number(this.balance - minus) + Number(dailyBalance))
-            })
         })
     }
 
@@ -372,4 +366,5 @@ class User {
     }
 }
 
+module.exports.userDB = userDB;
 module.exports.User = User;

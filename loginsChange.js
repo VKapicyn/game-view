@@ -1,8 +1,4 @@
 const User = require('./models/user').User;
-const License = require('./models/license').License;
-const config = require('./config');
-const Round = require('./models/round');
-const userDB = require('./server').userDB;
 const Operations = require('./models/ops').Operations;
 
 async function loginsChange() {
@@ -29,7 +25,7 @@ async function loginsChange() {
         }
     }
     console.log("exiting");
-    process.exit();
+
 }
 
 loginsChange();
