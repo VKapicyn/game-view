@@ -6,6 +6,17 @@ const Advert = require('../models/advert').Advert;
 const advertDB = require('../server').advertDB;
 const nodemailer = require("nodemailer");
 
+let transporter = nodemailer.createTransport({
+    host: config.host,
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: {
+      user: config.sentEmail,
+      pass: config.sentPass
+    }
+});
+
 class User {
     constructor(login, pass, ops, balance, name, lastname, licenses, email, permission, regdate, status, statusVerification) {
         this.login = login;
@@ -42,19 +53,9 @@ class User {
         }
         items.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0)); 
         
-        let transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-              user: config.sentEmail,
-              pass: config.sentPass
-            }
-        });
         let place = null;
         for(let i = 0; i < items.length; i++) {
-            if(items[i].login == User.login) {
+            if(items[i].login == this.login) {
                 place = i+1;
             }
         }
@@ -76,12 +77,12 @@ class User {
         dailyBalance = dailyBalance > 0 ? dailyBalance : 0;
         console.log(dailyBalance);
         return new Promise((res, rej) => {
-            if(User.email) {
+            if(this.email) {
                 transporter.sendMail({
                     from: config.sentEmail,
-                    to: User.email,
+                    to: this.email,
                     subject: "С Вами поделились VIRом!",
-                    html: User.name+", здравствуйте!<br><br>Системалась с Вами на 50.<br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
+                    html: this.name+", здравствуйте!<br><br>Системалась с Вами на 50.<br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
                     "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
                     "<img src='cid:uniq-логотип2.png' alt='логотип2' width='32px' height='32px'>",
                     attachments: [{
