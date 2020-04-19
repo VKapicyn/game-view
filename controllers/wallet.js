@@ -165,7 +165,7 @@ exports.send = async (req, res) => {
         items.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0)); 
         
         let transporter = nodemailer.createTransport({
-            host: 'mail.hosting.reg.ru',
+            host: config.host,
             port: 587,
             secure: false,
             requireTLS: true,

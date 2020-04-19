@@ -39,12 +39,6 @@ exports.setUser = async (req, res) => {
 
     let regedUsers = await User.getUserList(null);
     console.log(regedUsers);
-    /*for(let j = 0; j < regedUsers.length; j++) {      функция для замены всех "A.." в базе на "V.."
-        if(regedUsers[j].charAt(0) == 'A') {
-            str = regedUsers[j].replace('A', 'V');
-            User.updateOne(regedUsers[j], str);
-        }
-    }*/
    
     let err = null,
         isReged = await User.isReged({email: req.body.email}),
@@ -87,7 +81,7 @@ exports.setUser = async (req, res) => {
             user.statusVerification = await hashCode((req.body.name+Date.now()).toString());
 
             let transporter = nodemailer.createTransport({
-                host: 'smtp.gmail.com',
+                host: config.host,
                 port: 587,
                 secure: false,
                 requireTLS: true,
@@ -102,17 +96,12 @@ exports.setUser = async (req, res) => {
                 subject: "Подтверждение почты на сайте",
                 html: user.name+", здравствуйте!<br><br>Перейдите по ссылке ниже, чтобы получить доступ ко всем функциям нашего сайта"+
                 "<br><br><a class='btn btn-primary'"+
-                "href='http://localhost:8080/verification/"+user.statusVerification+"'>Нажмите сюда, чтобы подтвердить почту</a>"
+                "href='"+config.domen+"verification/"+user.statusVerification+"'>Нажмите сюда, чтобы подтвердить почту</a>"
             });
 
         await user.save();
-
-        console.log(user);
         
         user.updateDB();
-
-        user2 = await User.find(user.login);
-        console.log(user2);
 
         req.session.user = {id: user._id, login: user.login, session: req.sessionID}
         req.session.save();
@@ -148,7 +137,9 @@ exports.getRegPage = async (req, res) => {
             throw new Error('Нет такого юзера')
         res.redirect('/')
     } catch(e) {
-        res.render('reg.html')
+        res.render('reg.html', {
+            secretKey: config.secretKey
+        })
     }
 
 }

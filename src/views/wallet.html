@@ -11,7 +11,7 @@
                 <span>(Начисленно системой: +{{dolg*(-1)}}, за {{(dolg/50)*(-1)}} дней)</span>
             {% endif %}
 
-        {% if stop == false %}
+        {% if stop == false and user.status %}
         <hr>
         <h3>Поделиться:</h3>
         <form action="/send" method="POST" onsubmit="return confirm('Подтвердите перевод');">
@@ -54,6 +54,9 @@
         </form>
         <br>
         {% endif %}
+    </div>
+    {% elif user.status == 0 %}
+    <h3>Вы не подтвердили свою почту</h3>
     </div>
     {% else %}
     <h3>Гейм завершён. Чтобы совершить перевод, дождитесь следующего гейма.</h3>

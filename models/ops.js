@@ -28,6 +28,26 @@ class Operations {
         });
     }
 
+    async updateDB(){
+        return new Promise((res, rej)=>{
+            userDB.update({
+                sender: this.sender
+            }, {
+                sender: this.sender,
+                responser: this.responser,
+                amount: this.amount,
+                text:  this.text,
+                count: this.count,
+                date: this.date,
+                round: this.round,
+                type: this.type
+            }, {}, (err, replaced)=>{
+                res(replaced)
+            })
+            
+        })
+    }
+
     static async getOpsByUser(login) {
         return new Promise( (res, rej) => {
             opsDB.find({'$or': [

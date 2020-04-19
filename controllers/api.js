@@ -3,6 +3,7 @@ const Ops = require('../models/ops').Operations;
 const Credit = require('../models/credit').Credit;
 const Advert = require('../models/advert').Advert;
 const User = require('../models/user').User;
+const config = require('../config');
 const { parse } = require('json2csv');
 
 exports.txs = async (req, res) => {
@@ -75,6 +76,11 @@ exports.getMyStatus = async (req, res) => {
     const user = await User.find(usr);
     let status = user.status;
     res.json({status});
+}
+
+exports.getSecretKey = async (req, res) => {
+    const key = config.secretKey;
+    res.json({key});
 }
 
 exports.isProduction = async (req, res) => {

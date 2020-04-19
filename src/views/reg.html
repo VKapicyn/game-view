@@ -24,7 +24,7 @@
             <br>
             <input id="pass1" name="pass1" class="form-control" type="password" placeholder="Повторите пароль">
             <br>
-            <div class="g-recaptcha" data-sitekey="6Ld9WOoUAAAAAOu6VjnquCTJAQXkIU-SWJZrxs0m"></div>
+            <div class='g-recaptcha' data-sitekey='{{secretKey}}'></div>
             <br>
             <button type="input" class="btn btn-primary">Зарегистрироваться</button>
         </form>
@@ -33,10 +33,10 @@
 </div>
 
 <script>
-    let prod = await $.get('/api/isProd');
-    if(prod.prod) { // отключение обязательного поля
-        window.onload = function() {
-            var $recaptcha = document.querySelector('#g-recaptcha-response');
+    window.onload = async function() {
+        let prod = await $.get('/api/isProd');
+        if(prod.prod) { // отключение обязательного поля
+            var $recaptcha = await document.querySelector('#g-recaptcha-response');
             if($recaptcha) {
                 $recaptcha.setAttribute("required", "required");
             }

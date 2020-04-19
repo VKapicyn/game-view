@@ -91,7 +91,7 @@
         (async () => {
             let usr = await $.get('/api/mylogin');
             let status = await $.get('/api/mystatus');
-            if(status.status == 0) {
+            if(status.status == 0 && usr.usr) {
                 let spanStatus =  document.getElementById('mystatus');
                 spanStatus.innerHTML = "Вы не подтвердили свой email, проверьте свою почту";
             }

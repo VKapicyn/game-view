@@ -284,12 +284,13 @@ class User {
 
     static async getAccessableLogins() {
         let i = 1;
-        let str = "";
-        let login = "V"+i;
+        let login = "V0"+i;
 
         let regedUsers = await User.getUserList(null);
-        while(regedUsers.indexOf(login) != -1)
-            login = "V"+ ++i;
+        while(regedUsers.indexOf(login) != -1) {
+            if(i < 9) login = "V0"+ ++i;
+            else login = "V"+ ++i;
+        }
         return login.toString();
     }
 
