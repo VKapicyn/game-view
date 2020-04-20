@@ -11,7 +11,7 @@
                 <span>(Начисленно системой: +{{dolg*(-1)}}, за {{(dolg/50)*(-1)}} дней)</span>
             {% endif %}
 
-        {% if stop == false and user.status %}
+        {% if stop == false and user.status == 0 %}
         <hr>
         <h3>Поделиться:</h3>
         <form action="/send" method="POST" onsubmit="return confirm('Подтвердите перевод');">

@@ -47,7 +47,7 @@ exports.getRaitPage = async (req, res) => {
             items[i] = new User(items[i].login, items[i].pass, items[i].ops, items[i].balance, items[i].name, items[i].lastname, items[i].licenses, items[i].email, items[i].permission, items[i].regdate);
             items[i].balance = await items[i].Balance();
         }
-        items.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0)); 
+        items.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0)); 
         res.render('rait.html', {items, admin, lices: await License.getAllTypes(), rounds, round, objectTypes});
     });
 }

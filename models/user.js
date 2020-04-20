@@ -8,8 +8,8 @@ const nodemailer = require("nodemailer");
 
 let transporter = nodemailer.createTransport({
     host: config.host,
-    port: 587,
-    secure: false,
+    port: 465,
+    secure: true,
     requireTLS: true,
     auth: {
       user: config.sentEmail,
@@ -18,7 +18,7 @@ let transporter = nodemailer.createTransport({
 });
 
 class User {
-    constructor(login, pass, ops, balance, name, lastname, licenses, email, permission, regdate, status, statusVerification) {
+    constructor(login, pass, ops, balance, name, lastname, licenses, email, permission, regdate, status, statusVerification, emailSent) {
         this.login = login;
         this.pass = pass;
         this.ops = ops || []
@@ -31,6 +31,7 @@ class User {
         this.regdate = regdate || 0;
         this.status = status || 0;
         this.statusVerification = statusVerification || 0;
+        this.emailSent = emailSent || 0;
     }
 
     set Ops(item) {
@@ -43,22 +44,24 @@ class User {
         this.ops.push(item._id);
     }
 
-    async Balance() {
-        let timestamp = Date.now();
-
-        const items = await userDB.find({});
-        for (let i=0; i<items.length; i++) {
-            items[i] = new User(items[i].login, items[i].pass, items[i].ops, items[i].balance, items[i].name, items[i].lastname, items[i].licenses, items[i].email, items[i].permission, items[i].regdate);
-            items[i].balance = await items[i].Balance();
-        }
+    async findPlace(login) {
+        const items = await User.findAll();
         items.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0)); 
         
         let place = null;
         for(let i = 0; i < items.length; i++) {
-            if(items[i].login == this.login) {
+            if(items[i].login == login) {
                 place = i+1;
+                console.log(place);
             }
         }
+        return place;
+    }
+
+    async Balance() {
+        let timestamp = Date.now();
+
+        let place = await this.findPlace(this.login);
 
         if (!this.regdate) {
             let regDate = Date.now();
@@ -71,27 +74,29 @@ class User {
 
             this.regdate = new Date(regDate).getTime();
             await this.updateDB(this.login);
-        } 
-        console.log(this.regdate)
+        }
         let dailyBalance = Math.floor((( timestamp - this.regdate )/86400000)) * 50;
         dailyBalance = dailyBalance > 0 ? dailyBalance : 0;
         console.log(dailyBalance);
+        if(this.email && this.emailSent < (dailyBalance / 50)) {
+            transporter.sendMail({
+                from: config.sentEmail,
+                to: this.email,
+                subject: "С Вами поделились VIRом!",
+                html: this.name+", здравствуйте!<br><br>Система поделилась с Вами на "+(dailyBalance-this.emailSent*50)+".<br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
+                "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
+                "<img src='cid:uniq-логотип2.png' alt='логотип2' width='32px' height='32px'>",
+                attachments: [{
+                    filename: 'логотип2.png',
+                    path: __dirname + '/../src/img/логотип2.png',
+                    cid: 'uniq-логотип2.png'
+                }]
+            });
+            this.emailSent = dailyBalance / 50;
+            console.log(this.emailSent + " + " + dailyBalance/50);
+            await this.updateDB(this.login);
+        }
         return new Promise((res, rej) => {
-            if(this.email) {
-                transporter.sendMail({
-                    from: config.sentEmail,
-                    to: this.email,
-                    subject: "С Вами поделились VIRом!",
-                    html: this.name+", здравствуйте!<br><br>Системалась с Вами на 50.<br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
-                    "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
-                    "<img src='cid:uniq-логотип2.png' alt='логотип2' width='32px' height='32px'>",
-                    attachments: [{
-                        filename: 'логотип2.png',
-                        path: __dirname + '/../src/img/логотип2.png',
-                        cid: 'uniq-логотип2.png'
-                    }]
-                });
-            }
             advertDB.find({author: this.login, offerType: 'buy', contrAgent: '', status: true}, (err, items) => {
                 let minus = 0;
                 items.map(item => {
@@ -118,7 +123,8 @@ class User {
                 permission: this.permission,
                 regdate: this.regdate,
                 status: this.status,
-                statusVerification: this.statusVerification
+                statusVerification: this.statusVerification,
+                emailSent: this.emailSent
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -142,7 +148,8 @@ class User {
                 permission: this.permission,
                 regdate: this.regdate,
                 status: this.status,
-                statusVerification: this.statusVerification
+                statusVerification: this.statusVerification,
+                emailSent: this.emailSent
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -191,7 +198,7 @@ class User {
             userDB.find({email: email}, (err, uD) => {
                 if (uD.length>0) {
                     uD = uD[0];
-                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission, uD.regdate, uD.status, uD.statusVerification);
+                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission, uD.regdate, uD.status, uD.statusVerification, uD.emailSent);
                     res(user);
                 }
                 else 
@@ -205,7 +212,7 @@ class User {
             userDB.find({login: login}, (err, uD) => {
                 if (uD.length>0) {
                     uD = uD[0];
-                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission, uD.regdate, uD.status, uD.statusVerification);
+                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission, uD.regdate, uD.status, uD.statusVerification, uD.emailSent);
                     res(user);
                 }
                 else 
@@ -213,12 +220,13 @@ class User {
             });
         }) 
     }
+
     static async findAll() {
         return new Promise((res, rej) => {
             userDB.find({}, (err, uDs) => {
                 let users = [];
                 for (let i=0; i<uDs.length; i++) {
-                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, uDs[i].licenses, uDs[i].email, uDs[i].permission, uDs[i].regdate, uDs[i].status, uDs[i].statusVerification))
+                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, uDs[i].licenses, uDs[i].email, uDs[i].permission, uDs[i].regdate, uDs[i].status, uDs[i].statusVerification, uDs[i].emailSent))
                 }
 
                 res(users)
@@ -361,7 +369,8 @@ class User {
             permission: this.permission,
             regdate: this.regdate,
             status: this.status,
-            statusVerification: this.statusVerification
+            statusVerification: this.statusVerification,
+            emailSent: this.emailSent
         }, (err, item) => {})   
     }
 

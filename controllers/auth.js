@@ -8,8 +8,8 @@ const nodemailer = require("nodemailer");
 
 let transporter = nodemailer.createTransport({
     host: config.host,
-    port: 587,
-    secure: false,
+    port: 465,
+    secure: true,
     requireTLS: true,
     auth: {
       user: config.sentEmail,
