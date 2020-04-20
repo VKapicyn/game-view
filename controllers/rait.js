@@ -1,4 +1,4 @@
-const userDB = require('../server').userDB;
+const userDB = require('../models/user').userDB;
 const User = require('../models/user').User;
 const Ops = require('../models/ops').Operations;
 const Round = require('../models/round');

@@ -1,9 +1,7 @@
-const userDB = require('../server').userDB;
+const Datastore = require('nedb');
+let userDB = new Datastore({filename: 'users'});
+userDB.loadDatabase();
 const config = require('../config');
-const Round = require('../models/round');
-const License = require('../models/license').License;
-const Advert = require('../models/advert').Advert;
-const advertDB = require('../server').advertDB;
 const nodemailer = require("nodemailer");
 
 let transporter = nodemailer.createTransport({
@@ -382,4 +380,5 @@ class User {
     }
 }
 
+module.exports.userDB = userDB;
 module.exports.User = User;
