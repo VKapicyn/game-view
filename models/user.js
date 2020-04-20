@@ -2,6 +2,7 @@ const Datastore = require('nedb');
 let userDB = new Datastore({filename: 'users'});
 userDB.loadDatabase();
 const config = require('../config');
+const advertDB = require('../server').advertDB;
 const nodemailer = require("nodemailer");
 
 let transporter = nodemailer.createTransport({
