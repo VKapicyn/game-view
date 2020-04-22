@@ -3,18 +3,6 @@ let userDB = new Datastore({filename: 'users'});
 userDB.loadDatabase();
 const config = require('../config');
 const advertDB = require('../server').advertDB;
-const nodemailer = require("nodemailer");
-
-let transporter = nodemailer.createTransport({
-    host: config.host,
-    port: 465,
-    secure: true,
-    requireTLS: true,
-    auth: {
-      user: config.sentEmail,
-      pass: config.sentPass
-    }
-});
 
 class User {
     constructor(login, pass, ops, balance, name, lastname, licenses, email, permission, regdate, status, statusVerification, emailSent) {
@@ -34,6 +22,7 @@ class User {
     }
 
     set Ops(item) {
+        console.log(item);
         if (item.sender == this.login) {
             this.balance = +this.balance - Number(item.amount);
         }
@@ -77,24 +66,6 @@ class User {
         let dailyBalance = Math.floor((( timestamp - this.regdate )/86400000)) * 50;
         dailyBalance = dailyBalance > 0 ? dailyBalance : 0;
         console.log(dailyBalance);
-        if(this.email && this.emailSent < (dailyBalance / 50)) {
-            transporter.sendMail({
-                from: config.sentEmail,
-                to: this.email,
-                subject: "С Вами поделились VIRом!",
-                html: this.name+", здравствуйте!<br><br>Система поделилась с Вами на "+(dailyBalance-this.emailSent*50)+".<br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
-                "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
-                "<img src='cid:uniq-логотип2.png' alt='логотип2' width='32px' height='32px'>",
-                attachments: [{
-                    filename: 'логотип2.png',
-                    path: __dirname + '/../src/img/логотип2.png',
-                    cid: 'uniq-логотип2.png'
-                }]
-            });
-            this.emailSent = dailyBalance / 50;
-            console.log(this.emailSent + " + " + dailyBalance/50);
-            await this.updateDB(this.login);
-        }
         return new Promise((res, rej) => {
             advertDB.find({author: this.login, offerType: 'buy', contrAgent: '', status: true}, (err, items) => {
                 let minus = 0;

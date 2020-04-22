@@ -3,19 +3,8 @@ const License = require('../models/license').License;
 const Ops = require('../models/ops').Operations;
 const config = require('../config');
 const Round = require('../models/round');
+const Messages = require('../models/messages').Messages;
 const userDB = require('../models/user').userDB;
-const nodemailer = require("nodemailer");
-
-let transporter = nodemailer.createTransport({
-    host: config.host,
-    port: 465,
-    secure: true,
-    requireTLS: true,
-    auth: {
-      user: config.sentEmail,
-      pass: config.sentPass
-    }
-});
 
 exports.logout = (req, res) => {
     delete req.session.user;
@@ -89,20 +78,14 @@ exports.setUser = async (req, res) => {
                         h = (h << 5) - h + s.charCodeAt(i++) | 0;
                 return Math.abs(h);
             };
+            user.status = 0;
             user.statusVerification = await hashCode((req.body.name+Date.now()).toString());
 
-            transporter.sendMail({
-                from: config.sentEmail,
-                to: user.email,
-                subject: "Подтверждение почты на сайте",
-                html: user.name+", здравствуйте!<br><br>Перейдите по ссылке ниже, чтобы получить доступ ко всем функциям нашего сайта"+
-                "<br><br><a class='btn btn-primary'"+
-                "href='"+config.domen+"verification/"+user.statusVerification+"'>Нажмите сюда, чтобы подтвердить почту</a>"
-            });
+            Messages.emailVerification(user.email, user.name, user.statusVerification); // отправка сообщения с кодом подтверждения
 
-        await user.save();
+            await user.save();
         
-        user.updateDB();
+        //user.updateDB();
 
         req.session.user = {id: user._id, login: user.login, session: req.sessionID}
         req.session.save();

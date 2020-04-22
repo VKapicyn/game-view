@@ -3,22 +3,11 @@ const Ops = require('../models/ops').Operations;
 const License = require('../models/license').License;
 const roundModel = require('../models/round').Round;
 const Round = require('../models/round');
+const Messages = require('../models/messages').Messages;
 const Credit = require('../models/credit').Credit;
 const Subsidy = require('../models/subsidy').Subsidy;
 const config = require('../config');
-const path = require('path')
-const nodemailer = require("nodemailer");
-
-let transporter = nodemailer.createTransport({
-    host: config.host,
-    port: 465,
-    secure: true,
-    requireTLS: true,
-    auth: {
-      user: config.sentEmail,
-      pass: config.sentPass
-    }
-});
+const path = require('path');
 
 exports.charge = async (req, res) => {
     let sender = req.body.responser,
@@ -204,22 +193,9 @@ exports.send = async (req, res) => {
                                 place = j+1;
                             }
                         }
-                        if(responsersUser[i].email) {
-                            transporter.sendMail({
-                                from: config.sentEmail,
-                                to: responsersUser[i].email,
-                                subject: "С Вами поделились VIRом!",
-                                html: responsersUser[i].name+", здравствуйте!<br><br>"+senderUser.name+" "+senderUser.lastname+
-                                " поделился(лась) с Вами на "+amount+".<br>Со словами: "+text+"<br><br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
-                                "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
-                                "<img src='cid:uniq-логотип2.png' alt='' width='32px' height='32px'>",
-                                attachments: [{
-                                    filename: 'логотип2.png',
-                                    path: __dirname + '/../src/img/логотип2.png',
-                                    cid: 'uniq-логотип2.png'
-                                }]
-                            });
-                        }
+
+                        Messages.operation(responsersUser[i].email, responsersUser[i].name, senderUser.name, senderUser.lastname,
+                            amount, text, place);
                     }
                 }          
             }
@@ -233,15 +209,9 @@ exports.send = async (req, res) => {
                 type = req.body.liclist;
                 count = req.body.count;
         
-            let operation = new Ops(sender, responser, amount, text, type, count),
+            let operation = new Ops(null, sender, responser, amount, text, type, count),
                 senderUser = await User.find(sender),
                 responserUser = await User.find(responser);
-
-            for(let j = 0; j < items.length; j++) {
-                if(items[j].login == responserUser.login) {
-                    place = j+1;
-                }
-            }
 
             if (amount > 0 && await senderUser.Balance() >= amount) {
                 operation = await operation.save();
@@ -250,22 +220,14 @@ exports.send = async (req, res) => {
                 responserUser.Ops = operation;
                 responserUser.updateDB();
 
-                if(responserUser.email) {
-                    transporter.sendMail({
-                        from: config.sentEmail,
-                        to: responserUser.email,
-                        subject: "С Вами поделились VIRом!",
-                        html: responserUser.name+", здравствуйте!<br><br>"+senderUser.name+" "+senderUser.lastname+
-                        " поделился(лась) с Вами на "+amount+".<br>Со словами: "+text+"<br><br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
-                        "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
-                        "<img src='cid:uniq-логотип2.png' alt='' width='32px' height='32px'>",
-                        attachments: [{
-                            filename: 'логотип2.png',
-                            path: __dirname + '/../src/img/логотип2.png',
-                            cid: 'uniq-логотип2.png'
-                        }]
-                    });
+                for(let j = 0; j < items.length; j++) {
+                    if(items[j].login == responser) {
+                        place = j+1;
+                    }
                 }
+
+                Messages.operation(responserUser.email, responserUser.name, senderUser.name, senderUser.lastname, 
+                    amount, text, place);
             }
 
             res.redirect('/wallet');

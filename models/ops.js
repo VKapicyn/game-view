@@ -5,7 +5,7 @@ opsDB.loadDatabase();
 
 class Operations {
     constructor(_id, sender, responser, amount, text, count, type){
-        this._id = _id || ObjectId();
+        this._id = _id || `f${(~~(Math.random()*1e8)).toString(16)}`;;
         this.sender = sender;
         this.responser = responser;
         this.amount = amount;

@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const Datastore = require('nedb');
 const cors = require('cors');
 const nunjucks = require('nunjucks');
+const Messages = require('./models/messages').Messages;
 const session = require('express-session')
 const nedbStore = require('nedb-session-store')( session );
 const app = express();
@@ -23,6 +24,8 @@ module.exports.tokensDB = tokensDB;
 module.exports.rounDB = rounDB; // new db connection
 module.exports.advertDB = advertDB; // new db connection
 module.exports.SubsidyDB = SubsidyDB; // new db connection
+
+Messages.moneyEveryDay();
 
 nunjucks.configure(__dirname + '/src/views', {
     autoescape: true,

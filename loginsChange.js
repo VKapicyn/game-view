@@ -1,35 +1,26 @@
 const User = require('./models/user').User;
-const License = require('./models/license').License;
-const config = require('./config');
-const Round = require('./models/round');
-const userDB = require('./server').userDB;
 const Operations = require('./models/ops').Operations;
 
 async function loginsChange() {
-    const ops = await Operations.findAll({dateFromat: true})
-
-    let regedUsers = await User.getUserList(null);
+    const ops = await Operations.findAll();
+    let users = await User.findAll();;
         
-    for(let j = 0; j < regedUsers.length; j++) {
-        if(regedUsers[j].charAt(0) != 'V') {
+    for(let i = 0; i < users.length; i++) {
+        if(users[i].login && users[i].login.charAt(0) != 'V') {
             const login = await User.getAccessableLogins();
-            let user = await User.find(regedUsers[j]);
-            for(let i = 0; i < ops.length; i++) {
-                let op = await Operations.findById(ops[i]._id);
-                if(op.sender == regedUsers[i]) {
-                    op.sender = login;
-                } else if(op.responser == regedUsers[i]) {
-                    op.responser = login;
+            for(let j = 0; j < ops.length; j++) {
+                if(ops[j].sender == users[i].login) {
+                    ops[j].sender = login;
+                } else if(op.responser == users[i].login) {
+                    ops[j].responser = login;
                 }
-                await op.updateOpsDB();
+                await ops[j].updateOpsDB();
             }
-            user.login = login;
-            user.status = 1;
-            await user.updateDB();
+            users[i].login = login;
+            users[i].status = 1;
+            await users[i].updateDB();
         }
     }
-    console.log("exiting");
-    process.exit();
 }
 
 loginsChange();

@@ -74,7 +74,8 @@ exports.getMyStatus = async (req, res) => {
         usr = req.session.user.login
     } catch (e) {usr = null};
     const user = await User.find(usr);
-    let status = user.status;
+    if(user) status = user.status;
+    else status = 0;
     res.json({status});
 }
 
