@@ -100,7 +100,7 @@ class Operations {
             opsDB.find({_id: id}, (err, uD) => {
                 if (uD.length>0) {
                     uD = uD[0];
-                    let op = new Operations(uD._id, uD.sender, uD.responser, uD.amount, uD.text, uD.count, uD.date, uD.round, uD.type);
+                    let op = new Operations(uD._id, uD.sender, uD.responser, uD.amount, uD.text, uD.count, uD.type);
                     res(op);
                 }
                 else 

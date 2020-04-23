@@ -209,12 +209,13 @@ exports.send = async (req, res) => {
                 type = req.body.liclist;
                 count = req.body.count;
         
-            let operation = new Ops(null, sender, responser, amount, text, type, count),
+            let operation = new Ops(null, sender, responser, amount, text, count, type),
                 senderUser = await User.find(sender),
                 responserUser = await User.find(responser);
 
             if (amount > 0 && await senderUser.Balance() >= amount) {
                 operation = await operation.save();
+                console.log(operation);
                 senderUser.Ops = operation;
                 senderUser.updateDB();
                 responserUser.Ops = operation;
