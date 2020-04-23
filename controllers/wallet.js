@@ -111,7 +111,7 @@ exports.getWalletPage = async (req, res) => {
             items[i] = new User(items[i].login, items[i].pass, items[i].ops, items[i].balance, items[i].name, items[i].lastname, items[i].licenses, items[i].email, items[i].permission, items[i].regdate);
             items[i].balance = await items[i].Balance();
         }
-        items.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0)); 
+        items.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0)); 
         for (let i=0; i<items.length; i++) {
             console.log(req.session.user.login);
             if(items[i].login == req.session.user.login) place = i+1;
