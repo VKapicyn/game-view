@@ -157,13 +157,6 @@ exports.send = async (req, res) => {
         if (req.body.text == '')
             req.body.text = 'Без комментария'
 
-        const items = await User.findAll();
-        for (let i=0; i<items.length; i++) {
-            items[i] = new User(items[i].login, items[i].pass, items[i].ops, items[i].balance, items[i].name, items[i].lastname, items[i].licenses, items[i].email, items[i].permission, items[i].regdate);
-            items[i].balance = await items[i].Balance();
-        }
-        items.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0)); 
-        
         let place = null;
 
         if (req.body.responser == 'Всем') {
@@ -187,6 +180,13 @@ exports.send = async (req, res) => {
                         await senderUser.updateDB();
                         responsersUser[i].Ops = operation;
                         await responsersUser[i].updateDB();
+
+                        const items = await User.findAll();
+                        for (let i=0; i<items.length; i++) {
+                            items[i] = new User(items[i].login, items[i].pass, items[i].ops, items[i].balance, items[i].name, items[i].lastname, items[i].licenses, items[i].email, items[i].permission, items[i].regdate);
+                            items[i].balance = await items[i].Balance();
+                        }
+                        items.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0)); 
 
                         for(let j = 0; j < items.length; j++) {
                             if(items[j].login == responsersUser[i].login) {
@@ -219,6 +219,13 @@ exports.send = async (req, res) => {
                 senderUser.updateDB();
                 responserUser.Ops = operation;
                 responserUser.updateDB();
+
+                const items = await User.findAll();
+                for (let i=0; i<items.length; i++) {
+                    items[i] = new User(items[i].login, items[i].pass, items[i].ops, items[i].balance, items[i].name, items[i].lastname, items[i].licenses, items[i].email, items[i].permission, items[i].regdate);
+                    items[i].balance = await items[i].Balance();
+                }
+                items.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0)); 
 
                 for(let j = 0; j < items.length; j++) {
                     if(items[j].login == responser) {

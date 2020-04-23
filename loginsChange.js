@@ -7,18 +7,21 @@ async function loginsChange() {
         
     for(let i = 0; i < users.length; i++) {
         if(users[i].login && users[i].login.charAt(0) != 'V') {
-            const login = await User.getAccessableLogins();
+            let login = await User.getAccessableLogins();
+            let user = await User.find(users[i].login);
             for(let j = 0; j < ops.length; j++) {
-                if(ops[j].sender == users[i].login) {
-                    ops[j].sender = login;
-                } else if(op.responser == users[i].login) {
-                    ops[j].responser = login;
+                let op = await Operations.findById(ops[j]._id);
+                if(op.sender == user.login) {
+                    op.sender = login;
+                } else if(op.responser == user.login) {
+                    op.responser = login;
                 }
-                await ops[j].updateOpsDB();
+                console.log(op);
+                await op.updateOpsDB(op.sender, op.responser);
             }
-            users[i].login = login;
-            users[i].status = 1;
-            await users[i].updateDB();
+            user.login = login;
+            user.status = 1;
+            await user.updateOne(users[i].login, login);
         }
     }
 }

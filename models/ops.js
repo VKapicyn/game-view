@@ -32,13 +32,14 @@ class Operations {
         });
     }
 
-    async updateOpsDB(){
+    async updateOpsDB(sender2, responser2){
         return new Promise((res, rej)=>{
             opsDB.update({
                 _id: this._id,
             }, {
-                sender: this.sender,
-                responser: this.responser,
+                _id: this._id,
+                sender: sender2,
+                responser: responser2,
                 amount: this.amount,
                 text:  this.text,
                 count: this.count,

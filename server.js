@@ -22,7 +22,6 @@ SubsidyDB.loadDatabase();
 module.exports.tokensDB = tokensDB;
 
 module.exports.rounDB = rounDB; // new db connection
-module.exports.advertDB = advertDB; // new db connection
 module.exports.SubsidyDB = SubsidyDB; // new db connection
 
 Messages.moneyEveryDay();

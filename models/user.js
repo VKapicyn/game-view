@@ -2,7 +2,6 @@ const Datastore = require('nedb');
 let userDB = new Datastore({filename: 'users'});
 userDB.loadDatabase();
 const config = require('../config');
-const advertDB = require('../server').advertDB;
 
 class User {
     constructor(login, pass, ops, balance, name, lastname, licenses, email, permission, regdate, status, statusVerification, emailSent) {
@@ -32,24 +31,8 @@ class User {
         this.ops.push(item._id);
     }
 
-    async findPlace(login) {
-        const items = await User.findAll();
-        items.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0)); 
-        
-        let place = null;
-        for(let i = 0; i < items.length; i++) {
-            if(items[i].login == login) {
-                place = i+1;
-                console.log(place);
-            }
-        }
-        return place;
-    }
-
     async Balance() {
         let timestamp = Date.now();
-
-        let place = await this.findPlace(this.login);
 
         if (!this.regdate) {
             let regDate = Date.now();
@@ -66,15 +49,7 @@ class User {
         let dailyBalance = Math.floor((( timestamp - this.regdate )/86400000)) * 50;
         dailyBalance = dailyBalance > 0 ? dailyBalance : 0;
         console.log(dailyBalance);
-        return new Promise((res, rej) => {
-            advertDB.find({author: this.login, offerType: 'buy', contrAgent: '', status: true}, (err, items) => {
-                let minus = 0;
-                items.map(item => {
-                    minus = Number(minus)+Number(item.price)
-                })
-                res(Number(this.balance - minus) + Number(dailyBalance))
-            })
-        })
+        return this.balance+Number(dailyBalance);
     }
 
     async updateDB(){
@@ -102,9 +77,9 @@ class User {
         })
     }
 
-    static async updateOne(login1, login2){
+    async updateOne(login1, login2){
         return new Promise((res, rej)=>{ 
-            userDB.updateOne({
+            userDB.update({
                 login: login1
             }, {
                 login: login2, 
@@ -117,7 +92,7 @@ class User {
                 email: this.email,
                 permission: this.permission,
                 regdate: this.regdate,
-                status: this.status,
+                status: 1,
                 statusVerification: this.statusVerification,
                 emailSent: this.emailSent
             }, {}, (err, replaced)=>{
