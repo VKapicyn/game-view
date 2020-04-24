@@ -16,3 +16,17 @@ exports.sentPass = "xudhyp-vibgi4-kIqhif";
 exports.domen = "https://share.t2ch.io/";
 exports.secretKey = "6LfdQusUAAAAAGUmih-t32U8LSL-4uLfhFBMXde7";
 exports.isProduction = true;
+
+exports.sendVerification = 
+"[responser_name], здравствуйте!<br><br>Перейдите по ссылке ниже, чтобы получить доступ ко всем функциям нашего сайта"+
+"<br><br><a class='btn btn-primary'"+
+"href='[domen]verification/[verification_code]'>Нажмите сюда, чтобы подтвердить почту</a>";
+
+exports.sendOperation = 
+"[responser_name], здравствуйте!<br><br>[sender_name] [sender_lastname]"+
+" поделился(лась) с Вами на [amount].<br>Со словами: [text]<br><br>Теперь вы на [place] месте в рейтинге<br><br>"+
+"Всегда рады помочь,<br>Команда VIR<br><br><i>Поделись VIRом!</i><br><br>[image]";
+
+exports.moneyEveryDay = "[responser_name], здравствуйте!<br><br>Система поделилась с Вами на 50.<br><br>"+
+"Теперь вы на [place] месте в рейтинге<br><br>"+
+"Всегда рады помочь,<br>Команда VIR<br><br><i>Поделись VIRом!</i><br><br>[image]";

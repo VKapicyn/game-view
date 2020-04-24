@@ -16,31 +16,31 @@ let transporter = nodemailer.createTransport({
 
 class Messages {
     static async emailVerification(email, name, verification) {
+        let textSend = config.sendVerification.replace("[responser_name]", name);
+        textSend = textSend.replace("[domen]", config.domen);
+        textSend = textSend.replace("[verification_code]", verification);
         transporter.sendMail({
             from: config.sentEmail,
             to: email,
             subject: "Подтверждение почты на сайте",
-            html: name+", здравствуйте!<br><br>Перейдите по ссылке ниже, чтобы получить доступ ко всем функциям нашего сайта"+
-            "<br><br><a class='btn btn-primary'"+
-            "href='"+config.domen+"verification/"+verification+"'>Нажмите сюда, чтобы подтвердить почту</a>"
+            html: textSend
         });
     };
 
     static async operation(email, responserName, senderName, senderLastName, amount, text, place) {
         if(email) {
+            let textSend = config.sendOperation.replace("[responser_name]", responserName);
+            textSend = textSend.replace("[sender_name]", senderName);
+            textSend = textSend.replace("[sender_lastname]", senderLastName);
+            textSend = textSend.replace("[amount]", amount);
+            textSend = textSend.replace("[text]", text);
+            textSend = textSend.replace("[place]", place);
+            textSend = textSend.replace("[image]", "<img src='https://share.t2ch.io/img/%D0%BB%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF2.png' width='32px' height='32px'>");
             transporter.sendMail({
                 from: config.sentEmail,
                 to: email,
                 subject: "С Вами поделились VIRом!",
-                html: responserName+", здравствуйте!<br><br>"+senderName+" "+senderLastName+
-                " поделился(лась) с Вами на "+amount+".<br>Со словами: "+text+"<br><br>Теперь вы на "+place+" месте в рейтинге<br><br>"+
-                "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
-                "<img src='cid:uniq-логотип2.png' alt='' width='32px' height='32px'>",
-                attachments: [{
-                    filename: 'логотип2.png',
-                    path: __dirname + '/../src/img/логотип2.png',
-                    cid: 'uniq-логотип2.png'
-                }]
+                html: textSend
             });
         }
     }
@@ -55,20 +55,17 @@ async function checkDate() {
     const date = new Date().getHours();
     if(date < 6 && date > 4) {
         let users = await User.findAll();
+        users.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0));
         for(let i = 0; i < users.length; i++) {
             if(users[i].email) {
+                let textSend = config.moneyEveryDay.replace("[responser_name]", users[i].name);
+                textSend = textSend.replace("[place]", i+1);
+                textSend = textSend.replace("[image]", "<img src='https://share.t2ch.io/img/%D0%BB%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF2.png' width='32px' height='32px'>");
                 transporter.sendMail({
                     from: config.sentEmail,
                     to: users[i].email,
                     subject: "С Вами поделились VIRом!",
-                    html: users[i].name+", здравствуйте!<br><br>Система поделилась с Вами на 50.<br><br>"+
-                    "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделитесь VIRом!</i><br><br>"+
-                    "<img src='cid:uniq-логотип2.png' alt='логотип2' width='32px' height='32px'>",
-                    attachments: [{
-                        filename: 'логотип2.png',
-                        path: __dirname + '/../src/img/логотип2.png',
-                        cid: 'uniq-логотип2.png'
-                    }]
+                    html: textSend
                 });
             }
         }
