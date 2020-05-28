@@ -101,6 +101,38 @@ class User {
         })
     }
 
+    async updateBalance(login){
+        return new Promise((res, rej)=>{ 
+            userDB.update({
+                login: login
+            }, {
+                login: this.login, 
+                pass: this.pass, 
+                balance: 1000,
+                ops: this.ops,
+                name: this.name,
+                lastname: this.lastname,
+                licenses: this.licenses,
+                email: this.email,
+                permission: this.permission,
+                regdate: Date.now(),
+                status: 1,
+                statusVerification: this.statusVerification,
+                emailSent: this.emailSent
+            }, {}, (err, replaced)=>{
+                res(replaced)
+            })
+        })
+    }
+    
+    async deleteOne(login){
+        return new Promise((res, rej)=>{ 
+            userDB.remove({
+                login: login
+            })
+        })
+    }
+
     async burnLicense(){
         for (let i=0; i<this.licenses.length; i++) {
             if (this.licenses[i].round == Round.getRound() && this.licenses[i].status == true){

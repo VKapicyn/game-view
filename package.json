@@ -6,6 +6,8 @@
   "dependencies": {
     "async-request": "^1.2.0",
     "body-parser": "^1.18.3",
+    "bootbox": "^5.4.0",
+    "bootstrap": "^4.5.0",
     "connect-nedb-session": "0.0.3",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
@@ -20,12 +22,14 @@
     "nodemailer": "^6.4.6",
     "nodemon": "^1.18.5",
     "nunjucks": "^3.2.1",
-    "recaptcha": "^1.2.1"
+    "recaptcha": "^1.2.1",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
+    "@nuxtjs/vuetify": "^1.11.2",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
-    "mocha": "^6.2.2"
+    "mocha": "^7.2.0"
   },
   "scripts": {
     "start": "nodemon server.js"

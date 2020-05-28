@@ -53,6 +53,14 @@ class Operations {
         })
     }
 
+    async deleteOne(id){
+        return new Promise((res, rej)=>{ 
+            opsDB.remove({
+                _id: id
+            })
+        })
+    }
+
     static async getOpsByUser(login) {
         return new Promise( (res, rej) => {
             opsDB.find({'$or': [

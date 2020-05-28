@@ -13,7 +13,7 @@
         {% if stop == false and user.status == 1 %}
         <hr>
         <h3>Поделиться:</h3>
-        <form action="/send" method="POST" onsubmit="return confirm('Подтвердите перевод');">
+        <form action="/send" method="POST" id="myform">
             <input id="amount" name="amount" class="form-control" type="text" placeholder="На сколько">
             <br>
             <p>С кем</p>
@@ -31,7 +31,7 @@
             <br>
             <input id="text" name="text" class="form-control" type="text" placeholder="Комментарий">
             <br>
-            <button type="input" class="btn btn-primary" >Поделиться</button>
+            <button type="button" onclick="conf()" class="btn btn-primary">Поделиться</button>
         </form>
         <br>
 
@@ -111,4 +111,33 @@
 
     </div>
 </div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+<script type="text/javascript">
+    function conf() {
+        var is = null;
+        $.confirm({
+            title: 'Хотите поделиться?',
+            content: "",
+            buttons: {
+                confirm: {
+                    text:  "Да",
+                    btnClass: 'btn-green',
+                    action: () => {submitForm();}
+                },
+                cancel:{
+                    text:  "Нет",
+                    btnClass: 'btn-red'
+                }
+            }
+        });
+    };
+
+    function submitForm() {
+        $("#myform").submit();
+    }
+</script>
 {% endblock %}
