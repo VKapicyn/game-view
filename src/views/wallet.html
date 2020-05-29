@@ -17,7 +17,7 @@
             <input id="amount" name="amount" class="form-control" type="text" placeholder="На сколько">
             <br>
             <p>С кем</p>
-            <select name="responser" class="selectpicker" data-show-subtext="true" data-live-search="true">
+            <select name="responser" class="form-control" data-show-subtext="true" data-live-search="true">
                 {% for item in userList %}
                     <option value="{{item}}">{{item}}</option>
                 {% endfor %}

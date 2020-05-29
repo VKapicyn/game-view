@@ -20,7 +20,15 @@
             {% set balance = 0 %}
             {% for item in items %}
                 <tr>
-                    <th scope="row">{{loop.index}}</th>
+                    <th scope="row">
+                      {% if item.balance == 1000 %}
+                        0
+                      {% elif item.balance > 1000 %}
+                        {{loop.index}}
+                      {% else %}
+                        -{{loop.index-zero-plus}}
+                      {% endif %}
+                    </th>
                     <td>{{item.login}}</td>
                       
                       <td>{{item.name}} {{item.lastname}}</td>
