@@ -101,7 +101,31 @@ class User {
         })
     }
 
-    async updateBalance(login){
+    async updateBalance(login, balance){
+        return new Promise((res, rej)=>{ 
+            userDB.update({
+                login: login
+            }, {
+                login: this.login, 
+                pass: this.pass, 
+                balance: balance,
+                ops: this.ops,
+                name: this.name,
+                lastname: this.lastname,
+                licenses: this.licenses,
+                email: this.email,
+                permission: this.permission,
+                regdate: this.regdate,
+                status: this.status,
+                statusVerification: this.statusVerification,
+                emailSent: this.emailSent
+            }, {}, (err, replaced)=>{
+                res(replaced)
+            })
+        })
+    }
+
+    async clearOps(login){
         return new Promise((res, rej)=>{ 
             userDB.update({
                 login: login
@@ -116,7 +140,7 @@ class User {
                 email: this.email,
                 permission: this.permission,
                 regdate: Date.now(),
-                status: 1,
+                status: this.status,
                 statusVerification: this.statusVerification,
                 emailSent: this.emailSent
             }, {}, (err, replaced)=>{

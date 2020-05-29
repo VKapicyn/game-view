@@ -7,7 +7,7 @@ async function clearOps() {
         
     for(let i = 0; i < users.length; i++) {
         let user = await User.find(users[i].login);
-        await user.updateBalance(user.login);
+        await user.clearOps(user.login);
         console.log(user);
     }
 

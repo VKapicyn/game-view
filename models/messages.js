@@ -53,8 +53,8 @@ class Messages {
 
 async function checkDate() {
     const date = new Date().getHours();
+    let users = await User.findAll();
     if(date < 6 && date > 4) {
-        let users = await User.findAll();
         users.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0));
         for(let i = 0; i < users.length; i++) {
             if(users[i].email) {
@@ -67,6 +67,19 @@ async function checkDate() {
                     subject: "С Вами поделились VIRом!",
                     html: textSend
                 });
+            }
+        }
+    } else if(date < 3 && date > 5) {
+        for(let i = 0; i < users.length; i++) {
+            if(users[i].balance < 1000) {
+                let user = await User.find(users[i].login);
+                if(user.balance > 970) {
+                    user.balance = 1000;
+                    await user.updateBalance(users[i].login, user.balance);
+                } else {
+                    user.balance += 30;
+                    await user.updateBalance(users[i].login, user.balance);
+                }
             }
         }
     }
