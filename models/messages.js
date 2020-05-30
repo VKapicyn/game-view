@@ -52,9 +52,9 @@ class Messages {
 }
 
 async function checkDate() {
-    const date = new Date().getHours();
+    const hour = new Date().getHours();
     let users = await User.findAll();
-    if(date < 6 && date > 4) {
+    if(hour < 6 && hour > 4) {
         users.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0));
         for(let i = 0; i < users.length; i++) {
             if(users[i].email) {
@@ -69,7 +69,7 @@ async function checkDate() {
                 });
             }
         }
-    } else if(date < 3 && date > 5) {
+    } else if(hour < 3 && hour > 5) {
         for(let i = 0; i < users.length; i++) {
             if(users[i].balance < 1000) {
                 let user = await User.find(users[i].login);
@@ -81,6 +81,17 @@ async function checkDate() {
                     await user.updateBalance(users[i].login, user.balance);
                 }
             }
+        }
+    } else if(hour < 1) {
+        const dateMonth = new Date().getMonth();
+        const dayOfWeek = new Date().getDay();
+        const dateDay = new Date().getDate();
+        for(let i = 0; i < users.length; i++) {
+            let user = await User.find(users[i].login);
+            user.dayPlus = 0;
+            if(dateDay == 0) user.monthPlus = 0;
+            if(dayOfWeek == 1) user.weekPlus = 0;
+            await user.updateProgress(users[i].login, user.dayPlus, user.weekPlus, user.monthPlus);
         }
     }
     return;

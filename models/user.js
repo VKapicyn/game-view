@@ -4,7 +4,7 @@ userDB.loadDatabase();
 const config = require('../config');
 
 class User {
-    constructor(login, pass, ops, balance, name, lastname, licenses, email, permission, regdate, status, statusVerification, emailSent) {
+    constructor(login, pass, ops, balance, name, lastname, licenses, email, permission, regdate, status, statusVerification, emailSent, dayPlus, weekPlus, monthPlus) {
         this.login = login;
         this.pass = pass;
         this.ops = ops || []
@@ -18,6 +18,9 @@ class User {
         this.status = status || 0;
         this.statusVerification = statusVerification || 0;
         this.emailSent = emailSent || 0;
+        this.dayPlus = dayPlus || 0;
+        this.weekPlus = weekPlus || 0;
+        this.monthPlus = monthPlus || 0;
     }
 
     set Ops(item) {
@@ -69,7 +72,10 @@ class User {
                 regdate: this.regdate,
                 status: this.status,
                 statusVerification: this.statusVerification,
-                emailSent: this.emailSent
+                emailSent: this.emailSent,
+                dayPlus: this.dayPlus,
+                weekPlus: this.weekPlus,
+                monthPlus: this.monthPlus,
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -94,7 +100,10 @@ class User {
                 regdate: this.regdate,
                 status: 1,
                 statusVerification: this.statusVerification,
-                emailSent: this.emailSent
+                emailSent: this.emailSent,
+                dayPlus: this.dayPlus,
+                weekPlus: this.weekPlus,
+                monthPlus: this.monthPlus,
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -118,7 +127,37 @@ class User {
                 regdate: this.regdate,
                 status: this.status,
                 statusVerification: this.statusVerification,
-                emailSent: this.emailSent
+                emailSent: this.emailSent,
+                dayPlus: this.dayPlus,
+                weekPlus: this.weekPlus,
+                monthPlus: this.monthPlus,
+            }, {}, (err, replaced)=>{
+                res(replaced)
+            })
+        })
+    }
+
+    async updateProgress(login, day, week, month){
+        return new Promise((res, rej)=>{ 
+            userDB.update({
+                login: login
+            }, {
+                login: this.login, 
+                pass: this.pass, 
+                balance: balance,
+                ops: this.ops,
+                name: this.name,
+                lastname: this.lastname,
+                licenses: this.licenses,
+                email: this.email,
+                permission: this.permission,
+                regdate: this.regdate,
+                status: this.status,
+                statusVerification: this.statusVerification,
+                emailSent: this.emailSent,
+                dayPlus: day,
+                weekPlus: week,
+                monthPlus: month,
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -142,7 +181,10 @@ class User {
                 regdate: Date.now(),
                 status: this.status,
                 statusVerification: this.statusVerification,
-                emailSent: this.emailSent
+                emailSent: this.emailSent,
+                dayPlus: this.dayPlus,
+                weekPlus: this.weekPlus,
+                monthPlus: this.monthPlus,
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -199,7 +241,8 @@ class User {
             userDB.find({email: email}, (err, uD) => {
                 if (uD.length>0) {
                     uD = uD[0];
-                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission, uD.regdate, uD.status, uD.statusVerification, uD.emailSent);
+                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission,
+                        uD.regdate, uD.status, uD.statusVerification, uD.emailSent, uD.dayPlus, uD.weekPlus, uD.monthPlus);
                     res(user);
                 }
                 else 
@@ -213,7 +256,8 @@ class User {
             userDB.find({login: login}, (err, uD) => {
                 if (uD.length>0) {
                     uD = uD[0];
-                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission, uD.regdate, uD.status, uD.statusVerification, uD.emailSent);
+                    let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission,
+                        uD.regdate, uD.status, uD.statusVerification, uD.emailSent, uD.dayPlus, uD.weekPlus, uD.monthPlus);
                     res(user);
                 }
                 else 
@@ -227,7 +271,9 @@ class User {
             userDB.find({}, (err, uDs) => {
                 let users = [];
                 for (let i=0; i<uDs.length; i++) {
-                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, uDs[i].licenses, uDs[i].email, uDs[i].permission, uDs[i].regdate, uDs[i].status, uDs[i].statusVerification, uDs[i].emailSent))
+                    users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, 
+                        uDs[i].licenses, uDs[i].email, uDs[i].permission, uDs[i].regdate, uDs[i].status, uDs[i].statusVerification, 
+                        uDs[i].emailSent, uDs[i].dayPlus, uDs[i].weekPlus, uDs[i].monthPlus))
                 }
 
                 res(users)
@@ -371,7 +417,10 @@ class User {
             regdate: this.regdate,
             status: this.status,
             statusVerification: this.statusVerification,
-            emailSent: this.emailSent
+            emailSent: this.emailSent,
+            dayPlus: this.dayPlus,
+            weekPlus: this.weekPlus,
+            monthPlus: this.monthPlus,
         }, (err, item) => {})   
     }
 

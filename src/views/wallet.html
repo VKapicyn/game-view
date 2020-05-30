@@ -3,13 +3,13 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-7 col-md-7 col-12">
-        <h2><b>у Вас: </b>
             {% if (user.balance == specBalance) %}
-                <b>{{user.balance}} VIR&nbsp;&nbsp;&nbsp; Место в рейтинге: {{place}}</h2></b>
+            <h2><b>у Вас: </b><b>{{user.balance}} VIR&nbsp;&nbsp;&nbsp; Место в рейтинге: {{place}}</b>&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;D+{{user.dayPlus}}&nbsp;&nbsp; W+{{user.weekPlus}}&nbsp;&nbsp; M+{{user.monthPlus}}</h2>
             {% else %}
-                <b>{% set dolg = user.balance-specBalance %}{{specBalance}} VIR &nbsp;&nbsp;&nbsp; Место в рейтинге: {{place}}</h2></b>
+            <h2><b>у Вас: </b><b>{% set dolg = user.balance-specBalance %}{{specBalance}} VIR &nbsp;&nbsp;&nbsp; Место в рейтинге: {{place}}</b>&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;D+{{user.dayPlus}}&nbsp;&nbsp; W+{{user.weekPlus}}&nbsp;&nbsp; M+{{user.monthPlus}}</h2>
             {% endif %}
-
         {% if stop == false and user.status == 1 %}
         <hr>
         <h3>Поделиться:</h3>
