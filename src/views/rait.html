@@ -24,9 +24,9 @@
                       {% if item.balance == 1000 %}
                         0
                       {% elif item.balance > 1000 %}
-                        {{plus-loop.index+1}}
+                        {{plus-loop.revindex+1}}
                       {% else %}
-                        -{{loop.index-zero-plus}}
+                        -{{loop.revindex-zero-plus}}
                       {% endif %}
                     </th>
                     <td>{{item.login}}</td>

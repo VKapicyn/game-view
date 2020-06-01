@@ -47,11 +47,12 @@ exports.getRaitPage = async (req, res) => {
         let zero = 0;
         for (let i=0; i<items.length; i++) {
             items[i] = new User(items[i].login, items[i].pass, items[i].ops, items[i].balance, items[i].name, items[i].lastname, items[i].licenses, items[i].email, items[i].permission, items[i].regdate);
+            items[i].balance = await items[i].Balance();
             if(items[i].balance == 1000) zero++;
             else if(items[i].balance > 1000) plus++;
-            items[i].balance = await items[i].Balance();
         }
-        items.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0));
+        console.log(plus);
+        items.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0));
         res.render('rait.html', {items, admin, lices: await License.getAllTypes(), rounds, round, objectTypes, zero, plus});
     });
 }
