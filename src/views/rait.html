@@ -24,7 +24,7 @@
                       {% if item.balance == 1000 %}
                         0
                       {% elif item.balance > 1000 %}
-                        {{loop.index}}
+                        {{plus-loop.index+1}}
                       {% else %}
                         -{{loop.index-zero-plus}}
                       {% endif %}

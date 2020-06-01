@@ -4,7 +4,8 @@ userDB.loadDatabase();
 const config = require('../config');
 
 class User {
-    constructor(login, pass, ops, balance, name, lastname, licenses, email, permission, regdate, status, statusVerification, emailSent, dayPlus, weekPlus, monthPlus) {
+    constructor(login, pass, ops, balance, name, lastname, licenses, email, permission, regdate, status, statusVerification,
+    emailSent, dayPlus, weekPlus, monthPlus, place) {
         this.login = login;
         this.pass = pass;
         this.ops = ops || []
@@ -21,6 +22,7 @@ class User {
         this.dayPlus = dayPlus || 0;
         this.weekPlus = weekPlus || 0;
         this.monthPlus = monthPlus || 0;
+        this.place = place || 0;
     }
 
     set Ops(item) {
@@ -76,6 +78,7 @@ class User {
                 dayPlus: this.dayPlus,
                 weekPlus: this.weekPlus,
                 monthPlus: this.monthPlus,
+                place: this.place
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -104,6 +107,7 @@ class User {
                 dayPlus: this.dayPlus,
                 weekPlus: this.weekPlus,
                 monthPlus: this.monthPlus,
+                place: this.place
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -131,6 +135,7 @@ class User {
                 dayPlus: this.dayPlus,
                 weekPlus: this.weekPlus,
                 monthPlus: this.monthPlus,
+                place: this.place
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -144,7 +149,7 @@ class User {
             }, {
                 login: this.login, 
                 pass: this.pass, 
-                balance: balance,
+                balance: this.balance,
                 ops: this.ops,
                 name: this.name,
                 lastname: this.lastname,
@@ -158,6 +163,35 @@ class User {
                 dayPlus: day,
                 weekPlus: week,
                 monthPlus: month,
+                place: this.place
+            }, {}, (err, replaced)=>{
+                res(replaced)
+            })
+        })
+    }
+
+    async updatePlace(login, place){
+        return new Promise((res, rej)=>{ 
+            userDB.update({
+                login: login
+            }, {
+                login: this.login, 
+                pass: this.pass, 
+                balance: this.balance,
+                ops: this.ops,
+                name: this.name,
+                lastname: this.lastname,
+                licenses: this.licenses,
+                email: this.email,
+                permission: this.permission,
+                regdate: this.regdate,
+                status: this.status,
+                statusVerification: this.statusVerification,
+                emailSent: this.emailSent,
+                dayPlus: this.day,
+                weekPlus: this.week,
+                monthPlus: this.month,
+                place: place
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -185,6 +219,7 @@ class User {
                 dayPlus: this.dayPlus,
                 weekPlus: this.weekPlus,
                 monthPlus: this.monthPlus,
+                place: this.place
             }, {}, (err, replaced)=>{
                 res(replaced)
             })
@@ -242,7 +277,7 @@ class User {
                 if (uD.length>0) {
                     uD = uD[0];
                     let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission,
-                        uD.regdate, uD.status, uD.statusVerification, uD.emailSent, uD.dayPlus, uD.weekPlus, uD.monthPlus);
+                        uD.regdate, uD.status, uD.statusVerification, uD.emailSent, uD.dayPlus, uD.weekPlus, uD.monthPlus, uD.place);
                     res(user);
                 }
                 else 
@@ -257,7 +292,7 @@ class User {
                 if (uD.length>0) {
                     uD = uD[0];
                     let user = new User(uD.login, uD.pass, uD.ops, uD.balance, uD.name, uD.lastname, uD.licenses, uD.email, uD.permission,
-                        uD.regdate, uD.status, uD.statusVerification, uD.emailSent, uD.dayPlus, uD.weekPlus, uD.monthPlus);
+                        uD.regdate, uD.status, uD.statusVerification, uD.emailSent, uD.dayPlus, uD.weekPlus, uD.monthPlus, uD.place);
                     res(user);
                 }
                 else 
@@ -273,7 +308,7 @@ class User {
                 for (let i=0; i<uDs.length; i++) {
                     users.push(new User(uDs[i].login, uDs[i].pass, uDs[i].ops, uDs[i].balance, uDs[i].name, uDs[i].lastname, 
                         uDs[i].licenses, uDs[i].email, uDs[i].permission, uDs[i].regdate, uDs[i].status, uDs[i].statusVerification, 
-                        uDs[i].emailSent, uDs[i].dayPlus, uDs[i].weekPlus, uDs[i].monthPlus))
+                        uDs[i].emailSent, uDs[i].dayPlus, uDs[i].weekPlus, uDs[i].monthPlus, uDs[i].place))
                 }
 
                 res(users)
@@ -421,6 +456,7 @@ class User {
             dayPlus: this.dayPlus,
             weekPlus: this.weekPlus,
             monthPlus: this.monthPlus,
+            place: this.place
         }, (err, item) => {})   
     }
 

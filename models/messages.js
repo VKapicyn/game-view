@@ -49,6 +49,25 @@ class Messages {
         await checkDate();
         setInterval(checkDate, 3600000);
     }
+
+    static async setPlaces() {
+        console.log("doing!");
+        let users = await User.findAll();
+        let plus = 0, zero = 0;
+        for (let i=0; i<users.length; i++) {
+            if(users[i].balance == 1000) zero++;
+            else if(users[i].balance > 1000) plus++;
+        }
+        users.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0));
+        for(let i = 0; i < users.length; i++) {
+            let user = await User.find(users[i].login);
+            if(user.balance == 1000) user.place = 0;
+            else if(user.balance > 1000) user.place = plus-i;
+            else user.place = -(i+1-zero-plus);
+            console.log("place, ", user.place);
+            await user.updatePlace(user.login, user.place);
+        }
+    }
 }
 
 async function checkDate() {
@@ -86,11 +105,21 @@ async function checkDate() {
         const dateMonth = new Date().getMonth();
         const dayOfWeek = new Date().getDay();
         const dateDay = new Date().getDate();
+        let plus = 0, zero = 0;
+        for (let i=0; i<users.length; i++) {
+            if(users[i].balance == 1000) zero++;
+            else if(users[i].balance > 1000) plus++;
+        }
+        users.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0));
         for(let i = 0; i < users.length; i++) {
             let user = await User.find(users[i].login);
-            user.dayPlus = 0;
-            if(dateDay == 0) user.monthPlus = 0;
-            if(dayOfWeek == 1) user.weekPlus = 0;
+            if(user.balance == 1000) user.place = 0;
+            else if(user.balance > 1000) user.place = plus-i;
+            else user.place = -(i+1-zero-plus);
+            await user.updatePlace(user.login, user.place);
+            user.dayPlus = user.place;
+            if(dateDay == 0) user.monthPlus = user.place;
+            if(dayOfWeek == 1) user.weekPlus = user.place;
             await user.updateProgress(users[i].login, user.dayPlus, user.weekPlus, user.monthPlus);
         }
     }

@@ -196,6 +196,7 @@ exports.send = async (req, res) => {
 
                         Messages.operation(responsersUser[i].email, responsersUser[i].name, senderUser.name, senderUser.lastname,
                             amount, text, place);
+                        await Messages.setPlaces();
                     }
                 }          
             }
@@ -236,6 +237,7 @@ exports.send = async (req, res) => {
 
                 Messages.operation(responserUser.email, responserUser.name, senderUser.name, senderUser.lastname, 
                     amount, text, place);
+                await Messages.setPlaces();
             }
 
             res.redirect('/wallet');

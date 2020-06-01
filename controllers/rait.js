@@ -134,7 +134,6 @@ exports.raitSearchV2 = async (req, res) => {
     })
 }
 
-
 //Not actual
 exports.raitSearch = (req, res) => {
     userDB.find({}).sort({balance: -1}).exec( (err, items) => {
