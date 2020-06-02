@@ -51,7 +51,6 @@ class Messages {
     }
 
     static async setPlaces() {
-        console.log("doing!");
         let users = await User.findAll();
         let plus = 0, zero = 0;
         for (let i=0; i<users.length; i++) {
@@ -62,8 +61,9 @@ class Messages {
         for(let i = 0; i < users.length; i++) {
             let user = await User.find(users[i].login);
             console.log("balance", user.balance);
+            console.log(zero, plus);
             if(user.balance == 1000) user.place = 0;
-            else if(user.balance > 1000) user.place = i-zero-plus;
+            else if(user.balance > 1000) user.place = i-plus;
             else user.place = i-zero-plus+1;
             console.log("place, ", user.place);
             await user.updatePlace(user.login, user.place);
