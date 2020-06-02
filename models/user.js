@@ -191,7 +191,7 @@ class User {
                 licenses: this.licenses,
                 email: this.email,
                 permission: this.permission,
-                regdate: Date.now(),
+                regdate: this.regdate,
                 status: this.status,
                 statusVerification: this.statusVerification,
                 emailSent: this.emailSent,
