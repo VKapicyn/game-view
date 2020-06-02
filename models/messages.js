@@ -61,9 +61,10 @@ class Messages {
         users.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0));
         for(let i = 0; i < users.length; i++) {
             let user = await User.find(users[i].login);
+            console.log("balance", user.balance);
             if(user.balance == 1000) user.place = 0;
-            else if(user.balance > 1000) user.place = plus-i;
-            else user.place = -(i+1-zero-plus);
+            else if(user.balance > 1000) user.place = i-zero-plus;
+            else user.place = i-zero-plus+1;
             console.log("place, ", user.place);
             await user.updatePlace(user.login, user.place);
         }
@@ -77,8 +78,15 @@ async function checkDate() {
         users.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0));
         for(let i = 0; i < users.length; i++) {
             if(users[i].email) {
+                users[i].balance += 50;
+                let user = await User.find(users[i].login);
+                if(user.balance == 1000) user.place = 0;
+                else if(user.balance > 1000) user.place = i-zero-plus-1;
+                else user.place = i-zero-plus+1;
+                await user.updatePlace(user.login, user.place);
+                await users[i].updateBalance(users[i].login, users[i].balance);
                 let textSend = config.moneyEveryDay.replace("[responser_name]", users[i].name);
-                textSend = textSend.replace("[place]", i+1);
+                textSend = textSend.replace("[place]", users[i].place);
                 textSend = textSend.replace("[image]", "<img src='https://share.t2ch.io/img/%D0%BB%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF2.png' width='32px' height='32px'>");
                 transporter.sendMail({
                     from: config.sentEmail,
@@ -88,7 +96,7 @@ async function checkDate() {
                 });
             }
         }
-    } else if(hour < 3 && hour > 5) {
+    } else if(hour > 3 && hour < 5) {
         for(let i = 0; i < users.length; i++) {
             if(users[i].balance < 1000) {
                 let user = await User.find(users[i].login);
@@ -114,8 +122,8 @@ async function checkDate() {
         for(let i = 0; i < users.length; i++) {
             let user = await User.find(users[i].login);
             if(user.balance == 1000) user.place = 0;
-            else if(user.balance > 1000) user.place = plus-i;
-            else user.place = -(i+1-zero-plus);
+            else if(user.balance > 1000) user.place = i-zero-plus-1;
+            else user.place = i-zero-plus+1;
             await user.updatePlace(user.login, user.place);
             user.dayPlus = user.place;
             if(dateDay == 0) user.monthPlus = user.place;

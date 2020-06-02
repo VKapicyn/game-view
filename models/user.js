@@ -36,27 +36,6 @@ class User {
         this.ops.push(item._id);
     }
 
-    async Balance() {
-        let timestamp = Date.now();
-
-        if (!this.regdate) {
-            let regDate = Date.now();
-            if (new Date(regDate).getHours() < 5) {
-                regDate = new Date((Number(new Date(regDate).getTime())-86400000));
-            }
-            regDate = new Date(regDate).setHours(5);
-            regDate = new Date(regDate).setMinutes(0);
-            regDate = new Date(regDate).setSeconds(0);
-
-            this.regdate = new Date(regDate).getTime();
-            await this.updateDB(this.login);
-        }
-        let dailyBalance = Math.floor((( timestamp - this.regdate )/86400000)) * 50;
-        dailyBalance = dailyBalance > 0 ? dailyBalance : 0;
-        console.log(dailyBalance);
-        return this.balance+Number(dailyBalance);
-    }
-
     async updateDB(){
         return new Promise((res, rej)=>{
             userDB.update({

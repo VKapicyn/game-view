@@ -107,17 +107,12 @@ exports.getWalletPage = async (req, res) => {
         place = null;
 
         const items = await User.findAll();
-        for (let i=0; i<items.length; i++) {
-            items[i] = new User(items[i].login, items[i].pass, items[i].ops, items[i].balance, items[i].name, items[i].lastname, items[i].licenses, items[i].email, items[i].permission, items[i].regdate);
-            items[i].balance = await items[i].Balance();
-        }
         items.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0)); 
         for (let i=0; i<items.length; i++) {
             console.log(req.session.user.login);
             if(items[i].login == req.session.user.login) place = i+1;
         }
     if (user) {
-        let specBalance = await user.Balance();
         userList.sort();
         /*let _licTypes = await User.getActualLic(user.login),
             __licTypes = await License.find(_licTypes);
@@ -130,7 +125,6 @@ exports.getWalletPage = async (req, res) => {
         }*/
     
         console.log(user.balance);
-        console.log(specBalance);
         res.render('wallet.html', {
             //actualLic: __licTypes,
             //licList,
@@ -141,7 +135,6 @@ exports.getWalletPage = async (req, res) => {
             userName,
             stop: (charge || await User.isProject(req.session.user.login)) ? false: (roundModel.status == 1 ? false : true),
             charge,
-            specBalance,
             bankProcent: config.bankProcent,
             subsidyProcent: config.subsidyProcent,
             //subsidyLimit: await Subsidy.getSubsidyLimit(req.session.user.login),
@@ -214,7 +207,7 @@ exports.send = async (req, res) => {
                 senderUser = await User.find(sender),
                 responserUser = await User.find(responser);
 
-            if (amount > 0 && await senderUser.Balance() >= amount) {
+            if (amount > 0 && await senderUser.balance >= amount) {
                 operation = await operation.save();
                 console.log(operation);
                 senderUser.Ops = operation;
@@ -223,10 +216,6 @@ exports.send = async (req, res) => {
                 responserUser.updateDB();
 
                 const items = await User.findAll();
-                for (let i=0; i<items.length; i++) {
-                    items[i] = new User(items[i].login, items[i].pass, items[i].ops, items[i].balance, items[i].name, items[i].lastname, items[i].licenses, items[i].email, items[i].permission, items[i].regdate);
-                    items[i].balance = await items[i].Balance();
-                }
                 items.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0)); 
 
                 for(let j = 0; j < items.length; j++) {

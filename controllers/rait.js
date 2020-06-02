@@ -46,8 +46,6 @@ exports.getRaitPage = async (req, res) => {
         let plus = 0;
         let zero = 0;
         for (let i=0; i<items.length; i++) {
-            items[i] = new User(items[i].login, items[i].pass, items[i].ops, items[i].balance, items[i].name, items[i].lastname, items[i].licenses, items[i].email, items[i].permission, items[i].regdate);
-            items[i].balance = await items[i].Balance();
             if(items[i].balance == 1000) zero++;
             else if(items[i].balance > 1000) plus++;
         }

@@ -21,13 +21,7 @@
             {% for item in items %}
                 <tr>
                     <th scope="row">
-                      {% if item.balance == 1000 %}
-                        0
-                      {% elif item.balance > 1000 %}
-                        {{plus-loop.revindex+1}}
-                      {% else %}
-                        -{{loop.revindex-zero-plus}}
-                      {% endif %}
+                      {{item.place}}
                     </th>
                     <td>{{item.login}}</td>
                       

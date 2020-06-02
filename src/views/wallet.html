@@ -3,7 +3,6 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-7 col-md-7 col-12">
-            {% if (user.balance == specBalance) %}
             <h2><b>у Вас: </b><b>{{user.balance}} VIR&nbsp;&nbsp;&nbsp; Место в рейтинге: {{user.place}}</b>&nbsp;&nbsp;&nbsp;
                 &nbsp;&nbsp;
                 {% if user.place-user.dayPlus >= 0 %}
@@ -21,25 +20,6 @@
                 {% else %}
                     M{{user.place-user.monthPlus}}</h2>
                 {% endif %}
-            {% else %}
-            <h2><b>у Вас: </b><b>{% set dolg = user.balance-specBalance %}{{specBalance}} VIR &nbsp;&nbsp;&nbsp; Место в рейтинге: {{user.place}}</b>&nbsp;&nbsp;&nbsp;
-                &nbsp;&nbsp;
-                {% if user.place-user.dayPlus >= 0 %}
-                    D+{{user.place-user.dayPlus}}&nbsp;&nbsp;
-                {% else %}
-                    D{{user.place-user.dayPlus}}&nbsp;&nbsp;
-                {% endif %}
-                {% if user.place-user.weekPlus >= 0 %}
-                    W+{{user.place-user.weekPlus}}&nbsp;&nbsp; 
-                {% else %}
-                    W{{user.place-user.weekPlus}}&nbsp;&nbsp; 
-                {% endif %}
-                {% if user.place-user.monthPlus >= 0 %}
-                    M+{{user.place-user.monthPlus}}</h2>
-                {% else %}
-                    M{{user.place-user.monthPlus}}</h2>
-                {% endif %}
-            {% endif %}
         {% if stop == false and user.status == 1 %}
         <hr>
         <h3>Поделиться:</h3>
