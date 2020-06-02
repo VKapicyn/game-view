@@ -198,7 +198,7 @@ class User {
                 dayPlus: this.dayPlus,
                 weekPlus: this.weekPlus,
                 monthPlus: this.monthPlus,
-                place: this.place
+                place: 0
             }, {}, (err, replaced)=>{
                 res(replaced)
             })

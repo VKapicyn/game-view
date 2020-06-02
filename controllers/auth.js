@@ -139,7 +139,7 @@ exports.getMainPage = async (req, res) => {
     let user = await User.find(login);
 
     if (user) {
-        balance = await user.Balance()
+        balance = await user.balance
     
         res.render('main.html', {user, balance});
     } else
