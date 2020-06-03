@@ -3,22 +3,21 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-7 col-md-7 col-12">
-            <h2><b>у Вас: </b><b>{{user.balance}} VIR&nbsp;&nbsp;&nbsp; Место в рейтинге: {{user.place}}</b>&nbsp;&nbsp;&nbsp;
-                &nbsp;&nbsp;
+            <h2 style="display: inline;"><b>у Вас: {{user.balance}} VIR&nbsp;&nbsp; Уровень рейтинга: {{user.place}}</b>&nbsp;&nbsp;</h2>
                 {% if user.place-user.dayPlus >= 0 %}
-                    D+{{user.place-user.dayPlus}}&nbsp;&nbsp;
+                    <h4 style="display: inline;">D+{{user.place-user.dayPlus}}&nbsp;
                 {% else %}
-                    D{{user.place-user.dayPlus}}&nbsp;&nbsp;
+                    <h4 style="display: inline;"> D{{user.place-user.dayPlus}}&nbsp;
                 {% endif %}
                 {% if user.place-user.weekPlus >= 0 %}
-                    W+{{user.place-user.weekPlus}}&nbsp;&nbsp; 
+                    W+{{user.place-user.weekPlus}}&nbsp;
                 {% else %}
-                    W{{user.place-user.weekPlus}}&nbsp;&nbsp; 
+                    W{{user.place-user.weekPlus}}&nbsp;
                 {% endif %}
                 {% if user.place-user.monthPlus >= 0 %}
-                    M+{{user.place-user.monthPlus}}</h2>
+                    M+{{user.place-user.monthPlus}}</h4>
                 {% else %}
-                    M{{user.place-user.monthPlus}}</h2>
+                    M{{user.place-user.monthPlus}}</h4>
                 {% endif %}
         {% if stop == false and user.status == 1 %}
         <hr>

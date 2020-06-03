@@ -52,19 +52,29 @@ class Messages {
 
     static async setPlaces() {
         let users = await User.findAll();
-        let plus = 0, zero = 0;
+        let plus = 0, zero = 0, minus = 0;
         for (let i=0; i<users.length; i++) {
             if(users[i].balance == 1000) zero++;
             else if(users[i].balance > 1000) plus++;
+            else minus++;
         }
-        users.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0));
+        users.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0));
         for(let i = 0; i < users.length; i++) {
+            let prevUser;
             let user = await User.find(users[i].login);
-            console.log("balance", user.balance);
-            console.log(zero, plus);
+            if(i > 0) prevUser = await User.find(users[i-1].login);
             if(user.balance == 1000) user.place = 0;
-            else if(user.balance > 1000) user.place = i-plus;
-            else user.place = i-zero-plus+1;
+            else if(i == 0 && user.balance < 1000) {
+                user.place = minus;
+            } else if(i == 0 && user.balance > 1000) {
+                user.place = -1;
+            } else if(i > 0 && user.balance == prevUser.balance) {
+                user.place = prevUser.place;
+            } else if(user.balance > 1000 && prevUser.balance < 1000) {
+                user.place = -1; 
+            } else {
+                user.place = prevUser.place-1;
+            }
             console.log("place, ", user.place);
             await user.updatePlace(user.login, user.place);
         }
@@ -79,11 +89,6 @@ async function checkDate() {
         for(let i = 0; i < users.length; i++) {
             if(users[i].email) {
                 users[i].balance += 50;
-                let user = await User.find(users[i].login);
-                if(user.balance == 1000) user.place = 0;
-                else if(user.balance > 1000) user.place = i-zero-plus-1;
-                else user.place = i-zero-plus+1;
-                await user.updatePlace(user.login, user.place);
                 await users[i].updateBalance(users[i].login, users[i].balance);
                 let textSend = config.moneyEveryDay.replace("[responser_name]", users[i].name);
                 textSend = textSend.replace("[place]", users[i].place);
@@ -113,17 +118,29 @@ async function checkDate() {
         const dateMonth = new Date().getMonth();
         const dayOfWeek = new Date().getDay();
         const dateDay = new Date().getDate();
-        let plus = 0, zero = 0;
+        let plus = 0, zero = 0, minus = 0;
         for (let i=0; i<users.length; i++) {
             if(users[i].balance == 1000) zero++;
             else if(users[i].balance > 1000) plus++;
+            else minus++;
         }
-        users.sort((a,b) => (a.balance < b.balance) ? 1 : ((b.balance < a.balance) ? -1 : 0));
+        users.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0));
         for(let i = 0; i < users.length; i++) {
+            let prevUser;
             let user = await User.find(users[i].login);
+            if(i > 0) prevUser = await User.find(users[i-1].login);
             if(user.balance == 1000) user.place = 0;
-            else if(user.balance > 1000) user.place = i-zero-plus-1;
-            else user.place = i-zero-plus+1;
+            else if(i == 0 && user.balance < 1000) {
+                user.place = minus;
+            } else if(i == 0 && user.balance > 1000) {
+                user.place = -1;
+            } else if(i > 0 && user.balance == prevUser.balance) {
+                user.place = prevUser.place;
+            } else if(user.balance > 1000 && prevUser.balance < 1000) {
+                user.place = -1; 
+            } else {
+                user.place = prevUser.place-1;
+            }
             await user.updatePlace(user.login, user.place);
             user.dayPlus = user.place;
             if(dateDay == 0) user.monthPlus = user.place;

@@ -6,7 +6,7 @@ async function delete_V01_V07() {
     let users = await User.findAll();;
         
     for(let i = 0; i < users.length; i++) {
-        if(users[i].login && users[i].login == 'V01' || users[i].login == 'V07') {
+        if(users[i].login && (users[i].login == 'V01' || users[i].login == 'V07')) {
             let user = await User.find(users[i].login);
             for(let j = 0; j < ops.length; j++) {
                 let op = await Operations.findById(ops[j]._id);
