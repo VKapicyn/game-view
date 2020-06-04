@@ -24,9 +24,9 @@ exports.sendVerification =
 
 exports.sendOperation = 
 "[responser_name], здравствуйте!<br><br>[sender_name] [sender_lastname]"+
-" поделился(лась) с Вами на [amount].<br>Со словами: [text]<br><br>Теперь вы на [place] месте в рейтинге<br><br>"+
+" поделился(лась) с Вами на [amount].<br>Со словами: [text]<br><br>Теперь вы на [place] уровне<br><br>"+
 "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделись VIRом!</i><br><br>[image]";
 
-exports.moneyEveryDay = "[responser_name], здравствуйте!<br><br>Система поделилась с Вами на 50.<br><br>"+
-"Теперь вы на [place] месте в рейтинге<br><br>"+
+exports.moneyEveryDay = "[responser_name], здравствуйте!<br><br>Система поделилась с Вами на [moneyPlus].<br><br>"+
+"Теперь у вас [amount] VIR и вы на [place] уровне<br><br>"+
 "Всегда рады помочь,<br>Команда VIR<br><br><i>Поделись VIRом!</i><br><br>[image]";

@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-7 col-md-7 col-12">
-            <h2 style="display: inline;"><b>у Вас: {{user.balance}} VIR&nbsp;&nbsp; Уровень рейтинга: {{user.place}}</b>&nbsp;&nbsp;</h2>
+            <h2 style="display: inline;"><b>у Вас: {{user.balance}} VIR и &nbsp;&nbsp;{{user.place}} уровень</b>&nbsp;&nbsp;</h2>
                 {% if user.place-user.dayPlus >= 0 %}
                     <h4 style="display: inline;">D+{{user.place-user.dayPlus}}&nbsp;
                 {% else %}
@@ -38,7 +38,7 @@
                 <label for="Банк">Банк</label><br>
             {% endif %}
             <br>
-            <input id="text" name="text" class="form-control" type="text" placeholder="Комментарий">
+            <input id="text" name="text" class="form-control" type="text" placeholder="Сообщение">
             <br>
             <button type="button" onclick="conf()" class="btn btn-primary">Поделиться</button>
         </form>
@@ -83,7 +83,7 @@
                     <th scope="col">ID</th>
                     <th scope="col">Сколько</th>
                     <th scope="col">Кто</th>
-                    <th scope="col">Комментарий</th>
+                    <th scope="col">Сообщение</th>
                   </tr>
                 </thead>
                 <tbody>

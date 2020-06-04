@@ -84,14 +84,24 @@ class Messages {
 async function checkDate() {
     const hour = new Date().getHours();
     let users = await User.findAll();
-    if(hour < 6 && hour > 4) {
+    if(hour < 5 && hour > 3) {
         users.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0));
         for(let i = 0; i < users.length; i++) {
-            if(users[i].email) {
-                users[i].balance += 50;
-                await users[i].updateBalance(users[i].login, users[i].balance);
-                let textSend = config.moneyEveryDay.replace("[responser_name]", users[i].name);
-                textSend = textSend.replace("[place]", users[i].place);
+            if(users[i].email && users[i].balance < 1000) {
+                let user = await User.find(users[i].login);
+                let moneyPlus = 0;
+                if(user.balance > 970) {
+                    moneyPlus = 1000 - user.balance;
+                    user.balance = 1000;
+                } else {
+                    moneyPlus = 30;
+                    user.balance += 30;
+                }
+                await user.updateBalance(user.login, user.balance);
+                let textSend = config.moneyEveryDay.replace("[responser_name]", user.name);
+                textSend = textSend.replace("[amount]", user.balance+moneyPlus);
+                textSend = textSend.replace("[place]", user.place);
+                textSend = textSend.replace("[moneyPlus]", moneyPlus);
                 textSend = textSend.replace("[image]", "<img src='https://share.t2ch.io/img/%D0%BB%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF2.png' width='32px' height='32px'>");
                 transporter.sendMail({
                     from: config.sentEmail,
@@ -101,18 +111,23 @@ async function checkDate() {
                 });
             }
         }
-    } else if(hour > 3 && hour < 5) {
         for(let i = 0; i < users.length; i++) {
-            if(users[i].balance < 1000) {
-                let user = await User.find(users[i].login);
-                if(user.balance > 970) {
-                    user.balance = 1000;
-                    await user.updateBalance(users[i].login, user.balance);
-                } else {
-                    user.balance += 30;
-                    await user.updateBalance(users[i].login, user.balance);
-                }
+            let prevUser;
+            let user = await User.find(users[i].login);
+            if(i > 0) prevUser = await User.find(users[i-1].login);
+            if(user.balance == 1000) user.place = 0;
+            else if(i == 0 && user.balance < 1000) {
+                user.place = minus;
+            } else if(i == 0 && user.balance > 1000) {
+                user.place = -1;
+            } else if(i > 0 && user.balance == prevUser.balance) {
+                user.place = prevUser.place;
+            } else if(user.balance > 1000 && prevUser.balance < 1000) {
+                user.place = -1; 
+            } else {
+                user.place = prevUser.place-1;
             }
+            await user.updatePlace(user.login, user.place);
         }
     } else if(hour < 1) {
         const dateMonth = new Date().getMonth();
