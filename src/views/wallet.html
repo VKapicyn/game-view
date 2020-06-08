@@ -105,6 +105,7 @@
                     <th scope="row">{{(ops.length - loop.index) + 1}}</th>
                     <td>{{op.sender}}</td>
                     <td>+{{op.amount}}</td>
+                    {% set who = "-" %}
                     {% for us in userName %}
                         {% if us.login == op.sender %}
                             {% set who = us.name+" "+us.lastname %}

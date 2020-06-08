@@ -166,7 +166,7 @@ exports.send = async (req, res) => {
             if (await senderUser.balance >= amount * responsersUser.length && amount > 0) {
                 for( let i=0; i<responsersUser.length; i++) {
                     if (responsersUser[i].login != senderUser.login) {
-                        let operation = new Ops(sender, responsersUser[i].login, amount, text, type, count);
+                        let operation = new Ops(null, sender, responsersUser[i].login, amount, text, count, type);
 
                         operation = await operation.save();
                         senderUser.Ops = operation;
@@ -182,7 +182,7 @@ exports.send = async (req, res) => {
                         let responser = await User.find(responsersUser[i].login);
 
                         await Messages.operation(responser.email, responser.name, senderUser.name, senderUser.lastname,
-                            amount, text, responsers.place);
+                            amount, text, responser.place);
                     }
                 }          
             }
