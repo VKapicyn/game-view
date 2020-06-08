@@ -177,15 +177,12 @@ exports.send = async (req, res) => {
                         const items = await User.findAll();
                         items.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0)); 
 
-                        for(let j = 0; j < items.length; j++) {
-                            if(items[j].login == responsersUser[i].login) {
-                                place = j+1;
-                            }
-                        }
-
-                        Messages.operation(responsersUser[i].email, responsersUser[i].name, senderUser.name, senderUser.lastname,
-                            amount, text, place);
                         await Messages.setPlaces();
+
+                        let responser = await User.find(responsersUser[i].login);
+
+                        await Messages.operation(responser.email, responser.name, senderUser.name, senderUser.lastname,
+                            amount, text, responsers.place);
                     }
                 }          
             }
@@ -214,15 +211,12 @@ exports.send = async (req, res) => {
                 const items = await User.findAll();
                 items.sort((a,b) => (a.balance > b.balance) ? 1 : ((b.balance > a.balance) ? -1 : 0)); 
 
-                for(let j = 0; j < items.length; j++) {
-                    if(items[j].login == responser) {
-                        place = j+1;
-                    }
-                }
-
-                Messages.operation(responserUser.email, responserUser.name, senderUser.name, senderUser.lastname, 
-                    amount, text, place);
                 await Messages.setPlaces();
+
+                let responserUs = await User.find(responser);
+
+                await Messages.operation(responserUs.email, responserUs.name, senderUser.name, senderUser.lastname, 
+                    amount, text, responserUs.place);
             }
 
             res.redirect('/wallet');

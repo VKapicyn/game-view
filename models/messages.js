@@ -98,9 +98,11 @@ async function checkDate() {
                     user.balance += 30;
                 }
                 await user.updateBalance(user.login, user.balance);
-                let textSend = config.moneyEveryDay.replace("[responser_name]", user.name);
-                textSend = textSend.replace("[amount]", user.balance);
-                textSend = textSend.replace("[place]", user.place);
+                await setPlaces();
+                let user2 = await User.find(user.login);
+                let textSend = config.moneyEveryDay.replace("[responser_name]", user2.name);
+                textSend = textSend.replace("[amount]", user2.balance);
+                textSend = textSend.replace("[place]", user2.place);
                 textSend = textSend.replace("[moneyPlus]", moneyPlus);
                 textSend = textSend.replace("[image]", "<img src='https://share.t2ch.io/img/%D0%BB%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF2.png' width='32px' height='32px'>");
                 transporter.sendMail({
